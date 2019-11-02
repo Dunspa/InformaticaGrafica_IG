@@ -61,7 +61,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    v.clear();
    f.clear();
 
-   // Creación de la tabla de vértices TO DO
+   // Creación de la tabla de vértices
    for (int i = 0 ; i < numInstancias ; i++){	// Réplicas rotadas
       for (int j = 0 ; j < numVerticesPerfil ; j++){	// Vértices de una réplica
          // Vértice obtenido rotando j 2pi i / n en el eje elegido
@@ -81,7 +81,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
             case 'Z' :
                x = cos(2.0*PI*i/numInstancias)*perfil[j](X) - sin(2.0*PI*i/numInstancias)*perfil[j](Y);
                y = sin(2.0*PI*i/numInstancias)*perfil[j](X) + cos(2.0*PI*i/numInstancias)*perfil[j](Y);
-               z = perfil[j](2);
+               z = perfil[j](Z);
                break;
          }
 
@@ -99,10 +99,10 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
          int a = numVerticesPerfil * i + j;
          int b = numVerticesPerfil * ((i + 1) % numInstancias) + j;
 
-         // Triángulo por los índices a, b y b+1
+         // Triángulo por los índices a, b y b+1 (pares)
          Tupla3i t1 = {a, b, b+1};
          f.push_back(t1);
-         // Triángulo por los índices a, b+1 y a+1
+         // Triángulo por los índices a, b+1 y a+1 (impares)
          Tupla3i t2 = {a, b+1, a+1};
          f.push_back(t2);
       }
@@ -205,9 +205,9 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
 
       // Insertar triángulos de la tapa
       for (int i = 0 ; i < numInstancias ; i++){
-         Tupla3i cosa = {i_norte, numVerticesPerfil * (i+1) - 1, numVerticesPerfil * ((i+1) % numInstancias) + 1};
+         //Tupla3i cosa = {i_norte, numVerticesPerfil * (i+1) - 1, numVerticesPerfil * ((i+1) % numInstancias) + 1};
          f.push_back({i_norte, numVerticesPerfil * (i+1) - 1, numVerticesPerfil * ((i+1) % numInstancias) + 1});
-         std::cout << cosa << std::endl;
+         //std::cout << cosa << std::endl;
       }
    }
 
@@ -243,7 +243,15 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
       c_dif[i] = {0, 0, 1};
    }
 
-   /*for (int i = 0 ; i < numVertices ; i++){
-      std::cout << v[i] << " ";
-   }*/
+   /*std::cout << std::endl;
+   std::cout << std::endl;
+   for (int i = 0 ; i < numTriangulos/2 ; i++){
+      std::cout << f_par[i] << " ";
+   }
+   std::cout << std::endl;
+   std::cout << std::endl;
+   for (int i = 0 ; i < numTriangulos/2 ; i++){
+      std::cout << f_impar[i] << " ";
+   }
+   std::cout << std::endl << f.size();*/
 }

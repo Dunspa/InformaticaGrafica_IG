@@ -19,7 +19,7 @@
 
 class Cilindro : public ObjRevolucion{
 public:
-   Cilindro(int num_instancias=20, float h=1, float r=1, char eje_rotacion='Y', bool tapa_sup=true, bool tapa_inf=true);
+   Cilindro(int num_instancias=20, float h=1.0, float r=1.0, char eje_rotacion='Y', bool tapa_sup=true, bool tapa_inf=true);
 
 private:
    float altura;

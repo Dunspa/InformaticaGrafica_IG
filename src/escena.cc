@@ -20,6 +20,8 @@ Escena::Escena(){
     tetraedro = new Tetraedro(50);
     ant = new ObjPLY("plys/ant.ply");
     cilindro = new Cilindro(20, 20, 20, 'Y');
+    cono = new Cono(20, 20, 20, 'Y', false, true);
+    esfera = new Esfera(20, 20, 20);
 }
 
 //**************************************************************************
@@ -31,6 +33,8 @@ Escena::~Escena(){
    delete tetraedro;
    delete ant;
    delete cilindro;
+   delete cono;
+   delete esfera;
 }
 
 //**************************************************************************
@@ -76,6 +80,16 @@ void Escena::eligeObjetos(dibujado modoDibuj, objetoEscena obj){
    else if (obj == CILINDRO){
       if (cilindro != nullptr && cilindroVisible){
          cilindro->draw(modoDibuj);
+      }
+   }
+   else if (obj == CONO){
+      if (cono != nullptr && conoVisible){
+         cono->draw(modoDibuj);
+      }
+   }
+   else if (obj == ESFERA){
+      if (esfera != nullptr && esferaVisible){
+         esfera->draw(modoDibuj);
       }
    }
 }
@@ -142,6 +156,20 @@ void Escena::dibujar(){
       glTranslatef(-50.0, 0.0, 0.0);
       dibujaObjetos(modoDibujado, CILINDRO);
    glPopMatrix();
+
+   // Cono
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(-50.0, 40.0, 0.0);
+      dibujaObjetos(modoDibujado, CONO);
+   glPopMatrix();
+
+   // Esfera
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(0.0, 50.0, 0.0);
+      dibujaObjetos(modoDibujado, ESFERA);
+   glPopMatrix();
 }
 
 //**************************************************************************
@@ -180,6 +208,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
               << " - T: Tetraedro." << endl
               << " - H: Ant (Hormiga)." << endl
               << " - I: Cilindro." << endl
+              << " - N: Cono." << endl
+              << " - E: Esfera." << endl
               << "Q para salir al menú principal." << endl;
          break;
 
@@ -208,6 +238,20 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          if (modoMenu == SELOBJETO){
             cilindroVisible = !cilindroVisible;
             cout << "Objeto: Cilindro" << endl;
+         }
+         break;
+
+      case 'N' :
+         if (modoMenu == SELOBJETO){
+            conoVisible = !conoVisible;
+            cout << "Objeto: Cono" << endl;
+         }
+         break;
+
+      case 'E' :
+         if (modoMenu == SELOBJETO){
+            esferaVisible = !esferaVisible;
+            cout << "Objeto: Esfera" << endl;
          }
          break;
 
@@ -344,37 +388,4 @@ void Escena::change_observer(){
    glTranslatef(0.0, 0.0, -Observer_distance);
    glRotatef(Observer_angle_y, 0.0 ,1.0, 0.0);
    glRotatef(Observer_angle_x, 1.0, 0.0, 0.0);
-}
-
-//**************************************************************************
-//
-// Métodos para consultar y cambiar la visibilidad de los distintos objetos
-//
-//**************************************************************************
-
-// Cubo
-bool Escena::getCuboVisible(){
-   return cuboVisible;
-}
-
-void Escena::setCuboVisible(bool visib){
-   cuboVisible = visib;
-}
-
-// Tetraedro
-bool Escena::getTetraedroVisible(){
-   return tetraedroVisible;
-}
-
-void Escena::setTetraedroVisible(bool visib){
-   tetraedroVisible = visib;
-}
-
-// Ant (Hormiga)
-bool Escena::getAntVisible(){
-   return antVisible;
-}
-
-void Escena::setAntVisible(bool visib){
-   antVisible = visib;
 }

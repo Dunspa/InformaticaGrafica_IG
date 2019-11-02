@@ -7,13 +7,15 @@
 #include "tetraedro.h"
 #include "objply.h"
 #include "cilindro.h"
+#include "cono.h"
+#include "esfera.h"
 
 typedef enum{
    NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, ANT, CILINDRO
+   CUBO, TETRAEDRO, ANT, CILINDRO, CONO, ESFERA
 } objetoEscena;
 
 class Escena{
@@ -44,12 +46,16 @@ private:
    Tetraedro * tetraedro = nullptr;
    ObjPLY * ant = nullptr;
    Cilindro * cilindro = nullptr;
+   Cono * cono = nullptr;
+   Esfera * esfera = nullptr;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible      = true;
    bool tetraedroVisible = true;
    bool antVisible       = true;
    bool cilindroVisible  = true;
+   bool conoVisible      = true;
+   bool esferaVisible    = true;
 
    // Controlan la visibilidad de los distintos modos
    bool puntosVisible    = false;
@@ -71,17 +77,6 @@ public:
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
-
-   // Métodos para consultar y cambiar la visibilidad de los objetos
-   // Cubo
-   bool getCuboVisible();
-   void setCuboVisible(bool visib);
-   // Tetraedro
-   bool getTetraedroVisible();
-   void setTetraedroVisible(bool visib);
-   // Ant (Hormiga)
-   bool getAntVisible();
-   void setAntVisible(bool visib);
 };
 
 #endif
