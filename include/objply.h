@@ -1,7 +1,6 @@
 // #############################################################################
 //
 // Informática Gráfica (Grado Informática)
-//
 // Archivo: objply.h
 //
 // Jose Luis Gallego Peña

@@ -45,19 +45,17 @@ Tetraedro::Tetraedro(float lado){
       }
    }
 
-   // Inicializar la tabla de colores inmediato (morado)
+   // Inicializar la tabla de colores inmediato (verde)
    c.resize(numVertices);
-   c[0] = {0, 204, 0};
-   c[1] = {0, 204, 0};
-   c[2] = {0, 204, 0};
-   c[3] = {0, 204, 0};
+   for (int i = 0 ; i < numVertices ; i++){
+      c[i] = {0, 0.8, 0};
+   }
 
    // Inicializar la tabla de colores diferido (amarillo)
    c_dif.resize(numVertices);
-   c_dif[0] = {255, 233, 0};
-   c_dif[1] = {255, 233, 0};
-   c_dif[2] = {255, 233, 0};
-   c_dif[3] = {255, 233, 0};
+   for (int i = 0 ; i < numVertices ; i++){
+      c_dif[i] = {1, 0.8, 0};
+   }
 }
 
 // -----------------------------------------------------------------------------

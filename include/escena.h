@@ -6,13 +6,14 @@
 #include "cubo.h"
 #include "tetraedro.h"
 #include "objply.h"
+#include "cilindro.h"
 
 typedef enum{
    NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, ANT
+   CUBO, TETRAEDRO, ANT, CILINDRO
 } objetoEscena;
 
 class Escena{
@@ -42,11 +43,13 @@ private:
    Cubo * cubo = nullptr;
    Tetraedro * tetraedro = nullptr;
    ObjPLY * ant = nullptr;
+   Cilindro * cilindro = nullptr;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible      = true;
    bool tetraedroVisible = true;
    bool antVisible       = true;
+   bool cilindroVisible  = true;
 
    // Controlan la visibilidad de los distintos modos
    bool puntosVisible    = false;
@@ -79,20 +82,6 @@ public:
    // Ant (Hormiga)
    bool getAntVisible();
    void setAntVisible(bool visib);
-
-   // Métodos para consultar y cambiar la visibilidad de los modos de visualización
-   // Modo visualización de puntos
-   bool getPuntosVisible();
-   void setPuntosVisible(bool visib);
-   // Modo visualización de líneas
-   bool getLineasVisible();
-   void setLineasVisible(bool visib);
-   // Modo visualización sólido
-   bool getSolidoVisible();
-   void setSolidoVisible(bool visib);
-   // Modo visualización ajedrez
-   bool getAjedrezVisible();
-   void setAjedrezVisible(bool visib);
 };
 
 #endif

@@ -19,6 +19,7 @@ Escena::Escena(){
     cubo = new Cubo(50);
     tetraedro = new Tetraedro(50);
     ant = new ObjPLY("plys/ant.ply");
+    cilindro = new Cilindro(20, 20, 20, 'Y');
 }
 
 //**************************************************************************
@@ -29,6 +30,7 @@ Escena::~Escena(){
    delete cubo;
    delete tetraedro;
    delete ant;
+   delete cilindro;
 }
 
 //**************************************************************************
@@ -38,10 +40,11 @@ Escena::~Escena(){
 //**************************************************************************
 
 void Escena::inicializar(int UI_window_width, int UI_window_height){
-	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
+	glClearColor(1.0, 1.0, 1.0, 1.0);// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
 	glEnable(GL_DEPTH_TEST);  // se habilita el z-bufer
    glEnable(GL_CULL_FACE);   // se habilita el cull face
+   glEnable(GL_NORMALIZE);   // normales invariantes a transformaciones geométricas
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -59,42 +62,47 @@ void Escena::inicializar(int UI_window_width, int UI_window_height){
 
 void Escena::eligeObjetos(dibujado modoDibuj, objetoEscena obj){
    if (obj == CUBO){
-      if (cubo != nullptr && getCuboVisible())
+      if (cubo != nullptr && cuboVisible)
          cubo->draw(modoDibuj);
    }
    else if (obj == TETRAEDRO){
-      if (tetraedro != nullptr && getTetraedroVisible())
+      if (tetraedro != nullptr && tetraedroVisible)
          tetraedro->draw(modoDibuj);
    }
    else if (obj == ANT){
-      if (ant != nullptr && getAntVisible())
+      if (ant != nullptr && antVisible)
          ant->draw(modoDibuj);
+   }
+   else if (obj == CILINDRO){
+      if (cilindro != nullptr && cilindroVisible){
+         cilindro->draw(modoDibuj);
+      }
    }
 }
 
 void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
    // Modo ajedrez
-   if (getAjedrezVisible()){
+   if (ajedrezVisible){
       glPolygonMode(GL_FRONT, GL_FILL);
       eligeObjetos(modoDibuj, obj);
    }
    // Otros modos (no ajedrez)
    else{
       // Dibujar puntos
-      if (getPuntosVisible()){
+      if (puntosVisible){
          glPolygonMode(GL_FRONT, GL_POINT);
          glPointSize(5);   // Puntos más gordos para que se vean bien
          eligeObjetos(modoDibuj, obj);
       }
 
       // Dibujar líneas
-      if (getLineasVisible()){
+      if (lineasVisible){
          glPolygonMode(GL_FRONT, GL_LINE);
          eligeObjetos(modoDibuj, obj);
       }
 
       // Dibujar sólidos
-      if (getSolidoVisible()){
+      if (solidoVisible){
          glPolygonMode(GL_FRONT, GL_FILL);
          eligeObjetos(modoDibuj, obj);
       }
@@ -126,6 +134,13 @@ void Escena::dibujar(){
       glScalef(2.0, 2.0, 2.0);
       glTranslatef(0.0, 10.0, 0.0);
       dibujaObjetos(modoDibujado, ANT);
+   glPopMatrix();
+
+   // Cilindro
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(-50.0, 0.0, 0.0);
+      dibujaObjetos(modoDibujado, CILINDRO);
    glPopMatrix();
 }
 
@@ -164,27 +179,35 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
               << " - C: Cubo." << endl
               << " - T: Tetraedro." << endl
               << " - H: Ant (Hormiga)." << endl
+              << " - I: Cilindro." << endl
               << "Q para salir al menú principal." << endl;
          break;
 
       case 'C' :
          if (modoMenu == SELOBJETO){
-            setCuboVisible(!getCuboVisible());
+            cuboVisible = !cuboVisible;
             cout << "Objeto: Cubo" << endl;
          }
          break;
 
       case 'T' :
          if (modoMenu == SELOBJETO){
-            setTetraedroVisible(!getTetraedroVisible());
+            tetraedroVisible = !tetraedroVisible;
             cout << "Objeto: Tetraedro" << endl;
          }
          break;
 
       case 'H' :
          if (modoMenu == SELOBJETO){
-            setAntVisible(!getAntVisible());
+            antVisible = !antVisible;
             cout << "Objeto: Ant (Hormiga)" << endl;
+         }
+         break;
+
+      case 'I' :
+         if (modoMenu == SELOBJETO){
+            cilindroVisible = !cilindroVisible;
+            cout << "Objeto: Cilindro" << endl;
          }
          break;
 
@@ -202,21 +225,21 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
       case 'P' :
          // PUNTOS
          if (modoMenu == SELVISUALIZACION){
-            setPuntosVisible(!getPuntosVisible());
+            puntosVisible = !puntosVisible;
             cout << "Modo de visualización: puntos" << endl;
          }
          break;
 
       case 'L' :
          if (modoMenu == SELVISUALIZACION){
-            setLineasVisible(!getLineasVisible());
+            lineasVisible = !lineasVisible;
             cout << "Modo de visualización: líneas" << endl;
          }
          break;
 
       case 'S' :
          if (modoMenu == SELVISUALIZACION){
-            setSolidoVisible(!getSolidoVisible());
+            solidoVisible = !solidoVisible;
             cout << "Modo de visualización: sólido" << endl;
          }
          break;
@@ -224,8 +247,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
       case 'A' :
          if (modoMenu == SELVISUALIZACION){
             modoDibujado = AJEDREZ;
-            setAjedrezVisible(!getAjedrezVisible());
-            if (!getAjedrezVisible())
+            ajedrezVisible = !ajedrezVisible;
+            if (!ajedrezVisible)
                modoDibujado = INMEDIATO; // Inmediato por defecto
             cout << "Modo de visualización: ajedrez" << endl;
          }
@@ -354,47 +377,4 @@ bool Escena::getAntVisible(){
 
 void Escena::setAntVisible(bool visib){
    antVisible = visib;
-}
-
-//**************************************************************************
-//
-// Métodos para consultar y cambiar la visibilidad de los
-// modos de visualización
-//
-//**************************************************************************
-
-// Modo de visualización de puntos
-bool Escena::getPuntosVisible(){
-   return puntosVisible;
-}
-
-void Escena::setPuntosVisible(bool visib){
-   puntosVisible = visib;
-}
-
-// Modo visualización de líneas
-bool Escena::getLineasVisible(){
-   return lineasVisible;
-}
-
-void Escena::setLineasVisible(bool visib){
-   lineasVisible = visib;
-}
-
-// Modo visualización sólido
-bool Escena::getSolidoVisible(){
-   return solidoVisible;
-}
-
-void Escena::setSolidoVisible(bool visib){
-   solidoVisible = visib;
-}
-
-// Modo visualización ajedrez
-bool Escena::getAjedrezVisible(){
-   return ajedrezVisible;
-}
-
-void Escena::setAjedrezVisible(bool visib){
-   ajedrezVisible = visib;
 }

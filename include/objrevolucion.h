@@ -19,17 +19,19 @@ class ObjRevolucion : public Malla3D{
 public:
    // Constructores
    ObjRevolucion();
-   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true);
-   ObjRevolucion(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_sup=true, bool tapa_inf=true);
+   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true, char eje_rotacion='Y');
+   ObjRevolucion(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_sup=true, bool tapa_inf=true, char eje_rotacion='Y');
 
 protected:
    // Crea la malla del objeto de revolución con NM vértices
-   void crearMalla(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_sup, bool tapa_inf);
+   void crearMalla(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_sup, bool tapa_inf, char eje_rotacion);
 
-private:
    int numInstancias;      // Número total de réplicas rotadas (N)
    int numVerticesPerfil;  // Número total de vértices en el perfil original (M)
    int numVertices;        // Número total de vértices de la figura (NM)
+   int numTriangulos;      // Número total de triángulos de la figura
+
+	static const int PI = atan(1)*4;	// Número pi
 };
 
 #endif

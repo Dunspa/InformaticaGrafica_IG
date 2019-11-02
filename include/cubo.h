@@ -1,9 +1,9 @@
 // #############################################################################
 //
 // Informática Gráfica (Grado Informática)
+// Archivo: cubo.h
 //
-// Archivo: Cubo.h
-
+// Jose Luis Gallego Peña
 //
 // #############################################################################
 
@@ -21,7 +21,7 @@
 
 // *****************************************************************************
 // Cubo con centro en el origen y lado unidad por defecto
-// (tiene 9 vertices y 6 caras)
+// (tiene 8 vertices y 6 caras)
 
 class Cubo : public Malla3D{
 public:

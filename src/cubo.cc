@@ -50,23 +50,13 @@ Cubo::Cubo(float lado){
 
    // Inicializar la tabla de colores inmediato (rojo)
    c.resize(numVertices);
-   c[0] = {204, 0, 0};
-   c[1] = {204, 0, 0};
-   c[2] = {204, 0, 0};
-   c[3] = {204, 0, 0};
-   c[4] = {204, 0, 0};
-   c[5] = {204, 0, 0};
-   c[6] = {204, 0, 0};
-   c[7] = {204, 0, 0};
+   for (int i = 0 ; i < numVertices ; i++){
+      c[i] = {1, 0, 0};
+   }
 
    // Inicializar la tabla de colores diferido (azul)
    c_dif.resize(numVertices);
-   c_dif[0] = {255, 0, 127};
-   c_dif[1] = {255, 0, 127};
-   c_dif[2] = {255, 0, 127};
-   c_dif[3] = {255, 0, 127};
-   c_dif[4] = {255, 0, 127};
-   c_dif[5] = {255, 0, 127};
-   c_dif[6] = {255, 0, 127};
-   c_dif[7] = {255, 0, 127};
+   for (int i = 0 ; i < numVertices ; i++){
+      c_dif[i] = {0, 0, 1};
+   }
 }

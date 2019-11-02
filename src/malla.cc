@@ -81,8 +81,6 @@ void Malla3D::draw_ModoAjedrez(){
    glColorPointer(3, GL_FLOAT, 0, c.data());
    // Habilitar vertex arrays
    glEnableClientState(GL_VERTEX_ARRAY);
-   // Dibuja cada pixel con interpolacion de los colores de los vértices
-   glShadeModel(GL_SMOOTH);
    // Especificar puntero a tabla de vertices
    glVertexPointer(3, GL_FLOAT, 0, v.data());
    // Dibujar usando vertices indexados
@@ -94,8 +92,6 @@ void Malla3D::draw_ModoAjedrez(){
    glColorPointer(3, GL_FLOAT, 0, c_dif.data());
    // Habilitar vertex arrays
    glEnableClientState(GL_VERTEX_ARRAY);
-   // Dibuja cada pixel con interpolacion de los colores de los vértices
-   glShadeModel(GL_SMOOTH);
    // Especificar puntero a tabla de vertices
    glVertexPointer(3, GL_FLOAT, 0, v.data());
    // Dibujar usando vertices indexados
