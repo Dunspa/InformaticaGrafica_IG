@@ -18,9 +18,9 @@ Escena::Escena(){
     // Crear los objetos de la escena
     cubo = new Cubo(50);
     tetraedro = new Tetraedro(50);
-    ant = new ObjPLY("plys/ant.ply");
-    cilindro = new Cilindro(20, 20, 20, 'Y');
-    cono = new Cono(20, 20, 20, 'Y', false, true);
+    peon = new ObjRevolucion("plys/peon.ply", 20, true, true);
+    cilindro = new Cilindro(20, 20, 20, 'Y', true, true);
+    cono = new Cono(20, 20, 20, 'Y', true, true);
     esfera = new Esfera(20, 20, 20);
 }
 
@@ -31,7 +31,7 @@ Escena::Escena(){
 Escena::~Escena(){
    delete cubo;
    delete tetraedro;
-   delete ant;
+   delete peon;
    delete cilindro;
    delete cono;
    delete esfera;
@@ -73,24 +73,21 @@ void Escena::eligeObjetos(dibujado modoDibuj, objetoEscena obj){
       if (tetraedro != nullptr && tetraedroVisible)
          tetraedro->draw(modoDibuj);
    }
-   else if (obj == ANT){
-      if (ant != nullptr && antVisible)
-         ant->draw(modoDibuj);
+   else if (obj == PEON){
+      if (peon != nullptr && peonVisible)
+         peon->draw(modoDibuj);
    }
    else if (obj == CILINDRO){
-      if (cilindro != nullptr && cilindroVisible){
+      if (cilindro != nullptr && cilindroVisible)
          cilindro->draw(modoDibuj);
-      }
    }
    else if (obj == CONO){
-      if (cono != nullptr && conoVisible){
+      if (cono != nullptr && conoVisible)
          cono->draw(modoDibuj);
-      }
    }
    else if (obj == ESFERA){
-      if (esfera != nullptr && esferaVisible){
+      if (esfera != nullptr && esferaVisible)
          esfera->draw(modoDibuj);
-      }
    }
 }
 
@@ -143,11 +140,11 @@ void Escena::dibujar(){
       dibujaObjetos(modoDibujado, TETRAEDRO);
    glPopMatrix();
 
-   // Ant (hormiga)
+   // Peon
    glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(0.0, 10.0, 0.0);
-      dibujaObjetos(modoDibujado, ANT);
+      glScalef(15.0, 15.0, 15.0);
+      //glTranslatef(0.0, 10.0, 0.0);
+      dibujaObjetos(modoDibujado, PEON);
    glPopMatrix();
 
    // Cilindro
@@ -206,7 +203,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          cout << "Modo selección de objeto. Opciones: " << endl
               << " - C: Cubo." << endl
               << " - T: Tetraedro." << endl
-              << " - H: Ant (Hormiga)." << endl
+              << " - H: Peon." << endl
               << " - I: Cilindro." << endl
               << " - N: Cono." << endl
               << " - E: Esfera." << endl
@@ -229,8 +226,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
       case 'H' :
          if (modoMenu == SELOBJETO){
-            antVisible = !antVisible;
-            cout << "Objeto: Ant (Hormiga)" << endl;
+            peonVisible = !peonVisible;
+            cout << "Objeto: Peon" << endl;
          }
          break;
 
@@ -263,6 +260,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
               << " - L: Visualizar líneas." << endl
               << " - S: Visualizar sólidos." << endl
               << " - A: Visualizar modo ajedrez." << endl
+              << " - K: Visualizar tapas." << endl
               << "Q para salir al menú principal." << endl;
          break;
 
@@ -295,6 +293,22 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             if (!ajedrezVisible)
                modoDibujado = INMEDIATO; // Inmediato por defecto
             cout << "Modo de visualización: ajedrez" << endl;
+         }
+         break;
+
+      case 'K' :
+         if (modoMenu == SELVISUALIZACION){
+            tapasVisible = !tapasVisible;
+            cout << "Modo de visualización: tapas" << endl;
+
+            /* Dibujar tapas
+            if (tapasVisible){
+               cilindro->crearTapaInf(cilindro->eje);
+               cilindro->crearTapaSup(cilindro->eje);
+            }
+            else{
+               cilindro->eliminarTapas();
+            }*/
          }
          break;
 

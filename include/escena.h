@@ -15,7 +15,7 @@ typedef enum{
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, ANT, CILINDRO, CONO, ESFERA
+   CUBO, TETRAEDRO, PEON, CILINDRO, CONO, ESFERA
 } objetoEscena;
 
 class Escena{
@@ -44,7 +44,7 @@ private:
    Ejes ejes;
    Cubo * cubo = nullptr;
    Tetraedro * tetraedro = nullptr;
-   ObjPLY * ant = nullptr;
+   ObjRevolucion * peon = nullptr;
    Cilindro * cilindro = nullptr;
    Cono * cono = nullptr;
    Esfera * esfera = nullptr;
@@ -52,7 +52,7 @@ private:
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible      = true;
    bool tetraedroVisible = true;
-   bool antVisible       = true;
+   bool peonVisible      = true;
    bool cilindroVisible  = true;
    bool conoVisible      = true;
    bool esferaVisible    = true;
@@ -62,6 +62,7 @@ private:
    bool lineasVisible    = false;
    bool solidoVisible    = true;
    bool ajedrezVisible   = false;   // Si ajedrez visible, los otros modos invisibles
+   bool tapasVisible     = false;
 
 public:
    Escena();

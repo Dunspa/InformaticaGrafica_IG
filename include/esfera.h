@@ -1,7 +1,7 @@
 // #############################################################################
 //
 // Informática Gráfica (Grado Informática)
-// Archivo: cono.h
+// Archivo: esfera.h
 //
 // Jose Luis Gallego Peña
 //
