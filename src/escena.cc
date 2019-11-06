@@ -120,6 +120,34 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
    }
 }
 
+void Escena::eliminaTapas(){
+   if (peon != nullptr)
+      peon->eliminarTapas(2);
+
+   if (cilindro != nullptr)
+      cilindro->eliminarTapas(2);
+
+   if (cono != nullptr)
+      cono->eliminarTapas(1);
+
+   if (esfera != nullptr)
+      esfera->eliminarTapas(2);
+}
+
+void Escena::dibujaTapas(){
+   if (peon != nullptr)
+      peon->crearTapas(2, peon->eje);
+
+   if (cilindro != nullptr)
+      cilindro->crearTapas(2, cilindro->eje);
+
+   if (cono != nullptr)
+      cono->crearTapas(1, cono->eje);
+
+   if (esfera != nullptr)
+      esfera->crearTapas(2, esfera->eje);
+}
+
 void Escena::dibujar(){
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
 	change_observer();
@@ -298,17 +326,17 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
       case 'K' :
          if (modoMenu == SELVISUALIZACION){
-            tapasVisible = !tapasVisible;
-            cout << "Modo de visualización: tapas" << endl;
+            cout << "Modo de visualización: tapas." << endl;
 
-            /* Dibujar tapas
+            // Dibujar tapas
             if (tapasVisible){
-               cilindro->crearTapaInf(cilindro->eje);
-               cilindro->crearTapaSup(cilindro->eje);
+               eliminaTapas();
             }
             else{
-               cilindro->eliminarTapas();
-            }*/
+               dibujaTapas();
+            }
+
+            tapasVisible = !tapasVisible;
          }
          break;
 

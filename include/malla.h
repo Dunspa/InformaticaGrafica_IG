@@ -1,9 +1,8 @@
 // #############################################################################
 //
 // Informática Gráfica (Grado Informática)
-//
 // Archivo: Malla3D.h
-// -- declaraciones de clase Malla3D (mallas indexadas) y derivados
+// Declaraciones de clase Malla3D (mallas indexadas) y derivados
 //
 // Jose Luis Gallego Peña
 //

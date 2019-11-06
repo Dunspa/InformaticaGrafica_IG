@@ -23,18 +23,16 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
    crearMalla(perfil, num_instancias, tapa_sup, tapa_inf, eje_rotacion);
 
    // Triángulos modo ajedrez
-   f_par.resize(numTriangulos/2);
-   f_impar.resize(numTriangulos/2);
    int i_par = 0, i_impar = 0;
    for (int i = 0 ; i < numTriangulos ; i++){
       // Triángulos pares
       if (i % 2 == 0){
-         f_par[i_par] = f[i];
+         f_par.push_back(f[i]);
          i_par++;
       }
       // Triángulos impares
       else{
-         f_impar[i_impar] = f[i];
+         f_impar.push_back(f[i]);
          i_impar++;
       }
    }
@@ -62,18 +60,16 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
    crearMalla(perfil, num_instancias, tapa_sup, tapa_inf, eje_rotacion);
 
    // Triángulos modo ajedrez
-   f_par.resize(numTriangulos/2);
-   f_impar.resize(numTriangulos/2);
    int i_par = 0, i_impar = 0;
    for (int i = 0 ; i < numTriangulos ; i++){
       // Triángulos pares
       if (i % 2 == 0){
-         f_par[i_par] = f[i];
+         f_par.push_back(f[i]);
          i_par++;
       }
       // Triángulos impares
       else{
-         f_impar[i_impar] = f[i];
+         f_impar.push_back(f[i]);
          i_impar++;
       }
    }
@@ -249,7 +245,6 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
 
 void ObjRevolucion::crearTapaInf(char eje_rotacion){
    bool tapaInf = true;
-   float x, y, z;
 
    // Índice del polo sur en la tabla de vértices (para triangulos)
    int i_sur = numInstancias * numVerticesPerfil;
@@ -265,7 +260,6 @@ void ObjRevolucion::crearTapaInf(char eje_rotacion){
 
 void ObjRevolucion::crearTapaSup(char eje_rotacion){
    bool tapaSup = true;
-   float x, y, z;
 
    // Índice del polo norte en la tabla de vértices (para triangulos)
    int i_norte = numInstancias * numVerticesPerfil + 1;
@@ -282,16 +276,102 @@ void ObjRevolucion::crearTapaSup(char eje_rotacion){
    numTriangulos = f.size();
 }
 
-void ObjRevolucion::eliminarTapas(){
-   for (int i=0;i<numTriangulos;i++){
-      std::cout << f[i] << std::endl;
+void ObjRevolucion::crearTapas(int numTapas, char eje_rotacion){
+   if (numTapas == 1){
+      bool tapaInf = true;
+      float x, y, z;
+      std::vector<Tupla3i>::iterator it = f.begin();
+      int i;
+
+      // Índice del polo sur en la tabla de vértices (para triangulos)
+      int i_sur = numInstancias * numVerticesPerfil;
+
+      // Insertar triángulos de la tapa
+      for (int i = 0 ; i < numInstancias ; i++){
+         f.insert(it, {(numVerticesPerfil + numVerticesPerfil * i)%i_sur, numVerticesPerfil * i, i_sur});
+         ++it;
+      }
+
+      numTriangulos = f.size();
+
+      // Triángulos modo ajedrez
+      int i_par = 0, i_impar = 0;
+      for (int i = 0 ; i < numInstancias ; i++){
+         // Triángulos pares
+         if (i % 2 == 0){
+            f_par.push_back(f[i]);
+            i_par++;
+         }
+         // Triángulos impares
+         else{
+            f_impar.push_back(f[i]);
+            i_impar++;
+         }
+      }
    }
-   for (int i = 0 ; i < numInstancias*2 ; i++){
-      f.pop_back();
-      f_par.pop_back();
-      f_impar.pop_back();
+   else{
+      crearTapaInf(eje_rotacion);
+      crearTapaSup(eje_rotacion);
+
+      // Triángulos modo ajedrez
+      int i_par = 0, i_impar = 0;
+      for (int i = 0 ; i < numTriangulos ; i++){
+         // Triángulos pares
+         if (i % 2 == 0){
+            f_par.push_back(f[i]);
+            i_par++;
+         }
+         // Triángulos impares
+         else{
+            f_impar.push_back(f[i]);
+            i_impar++;
+         }
+      }
    }
-   for (int i=0;i<numTriangulos;i++){
-      std::cout << f[i] << std::endl;
+
+   numVertices = v.size();
+   numTriangulos = f.size();
+}
+
+void ObjRevolucion::eliminarTapas(int numTapas){
+   // Si es una tapa, se elimina la inferior
+   if (numTapas == 1){
+      std::vector<Tupla3i>::iterator it = f.end();
+      --it;
+      int i;
+      // Índice del polo sur en la tabla de vértices (para triangulos)
+      int i_sur = numInstancias * numVerticesPerfil;
+
+      // Pasar tapa superior sin tocarla
+      for (i = 0 ; i < numInstancias ; --it, i++);
+      // Eliminar solo tapa inferior
+      for (i = 0 ; i < numInstancias ; i++){
+         f.erase(it);
+         --it;
+      }
+   }
+   // Si son dos tapas, se eliminan la superior y la inferior
+   else{
+      for (int i = 0 ; i < numInstancias*2 ; i++){
+         f.pop_back();
+      }
+   }
+
+   numVertices = v.size();
+   numTriangulos = f.size();
+   f_par.clear();
+   f_impar.clear();
+
+   // Triángulos modo ajedrez
+   int i_par = 0, i_impar = 0;
+   for (int i = 0 ; i < numTriangulos ; i++){
+      // Triángulos pares
+      if (i % 2 == 0){
+         f_par.push_back(f[i]);
+      }
+      // Triángulos impares
+      else{
+         f_impar.push_back(f[i]);
+      }
    }
 }

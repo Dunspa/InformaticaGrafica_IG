@@ -28,18 +28,16 @@ Cono::Cono(int num_instancias, float h, float r, char eje_rotacion, bool tapa_in
    crearMalla(perfil, num_instancias, tapa_inf, tapa_sup, eje_rotacion);
 
    // Triángulos modo ajedrez
-   f_par.resize(numTriangulos/2);
-   f_impar.resize(numTriangulos/2);
    int i_par = 0, i_impar = 0;
    for (int i = 0 ; i < numTriangulos ; i++){
       // Triángulos pares
       if (i % 2 == 0){
-         f_par[i_par] = f[i];
+         f_par.push_back(f[i]);
          i_par++;
       }
       // Triángulos impares
       else{
-         f_impar[i_impar] = f[i];
+         f_impar.push_back(f[i]);
          i_impar++;
       }
    }

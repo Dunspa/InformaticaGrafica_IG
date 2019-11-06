@@ -62,22 +62,24 @@ private:
    bool lineasVisible    = false;
    bool solidoVisible    = true;
    bool ajedrezVisible   = false;   // Si ajedrez visible, los otros modos invisibles
-   bool tapasVisible     = false;
+   bool tapasVisible     = true;
 
 public:
    Escena();
    ~Escena();
-	void inicializar( int UI_window_width, int UI_window_height );
-	void redimensionar( int newWidth, int newHeight ) ;
+	void inicializar(int UI_window_width, int UI_window_height);
+   void redimensionar(int newWidth, int newHeight);
 
 	// Dibujar
    void eligeObjetos(dibujado modoDibuj, objetoEscena obj);
    void dibujaObjetos(dibujado modoDibuj, objetoEscena obj);
-	void dibujar() ;
+   void eliminaTapas();
+   void dibujaTapas();
+	void dibujar();
 
 	// Interacción con la escena
-	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
-	void teclaEspecial( int Tecla1, int x, int y );
+	bool teclaPulsada(unsigned char Tecla1, int x, int y);
+	void teclaEspecial(int Tecla1, int x, int y);
 };
 
 #endif
