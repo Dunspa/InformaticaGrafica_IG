@@ -39,7 +39,8 @@ public:
    // función que redibuja el objeto
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
-   void draw(dibujado modoDibuj);
+   // o bien a draw_ModoAjedrez (modo ajedrez con inmediato)
+   void draw(dibujado modoDibuj, bool modoIluminacion);
 
 protected:
    void calcular_normales();  // calcula tabla de normales de vértices (práctica 3)
@@ -55,7 +56,10 @@ protected:
    std::vector<Tupla3f> c_dif;   // Color modo diferido (impar en ajedrez)
 
    // Normales
-   std::vector<Tupla3f> n;    // tabla de normales
+   std::vector<Tupla3f> nf;   // tabla de normales de las caras
+   std::vector<Tupla3f> nv;   // tabla de normales de los vértices
+   int numNormalesCaras;      // Número total de normales en las caras
+   int numNormalesVertices;   // Número total de normales en los vértices
 
    // Identificadores de VBOs, ambos inicialmente a 0 (VBO no creados)
    GLuint id_vbo_ver = 0;  // Identificador para el VBO de tabla de vértices

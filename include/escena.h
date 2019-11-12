@@ -9,9 +9,12 @@
 #include "cilindro.h"
 #include "cono.h"
 #include "esfera.h"
+#include "luz.h"
+#include "luzdireccional.h"
+#include "luzposicional.h"
 
 typedef enum{
-   NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO
+   NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION
 } menu;
 
 typedef enum{
@@ -49,6 +52,10 @@ private:
    Cono * cono = nullptr;
    Esfera * esfera = nullptr;
 
+   // Luces de la escena
+   LuzDireccional * luzdireccional = nullptr;
+   LuzPosicional * luzposicional = nullptr;
+
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible      = true;
    bool tetraedroVisible = true;
@@ -63,6 +70,13 @@ private:
    bool solidoVisible    = true;
    bool ajedrezVisible   = false;   // Si ajedrez visible, los otros modos invisibles
    bool tapasVisible     = true;
+
+   bool modoIluminacion  = true;    // Modo iluminación: SMOOTH (true), FLAT(false)
+   bool iluminado        = false;   // Luces encendidas
+
+   // Controlan qué ángulo de iluminación aumentar o decrementar
+   bool anguloAlpha       = false;
+   bool anguloBeta       = false;
 
 public:
    Escena();

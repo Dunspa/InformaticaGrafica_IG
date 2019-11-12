@@ -1,7 +1,7 @@
 //**************************************************************************
-// Prácticas
+// Prácticas Informática Gráfica (2019-2020)
 //
-// F.J. melero
+// Jose Luis Gallego Peña
 //
 // GPL
 //**************************************************************************
@@ -40,7 +40,6 @@ void change_window_size(int newWidth, int newHeight){
       escena->redimensionar(newWidth,newHeight);
 	glutPostRedisplay();
 }
-
 
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla normal

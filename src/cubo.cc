@@ -57,4 +57,6 @@ Cubo::Cubo(float lado){
    for (int i = 0 ; i < numVertices ; i++){
       c_dif[i] = {0, 0, 1};
    }
+
+   calcular_normales();
 }
