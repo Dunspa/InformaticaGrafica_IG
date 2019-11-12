@@ -16,15 +16,16 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    cubo = new Cubo(50);
+    //cubo = new Cubo(50);
     //tetraedro = new Tetraedro(50);
     //peon = new ObjRevolucion("plys/peon.ply", 20, true, true);
     //cilindro = new Cilindro(20, 20, 20, 'Y', true, true);
     //cono = new Cono(20, 20, 20, 'Y', true, true);
-    //esfera = new Esfera(20, 20, 20);
+    esfera = new Esfera(20, 20, 20);
 
     // Crear las luces de la escena
-    luzposicional = new LuzPosicional({25, 55, 55}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzposicional = new LuzPosicional({0, 0, 0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzdireccional = new LuzDireccional({0, 0, 10}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
 }
 
 //**************************************************************************
@@ -38,6 +39,8 @@ Escena::~Escena(){
    delete cilindro;
    delete cono;
    delete esfera;
+   delete luzposicional;
+   delete luzdireccional;
 }
 
 //**************************************************************************
@@ -157,15 +160,17 @@ void Escena::dibujar(){
    glDisable(GL_LIGHTING);
    ejes.draw();
 
-   if (iluminado)
+   if (iluminado){
       glEnable(GL_LIGHTING);
+      //glEnable(GL_LIGHT0); // Luz 0 por defecto
+   }
 
 	// Dibujar todos los objetos de la escena
 
 	// Cubo
 	glPushMatrix();
       //glScalef(1.0, 1.6, 1.0);
-		//glTranslatef(50.0, 0.0, 0.0);
+		glTranslatef(25.0, 0.0, 0.0);
 		dibujaObjetos(modoDibujado, CUBO);
 	glPopMatrix();
 
@@ -356,6 +361,9 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          if (modoMenu == SELVISUALIZACION){
             modoMenu = ILUMINACION;
             iluminado = true;
+            solidoVisible = true;
+            puntosVisible = false;
+            lineasVisible = false;
             cout << "Modo de visualización: iluminación. Opciones: " << endl
                  << " - 0 al 7: Activar distintas luces." << endl
                  << " - A: Modo variación del ángulo alpha." << endl
@@ -369,6 +377,13 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          if (modoMenu == ILUMINACION){
             cout << "Luz 0 activada: posicional" << endl;
             luzposicional->activar();
+         }
+         break;
+
+      case '1' :
+         if (modoMenu == ILUMINACION){
+            cout << "Luz 1 activada: direccional" << endl;
+            luzdireccional->activar();
          }
          break;
 
@@ -394,20 +409,20 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
       case '>' :
          if (anguloAlpha){
-            luzposicional->variarAnguloAlpha(10);
+            luzdireccional->variarAnguloAlpha(10);
          }
          else if (anguloBeta){
-            luzposicional->variarAnguloBeta(10);
+            luzdireccional->variarAnguloBeta(10);
          }
          cout << "Aumentando ángulo alpha" << endl;
          break;
 
       case '<' :
          if (anguloAlpha){
-            luzposicional->variarAnguloAlpha(-10);
+            luzdireccional->variarAnguloAlpha(-10);
          }
          else if (anguloBeta){
-            luzposicional->variarAnguloBeta(-10);
+            luzdireccional->variarAnguloBeta(-10);
          }
          cout << "Aumentando ángulo beta" << endl;
          break;
@@ -415,28 +430,28 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
       case 'F' :
          modoIluminacion = !modoIluminacion;
          if (modoIluminacion)
-            cout << "Modo de iluminación: SMOOTH.";
-         else
             cout << "Modo de iluminación: FLAT.";
+         else
+            cout << "Modo de iluminación: SMOOTH.";
          break;
 
       case 'D' :
          // ESTAMOS EN MODO SELECCION DE DIBUJADO
          modoMenu = SELDIBUJADO;
          cout << "Modo selección de dibujado. Opciones: "
-              << " - 1: Dibujado inmediato." << endl
-              << " - 2: Dibujado diferido." << endl
+              << " - 8: Dibujado inmediato." << endl
+              << " - 9: Dibujado diferido." << endl
               << "Q para salir al menú principal." << endl;
          break;
 
-      case '1' :
+      case '8' :
          if (modoMenu == SELDIBUJADO){
             modoDibujado = INMEDIATO;
             cout << "Modo de dibujado: inmediato" << endl;
          }
          break;
 
-      case '2' :
+      case '9' :
          if (modoMenu == SELDIBUJADO){
             modoDibujado = DIFERIDO;
             cout << "Modo de dibujado: diferido" << endl;

@@ -53,8 +53,8 @@ private:
    Esfera * esfera = nullptr;
 
    // Luces de la escena
-   LuzDireccional * luzdireccional = nullptr;
    LuzPosicional * luzposicional = nullptr;
+   LuzDireccional * luzdireccional = nullptr;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible      = true;
@@ -71,11 +71,11 @@ private:
    bool ajedrezVisible   = false;   // Si ajedrez visible, los otros modos invisibles
    bool tapasVisible     = true;
 
-   bool modoIluminacion  = true;    // Modo iluminación: SMOOTH (true), FLAT(false)
+   bool modoIluminacion  = true;    // Modo iluminación: SMOOTH o FLAT
    bool iluminado        = false;   // Luces encendidas
 
    // Controlan qué ángulo de iluminación aumentar o decrementar
-   bool anguloAlpha       = false;
+   bool anguloAlpha      = false;
    bool anguloBeta       = false;
 
 public:
