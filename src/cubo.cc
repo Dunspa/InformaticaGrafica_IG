@@ -3,6 +3,9 @@
 #include "cubo.h"
 
 Cubo::Cubo(float lado){
+   numVertices = 8;
+   numTriangulos = 12;
+
    // Inicializar la tabla de vértices
    v.resize(numVertices);
    v[0] = {0.0, 0.0, lado};
@@ -32,31 +35,11 @@ Cubo::Cubo(float lado){
    f[11] = {0, 4, 1};
 
    // Triángulos modo ajedrez
-   int i_par = 0, i_impar = 0;
-   for (int i = 0 ; i < numTriangulos ; i++){
-      // Triángulos pares
-      if (i % 2 == 0){
-         f_par.push_back(f[i]);
-         i_par++;
-      }
-      // Triángulos impares
-      else{
-         f_impar.push_back(f[i]);
-         i_impar++;
-      }
-   }
+   calcularModoAjedrez();
 
-   // Inicializar la tabla de colores inmediato (rojo)
-   c.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c[i] = {1, 0, 0};
-   }
+   // Colores
+   calcularColores(ROJO, AZUL);
 
-   // Inicializar la tabla de colores diferido (azul)
-   c_dif.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c_dif[i] = {0, 0, 1};
-   }
-
+   // Normales
    calcular_normales();
 }

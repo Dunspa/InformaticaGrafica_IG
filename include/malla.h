@@ -17,6 +17,10 @@ typedef enum{
    DIFERIDO, INMEDIATO, AJEDREZ
 } dibujado;
 
+typedef enum{
+   ROJO, AZUL, VERDE, AMARILLO
+} color;
+
 // *****************************************************************************
 //
 // clase para objetos 3D (mallas indexadas)
@@ -43,7 +47,9 @@ public:
    void draw(dibujado modoDibuj, bool modoIluminacion);
 
 protected:
-   void calcular_normales();  // calcula tabla de normales de vértices (práctica 3)
+   void calcularColores(color col_inm, color col_dif); // Calcula las tablas de colores
+   void calcularModoAjedrez();      // Calcula los colores de las caras para el modo ajedrez
+   void calcular_normales();        // calcula tabla de normales de vértices (práctica 3)
 
    // Geometría y topología
    std::vector<Tupla3f> v;    // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
@@ -60,6 +66,8 @@ protected:
    std::vector<Tupla3f> nv;   // tabla de normales de los vértices
    int numNormalesCaras;      // Número total de normales en las caras
    int numNormalesVertices;   // Número total de normales en los vértices
+   int numVertices;           // Número total de vértices de la figura
+   int numTriangulos;         // Número total de triángulos de la figura
 
    // Identificadores de VBOs, ambos inicialmente a 0 (VBO no creados)
    GLuint id_vbo_ver = 0;  // Identificador para el VBO de tabla de vértices

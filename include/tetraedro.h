@@ -29,8 +29,6 @@ public:
 
 private:
    // Características de un tetraedro
-   static const int numVertices   = 4;
-   static const int numTriangulos = 4;
    int altura;
    Tupla3f baricentro;
 

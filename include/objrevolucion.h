@@ -18,8 +18,8 @@ class ObjRevolucion : public Malla3D{
 public:
    // Constructores
    ObjRevolucion();
-   ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_inf=true, bool tapa_sup=true, char eje_rotacion='Y');
-   ObjRevolucion(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_inf=true, bool tapa_sup=true, char eje_rotacion='Y');
+   ObjRevolucion(const std::string & archivo, int num_instancias, char eje_rotacion='Y');
+   ObjRevolucion(std::vector<Tupla3f> perfil, int num_instancias, char eje_rotacion='Y');
 
    // Añade las tapas al objeto de revolución (1 o 2 tapas)
    void crearTapas(int numTapas, char eje_rotacion);
@@ -43,10 +43,8 @@ protected:
 
    int numInstancias;      // Número total de réplicas rotadas (N)
    int numVerticesPerfil;  // Número total de vértices en el perfil original (M)
-   int numVertices;        // Número total de vértices de la figura (NM)
-   int numTriangulos;      // Número total de triángulos de la figura
-   bool tapaSup;           // El objeto tiene tapa superior
-   bool tapaInf;           // El objeto tiene tapa inferior
+   bool tapaSup = true;    // El objeto tiene tapa superior
+   bool tapaInf = true;    // El objeto tiene tapa inferior
 
 	const float PI = atan(1)*4.0;	// Número pi
 };

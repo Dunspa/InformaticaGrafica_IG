@@ -29,15 +29,6 @@ ObjPLY::ObjPLY(const std::string & nombre_archivo){
       }
    }
 
-   // Inicializar la tabla de colores inmediato (rojo)
-   c.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c[i] = {1, 0, 0};
-   }
-
-   // Inicializar la tabla de colores diferido (azul)
-   c_dif.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c_dif[i] = {0, 0, 1};
-   }
+   // Colores
+   calcularColores(ROJO, AZUL);
 }

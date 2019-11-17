@@ -22,10 +22,6 @@
 class ObjPLY : public Malla3D{
 public:
    ObjPLY(const std::string & nombre_archivo);
-
-private:
-   int numVertices;
-   int numTriangulos;
 };
 
 #endif

@@ -63,6 +63,11 @@ void Malla3D::draw_ModoDiferido(){
    if (id_vbo_tri == 0)
       id_vbo_tri = CrearVBO(GL_ELEMENT_ARRAY_BUFFER, 3*f.size()*sizeof(int), f.data());
 
+   // Habilitar uso de array de colores
+   glEnableClientState(GL_COLOR_ARRAY);
+   // Colores de los vértices
+   glColorPointer(3, GL_FLOAT, 0, c_dif.data());
+
    // Especificar localización y formato de la tabla de vértices y habilitarla
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);   // Activar VBO de vértices
    glVertexPointer(3, GL_FLOAT, 0, 0);          // Especifica formato y offset 0
@@ -74,6 +79,8 @@ void Malla3D::draw_ModoDiferido(){
    glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Desactivar VBO de triángulos
 
+   // Desactivar uso de array de colores
+   glDisableClientState(GL_COLOR_ARRAY);
    // Desactivar uso de array de vértices
    glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -126,6 +133,57 @@ void Malla3D::draw(dibujado modoDibuj, bool modoIluminacion){
       draw_ModoDiferido();
    else if (modoDibuj == AJEDREZ)
       draw_ModoAjedrez();
+}
+
+// -----------------------------------------------------------------------------
+// Calcula las tablas de colores de cualquier malla 3D (normal y diferido)
+void Malla3D::calcularColores(color col_inm, color col_dif){
+   c.resize(numVertices);
+   for (int i = 0 ; i < numVertices ; i++){
+      if (col_inm == ROJO){
+         c[i] = {1, 0, 0};
+      }
+      else if (col_inm == VERDE){
+         c[i] = {0, 0.8, 0};
+      }
+      else if (col_inm == AZUL){
+         c[i] = {0, 0, 1};
+      }
+      else if (col_inm == AMARILLO){
+         c[i] = {1, 0.8, 0};
+      }
+   }
+
+   c_dif.resize(numVertices);
+   for (int i = 0 ; i < numVertices ; i++){
+      if (col_dif == ROJO){
+         c_dif[i] = {1, 0, 0};
+      }
+      else if (col_dif == VERDE){
+         c_dif[i] = {0, 0.8, 0};
+      }
+      else if (col_dif == AZUL){
+         c_dif[i] = {0, 0, 1};
+      }
+      else if (col_dif == AMARILLO){
+         c_dif[i] = {1, 0.8, 0};
+      }
+   }
+}
+
+// -----------------------------------------------------------------------------
+// Calcula las caras para el modo ajedrez de cualquier malla 3D
+void Malla3D::calcularModoAjedrez(){
+   for (int i = 0 ; i < numTriangulos ; i++){
+      // Triángulos pares
+      if (i % 2 == 0){
+         f_par.push_back(f[i]);
+      }
+      // Triángulos impares
+      else{
+         f_impar.push_back(f[i]);
+      }
+   }
 }
 
 // -----------------------------------------------------------------------------

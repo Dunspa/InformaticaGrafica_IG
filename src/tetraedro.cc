@@ -4,19 +4,14 @@
 
 Tetraedro::Tetraedro(float lado){
    float x, y, z;
+   numVertices = 4;
+   numTriangulos = 4;
 
    // Inicializar la tabla de vértices
    v.resize(numVertices);
    v[0] = {0.0, 0.0, 0.0};
    v[1] = {lado, 0.0, 0.0};
    v[2] = {lado/2, 0, alturaCara(lado)};
-
-   /* Calcular las coordenadas del baricentro del tetraedro
-   x = (v[0](0) + v[1](0) + v[2](0)) / 3;
-   y = 0;
-   z = (v[0](3) + v[1](3) + v[2](3)) / 3;
-   baricentro = {x, y, z};*/
-
    v[3] = {lado/2, alturaTetraedro(lado), distanciaBaricentro(lado)};
 
    // Inicializar la tabla de caras o triángulos:
@@ -29,31 +24,13 @@ Tetraedro::Tetraedro(float lado){
    f[3]  = {3, 0 , 2};
 
    // Triángulos modo ajedrez
-   int i_par = 0, i_impar = 0;
-   for (int i = 0 ; i < numTriangulos ; i++){
-      // Triángulos pares
-      if (i % 2 == 0){
-         f_par.push_back(f[i]);
-         i_par++;
-      }
-      // Triángulos impares
-      else{
-         f_impar.push_back(f[i]);
-         i_impar++;
-      }
-   }
+   calcularModoAjedrez();
 
-   // Inicializar la tabla de colores inmediato (verde)
-   c.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c[i] = {0, 0.8, 0};
-   }
+   // Colores
+   calcularColores(VERDE, AMARILLO);
 
-   // Inicializar la tabla de colores diferido (amarillo)
-   c_dif.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c_dif[i] = {1, 0.8, 0};
-   }
+   // Normales
+   calcular_normales();
 }
 
 // -----------------------------------------------------------------------------

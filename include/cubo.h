@@ -28,8 +28,7 @@ public:
    Cubo(float lado = 1);
 
 private:
-   static const int numVertices   = 8;
-   static const int numTriangulos = 12;
+   int lado;
 };
 
 #endif

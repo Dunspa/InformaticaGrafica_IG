@@ -13,82 +13,47 @@ ObjRevolucion::ObjRevolucion(){
 
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un PLY)
-ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_inf, bool tapa_sup, char eje_rotacion){
+ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, char eje_rotacion){
    // Leer los vértices del perfil original
    ply::read_vertices(archivo, this->v);
    std::vector<Tupla3f> perfil = this->v;
    numVerticesPerfil = v.size();
 
    // Crear la malla del objeto de revolución
-   crearMalla(perfil, num_instancias, tapa_sup, tapa_inf, eje_rotacion);
+   crearMalla(perfil, num_instancias, tapaSup, tapaInf, eje_rotacion);
 
    // Triángulos modo ajedrez
-   int i_par = 0, i_impar = 0;
-   for (int i = 0 ; i < numTriangulos ; i++){
-      // Triángulos pares
-      if (i % 2 == 0){
-         f_par.push_back(f[i]);
-         i_par++;
-      }
-      // Triángulos impares
-      else{
-         f_impar.push_back(f[i]);
-         i_impar++;
-      }
-   }
+   calcularModoAjedrez();
 
-   // Inicializar la tabla de colores inmediato (rojo)
-   c.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c[i] = {1, 0, 0};
-   }
+   // Colores
+   calcularColores(ROJO, AZUL);
 
-   // Inicializar la tabla de colores diferido (azul)
-   c_dif.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c_dif[i] = {0, 0, 1};
-   }
+   // Normales
+   calcular_normales();
 }
 
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
-ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_inf, bool tapa_sup, char eje_rotacion){
+ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, char eje_rotacion){
    // Leer los vértices del perfil original
    std::vector<Tupla3f> perfil = archivo;
 
    // Crear la malla del objeto de revolución
-   crearMalla(perfil, num_instancias, tapa_sup, tapa_inf, eje_rotacion);
+   crearMalla(perfil, num_instancias, tapaSup, tapaInf, eje_rotacion);
 
    // Triángulos modo ajedrez
-   int i_par = 0, i_impar = 0;
-   for (int i = 0 ; i < numTriangulos ; i++){
-      // Triángulos pares
-      if (i % 2 == 0){
-         f_par.push_back(f[i]);
-         i_par++;
-      }
-      // Triángulos impares
-      else{
-         f_impar.push_back(f[i]);
-         i_impar++;
-      }
-   }
+   calcularModoAjedrez();
 
-   // Inicializar la tabla de colores inmediato (rojo)
-   c.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c[i] = {1, 0, 0};
-   }
+   // Colores
+   calcularColores(ROJO, AZUL);
 
-   // Inicializar la tabla de colores diferido (azul)
-   c_dif.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      c_dif[i] = {0, 0, 1};
-   }
+   // Normales
+   calcular_normales();
 }
 
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_inf, bool tapa_sup, char eje_rotacion){
    // Se supone que el perfil se da de abajo a arriba
+   bool sentido_perfil_ascendente;
    float x, y, z;
    Tupla3f polo_sur, polo_norte;
    numInstancias = num_instancias;
@@ -98,6 +63,19 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    // Se parte de la tabla de vértices y triángulos vacías
    v.clear();
    f.clear();
+
+   // Comprobar sentido del perfil
+   switch (toupper(eje_rotacion)){
+      case 'X' :
+
+         break;
+
+      case 'Y' :
+         break;
+
+      case 'Z' :
+         break;
+   }
 
    // Comprobación de polos en el perfil original
    bool existe_original_inf, existe_original_sup;
@@ -214,10 +192,6 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    v.push_back(polo_sur);
    v.push_back(polo_norte);
 
-   /*for (int i = 0 ; i < v.size() ; i++){
-      std::cout << v[i] << " " << std::flush;
-   }*/
-
    // Creación de la tabla de triángulos
    for (int i = 0 ; i < numInstancias ; i++){
       for (int j = 0 ; j < numVerticesPerfil - 1 ; j++){
@@ -295,17 +269,14 @@ void ObjRevolucion::crearTapas(int numTapas, char eje_rotacion){
       numTriangulos = f.size();
 
       // Triángulos modo ajedrez
-      int i_par = 0, i_impar = 0;
       for (int i = 0 ; i < numInstancias ; i++){
          // Triángulos pares
          if (i % 2 == 0){
             f_par.push_back(f[i]);
-            i_par++;
          }
          // Triángulos impares
          else{
             f_impar.push_back(f[i]);
-            i_impar++;
          }
       }
    }
@@ -314,19 +285,7 @@ void ObjRevolucion::crearTapas(int numTapas, char eje_rotacion){
       crearTapaSup(eje_rotacion);
 
       // Triángulos modo ajedrez
-      int i_par = 0, i_impar = 0;
-      for (int i = 0 ; i < numTriangulos ; i++){
-         // Triángulos pares
-         if (i % 2 == 0){
-            f_par.push_back(f[i]);
-            i_par++;
-         }
-         // Triángulos impares
-         else{
-            f_impar.push_back(f[i]);
-            i_impar++;
-         }
-      }
+      calcularModoAjedrez();
    }
 
    numVertices = v.size();
@@ -364,14 +323,5 @@ void ObjRevolucion::eliminarTapas(int numTapas){
 
    // Triángulos modo ajedrez
    int i_par = 0, i_impar = 0;
-   for (int i = 0 ; i < numTriangulos ; i++){
-      // Triángulos pares
-      if (i % 2 == 0){
-         f_par.push_back(f[i]);
-      }
-      // Triángulos impares
-      else{
-         f_impar.push_back(f[i]);
-      }
-   }
+   calcularModoAjedrez();
 }

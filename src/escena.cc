@@ -16,15 +16,15 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    //cubo = new Cubo(50);
-    //tetraedro = new Tetraedro(50);
-    //peon = new ObjRevolucion("plys/peon.ply", 20, true, true);
-    //cilindro = new Cilindro(20, 20, 20, 'Y', true, true);
-    //cono = new Cono(20, 20, 20, 'Y', true, true);
-    esfera = new Esfera(20, 20, 20);
+    cubo = new Cubo(50);                                       // Cubo(lado)
+    tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
+    peon = new ObjRevolucion("plys/peon.ply", 20); // Peon(perfil.ply, num_instancias)
+    cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
+    cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
+    esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
 
     // Crear las luces de la escena
-    luzposicional = new LuzPosicional({0, 0, 0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzposicional = new LuzPosicional({10, 10, 10}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
     luzdireccional = new LuzDireccional({0, 0, 10}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
 }
 
@@ -221,6 +221,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    using namespace std;
    cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir = false;
+
    switch(toupper(tecla)){
       case 'Q' :
          if (modoMenu != NADA){
@@ -243,13 +244,38 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          cout << "Modo selección de objeto. Opciones: " << endl
               << " - C: Cubo." << endl
               << " - T: Tetraedro." << endl
-              << " - H: Peon." << endl
-              << " - J: Cilindro." << endl
-              << " - N: Cono." << endl
+              << " - P: Peon." << endl
+              << " - L: Cilindro." << endl
+              << " - O: Cono." << endl
               << " - E: Esfera." << endl
               << "Q para salir al menú principal." << endl;
          break;
 
+      case 'V' :
+         // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
+         modoMenu = SELVISUALIZACION;
+         cout << "Modo selección de visualización. Opciones: " << endl
+              << " - P: Visualizar puntos." << endl
+              << " - L: Visualizar líneas." << endl
+              << " - S: Visualizar sólidos." << endl
+              << " - A: Visualizar modo ajedrez." << endl
+              << " - T: Visualizar tapas." << endl
+              << " - I: Visualizar iluminación." << endl
+              << "Q para salir al menú principal." << endl;
+         break;
+
+      case 'D' :
+         // ESTAMOS EN MODO SELECCION DE DIBUJADO
+         modoMenu = SELDIBUJADO;
+         cout << "Modo selección de dibujado. Opciones: " << endl
+              << " - 8: Dibujado inmediato." << endl
+              << " - 9: Dibujado diferido." << endl
+              << "Q para salir al menú principal." << endl;
+         break;
+   }
+
+   // Modo selección de objeto
+   switch (toupper(tecla)){
       case 'C' :
          if (modoMenu == SELOBJETO){
             cuboVisible = !cuboVisible;
@@ -264,21 +290,21 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          }
          break;
 
-      case 'H' :
+      case 'P' :
          if (modoMenu == SELOBJETO){
             peonVisible = !peonVisible;
             cout << "Objeto: Peon" << endl;
          }
          break;
 
-      case 'J' :
+      case 'L' :
          if (modoMenu == SELOBJETO){
             cilindroVisible = !cilindroVisible;
             cout << "Objeto: Cilindro" << endl;
          }
          break;
 
-      case 'N' :
+      case 'O' :
          if (modoMenu == SELOBJETO){
             conoVisible = !conoVisible;
             cout << "Objeto: Cono" << endl;
@@ -291,20 +317,10 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             cout << "Objeto: Esfera" << endl;
          }
          break;
+   }
 
-      case 'V' :
-         // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-         modoMenu = SELVISUALIZACION;
-         cout << "Modo selección de visualización. Opciones: " << endl
-              << " - P: Visualizar puntos." << endl
-              << " - L: Visualizar líneas." << endl
-              << " - S: Visualizar sólidos." << endl
-              << " - Z: Visualizar modo ajedrez." << endl
-              << " - K: Visualizar tapas." << endl
-              << " - I: Visualizar iluminación." << endl
-              << "Q para salir al menú principal." << endl;
-         break;
-
+   // Modo selección de modo de visualización
+   switch (toupper(tecla)){
       case 'P' :
          // PUNTOS
          if (modoMenu == SELVISUALIZACION){
@@ -315,6 +331,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          break;
 
       case 'L' :
+         // LINEAS
          if (modoMenu == SELVISUALIZACION){
             lineasVisible = !lineasVisible;
             iluminado = false;
@@ -323,6 +340,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          break;
 
       case 'S' :
+         // SÓLIDO
          if (modoMenu == SELVISUALIZACION){
             solidoVisible = !solidoVisible;
             iluminado = false;
@@ -330,7 +348,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          }
          break;
 
-      case 'Z' :
+      case 'A' :
+         // AJEDREZ
          if (modoMenu == SELVISUALIZACION){
             modoDibujado = AJEDREZ;
             ajedrezVisible = !ajedrezVisible;
@@ -341,7 +360,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          }
          break;
 
-      case 'K' :
+      case 'T' :
          if (modoMenu == SELVISUALIZACION){
             cout << "Modo de visualización: tapas." << endl;
 
@@ -372,7 +391,10 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << "Q para salir al menú principal." << endl;
          }
          break;
+   }
 
+   // Modo iluminación
+   switch (toupper(tecla)){
       case '0' :
          if (modoMenu == ILUMINACION){
             cout << "Luz 0 activada: posicional" << endl;
@@ -434,16 +456,10 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          else
             cout << "Modo de iluminación: SMOOTH.";
          break;
+   }
 
-      case 'D' :
-         // ESTAMOS EN MODO SELECCION DE DIBUJADO
-         modoMenu = SELDIBUJADO;
-         cout << "Modo selección de dibujado. Opciones: "
-              << " - 8: Dibujado inmediato." << endl
-              << " - 9: Dibujado diferido." << endl
-              << "Q para salir al menú principal." << endl;
-         break;
-
+   // Modo selección de dibujado
+   switch(toupper(tecla)){
       case '8' :
          if (modoMenu == SELDIBUJADO){
             modoDibujado = INMEDIATO;
