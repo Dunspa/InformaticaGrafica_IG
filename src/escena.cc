@@ -18,14 +18,15 @@ Escena::Escena(){
     // Crear los objetos de la escena
     cubo = new Cubo(50);                                       // Cubo(lado)
     tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
-    peon = new ObjRevolucion("plys/peon.ply", 20); // Peon(perfil.ply, num_instancias)
+    peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
+    hormiga = new ObjPLY("plys/ant.ply");                      // Hormiga(ant.ply)
     cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
     cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
     esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
 
     // Crear las luces de la escena
-    luzposicional = new LuzPosicional({10, 10, 10}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
-    luzdireccional = new LuzDireccional({0, 0, 10}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzposicional = new LuzPosicional({10.0, 10.0, 10.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzdireccional = new LuzDireccional({0.0, 30.0, 30.0}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
 }
 
 //**************************************************************************
@@ -36,6 +37,7 @@ Escena::~Escena(){
    delete cubo;
    delete tetraedro;
    delete peon;
+   delete hormiga;
    delete cilindro;
    delete cono;
    delete esfera;
@@ -82,6 +84,10 @@ void Escena::eligeObjetos(dibujado modoDibuj, objetoEscena obj){
    else if (obj == PEON){
       if (peon != nullptr && peonVisible)
          peon->draw(modoDibuj, modoIluminacion);
+   }
+   else if (obj == HORMIGA){
+      if (hormiga != nullptr && hormigaVisible)
+         hormiga->draw(modoDibuj, modoIluminacion);
    }
    else if (obj == CILINDRO){
       if (cilindro != nullptr && cilindroVisible)
@@ -187,6 +193,13 @@ void Escena::dibujar(){
       dibujaObjetos(modoDibujado, PEON);
    glPopMatrix();
 
+   // Hormiga
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(-50.0, 30.0, 0.0);
+      dibujaObjetos(modoDibujado, HORMIGA);
+   glPopMatrix();
+
    // Cilindro
    glPushMatrix();
       glScalef(2.0, 2.0, 2.0);
@@ -197,7 +210,7 @@ void Escena::dibujar(){
    // Cono
    glPushMatrix();
       glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-50.0, 40.0, 0.0);
+      glTranslatef(-50.0, 60.0, 0.0);
       dibujaObjetos(modoDibujado, CONO);
    glPopMatrix();
 
@@ -222,9 +235,10 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir = false;
 
+   // Menús
    switch(toupper(tecla)){
       case 'Q' :
-         if (modoMenu != NADA){
+         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO){
             modoMenu = NADA;
             cout << "Menú principal. Opciones: " << endl
                  << " - O: Selección de objeto." << endl
@@ -232,136 +246,139 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - D: Selección de dibujado." << endl
                  << "Q para salir del programa." << endl;
          }
-         else{
+         else if (modoMenu == ILUMINACION){
+            modoMenu = SELVISUALIZACION;
+            cout << "Modo selección de visualización. Opciones: " << endl
+                 << " - P: Visualizar puntos." << endl
+                 << " - L: Visualizar líneas." << endl
+                 << " - S: Visualizar sólidos." << endl
+                 << " - A: Visualizar modo ajedrez." << endl
+                 << " - T: Visualizar tapas." << endl
+                 << " - I: Visualizar iluminación." << endl
+                 << "Q para salir al menú principal." << endl;
+         }
+         else if (modoMenu == NADA){
             salir = true;
             cout << "Cerrando programa" << endl;
          }
          break;
+   }
 
-      case 'O' :
-         // ESTAMOS EN MODO SELECCION DE OBJETO
-         modoMenu = SELOBJETO;
-         cout << "Modo selección de objeto. Opciones: " << endl
-              << " - C: Cubo." << endl
-              << " - T: Tetraedro." << endl
-              << " - P: Peon." << endl
-              << " - L: Cilindro." << endl
-              << " - O: Cono." << endl
-              << " - E: Esfera." << endl
-              << "Q para salir al menú principal." << endl;
-         break;
+   if (modoMenu == NADA){
+      switch (toupper(tecla)){
+         case 'O' :
+            // ESTAMOS EN MODO SELECCION DE OBJETO
+            modoMenu = SELOBJETO;
+            cout << "Modo selección de objeto. Opciones: " << endl
+                 << " - C: Cubo." << endl
+                 << " - T: Tetraedro." << endl
+                 << " - P: Peon." << endl
+                 << " - L: Cilindro." << endl
+                 << " - O: Cono." << endl
+                 << " - E: Esfera." << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
 
-      case 'V' :
-         // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-         modoMenu = SELVISUALIZACION;
-         cout << "Modo selección de visualización. Opciones: " << endl
-              << " - P: Visualizar puntos." << endl
-              << " - L: Visualizar líneas." << endl
-              << " - S: Visualizar sólidos." << endl
-              << " - A: Visualizar modo ajedrez." << endl
-              << " - T: Visualizar tapas." << endl
-              << " - I: Visualizar iluminación." << endl
-              << "Q para salir al menú principal." << endl;
-         break;
+         case 'V' :
+            // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
+            modoMenu = SELVISUALIZACION;
+            cout << "Modo selección de visualización. Opciones: " << endl
+                 << " - P: Visualizar puntos." << endl
+                 << " - L: Visualizar líneas." << endl
+                 << " - S: Visualizar sólidos." << endl
+                 << " - A: Visualizar modo ajedrez." << endl
+                 << " - T: Visualizar tapas." << endl
+                 << " - I: Visualizar iluminación." << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
 
-      case 'D' :
-         // ESTAMOS EN MODO SELECCION DE DIBUJADO
-         modoMenu = SELDIBUJADO;
-         cout << "Modo selección de dibujado. Opciones: " << endl
-              << " - 8: Dibujado inmediato." << endl
-              << " - 9: Dibujado diferido." << endl
-              << "Q para salir al menú principal." << endl;
-         break;
+         case 'D' :
+            // ESTAMOS EN MODO SELECCION DE DIBUJADO
+            modoMenu = SELDIBUJADO;
+            cout << "Modo selección de dibujado. Opciones: " << endl
+                 << " - 8: Dibujado inmediato." << endl
+                 << " - 9: Dibujado diferido." << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
+      }
+      tecla = 0;
    }
 
    // Modo selección de objeto
-   switch (toupper(tecla)){
-      case 'C' :
-         if (modoMenu == SELOBJETO){
+   if (modoMenu == SELOBJETO){
+      switch (toupper(tecla)){
+         case 'C' :
             cuboVisible = !cuboVisible;
             cout << "Objeto: Cubo" << endl;
-         }
-         break;
+            break;
 
-      case 'T' :
-         if (modoMenu == SELOBJETO){
+         case 'T' :
             tetraedroVisible = !tetraedroVisible;
             cout << "Objeto: Tetraedro" << endl;
-         }
-         break;
+            break;
 
-      case 'P' :
-         if (modoMenu == SELOBJETO){
+         case 'P' :
             peonVisible = !peonVisible;
             cout << "Objeto: Peon" << endl;
-         }
-         break;
+            break;
 
-      case 'L' :
-         if (modoMenu == SELOBJETO){
+         case 'H' :
+            hormigaVisible = !hormigaVisible;
+            cout << "Objeto: Hormiga (PLY)" << endl;
+            break;
+
+         case 'L' :
             cilindroVisible = !cilindroVisible;
             cout << "Objeto: Cilindro" << endl;
-         }
-         break;
+            break;
 
-      case 'O' :
-         if (modoMenu == SELOBJETO){
+         case 'O' :
             conoVisible = !conoVisible;
             cout << "Objeto: Cono" << endl;
-         }
-         break;
+            break;
 
-      case 'E' :
-         if (modoMenu == SELOBJETO){
+         case 'E' :
             esferaVisible = !esferaVisible;
             cout << "Objeto: Esfera" << endl;
-         }
-         break;
+            break;
+      }
    }
 
    // Modo selección de modo de visualización
-   switch (toupper(tecla)){
-      case 'P' :
-         // PUNTOS
-         if (modoMenu == SELVISUALIZACION){
+   if (modoMenu == SELVISUALIZACION){
+      switch (toupper(tecla)){
+         case 'P' :
+            // PUNTOS
             puntosVisible = !puntosVisible;
             iluminado = false;
             cout << "Modo de visualización: puntos" << endl;
-         }
-         break;
+            break;
 
-      case 'L' :
-         // LINEAS
-         if (modoMenu == SELVISUALIZACION){
+         case 'L' :
+            // LINEAS
             lineasVisible = !lineasVisible;
             iluminado = false;
             cout << "Modo de visualización: líneas" << endl;
-         }
-         break;
+            break;
 
-      case 'S' :
-         // SÓLIDO
-         if (modoMenu == SELVISUALIZACION){
+         case 'S' :
+            // SÓLIDO
             solidoVisible = !solidoVisible;
             iluminado = false;
             cout << "Modo de visualización: sólido" << endl;
-         }
-         break;
+            break;
 
-      case 'A' :
-         // AJEDREZ
-         if (modoMenu == SELVISUALIZACION){
+         case 'A' :
+            // AJEDREZ
             modoDibujado = AJEDREZ;
             ajedrezVisible = !ajedrezVisible;
             iluminado = false;
             if (!ajedrezVisible)
                modoDibujado = INMEDIATO; // Inmediato por defecto
             cout << "Modo de visualización: ajedrez" << endl;
-         }
-         break;
+            break;
 
-      case 'T' :
-         if (modoMenu == SELVISUALIZACION){
+         case 'T' :
             cout << "Modo de visualización: tapas." << endl;
 
             // Dibujar tapas
@@ -373,11 +390,9 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             }
 
             tapasVisible = !tapasVisible;
-         }
-         break;
+            break;
 
-      case 'I' :
-         if (modoMenu == SELVISUALIZACION){
+         case 'I' :
             modoMenu = ILUMINACION;
             iluminado = true;
             solidoVisible = true;
@@ -389,90 +404,96 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - B: Modo variación del ángulo beta." << endl
                  << " - F: Modo de iluminación FLAT o SMOOTH" << endl
                  << "Q para salir al menú principal." << endl;
-         }
-         break;
+            break;
+      }
    }
 
    // Modo iluminación
-   switch (toupper(tecla)){
-      case '0' :
-         if (modoMenu == ILUMINACION){
+   if (modoMenu == ILUMINACION){
+      switch (toupper(tecla)){
+         case '0' :
             cout << "Luz 0 activada: posicional" << endl;
-            luzposicional->activar();
-         }
-         break;
+            if (!luzposicional->activada)
+               luzposicional->activar();
+            else
+               luzposicional->desactivar();
+            break;
 
-      case '1' :
-         if (modoMenu == ILUMINACION){
+         case '1' :
             cout << "Luz 1 activada: direccional" << endl;
-            luzdireccional->activar();
-         }
-         break;
+            if (!luzdireccional->activada)
+               luzdireccional->activar();
+            else
+               luzdireccional->desactivar();
+            break;
 
-      case 'A' :
-         if (modoMenu == ILUMINACION){
-            anguloAlpha = !anguloAlpha;
+         case 'A' :
+            anguloAlpha = true;
+            anguloBeta = false;
             cout << "Modo de iluminación: variación del ángulo alpha. Opciones: " << endl
                  << " - >: Incrementa el ángulo." << endl
                  << " - <: Decrementa el ángulo." << endl
                  << "Q para salir al menú principal." << endl;
-         }
-         break;
+            break;
 
-      case 'B' :
-         if (modoMenu == ILUMINACION){
-            anguloBeta = !anguloBeta;
+         case 'B' :
+            anguloBeta = true;
+            anguloAlpha = false;
             cout << "Modo de iluminación: variación del ángulo beta. Opciones: " << endl
                  << " - >: Incrementa el ángulo." << endl
                  << " - <: Decrementa el ángulo." << endl
                  << "Q para salir al menú principal." << endl;
-         }
-         break;
+            break;
 
-      case '>' :
-         if (anguloAlpha){
-            luzdireccional->variarAnguloAlpha(10);
-         }
-         else if (anguloBeta){
-            luzdireccional->variarAnguloBeta(10);
-         }
-         cout << "Aumentando ángulo alpha" << endl;
-         break;
+         case '>' :
+            if (anguloAlpha){
+               luzdireccional->variarAnguloAlpha(0.1);
+               luzdireccional->activar();
+               cout << "Aumentando ángulo alpha" << endl;
+            }
+            else if (anguloBeta){
+               luzdireccional->variarAnguloBeta(0.1);
+               luzdireccional->activar();
+               cout << "Aumentando ángulo beta" << endl;
+            }
+            break;
 
-      case '<' :
-         if (anguloAlpha){
-            luzdireccional->variarAnguloAlpha(-10);
-         }
-         else if (anguloBeta){
-            luzdireccional->variarAnguloBeta(-10);
-         }
-         cout << "Aumentando ángulo beta" << endl;
-         break;
+         case '<' :
+            if (anguloAlpha){
+               luzdireccional->variarAnguloAlpha(-0.1);
+               luzdireccional->activar();
+               cout << "Disminuyendo ángulo alpha" << endl;
+            }
+            else if (anguloBeta){
+               luzdireccional->variarAnguloBeta(-0.1);
+               luzdireccional->activar();
+               cout << "Disminuyendo ángulo beta" << endl;
+            }
+            break;
 
-      case 'F' :
-         modoIluminacion = !modoIluminacion;
-         if (modoIluminacion)
-            cout << "Modo de iluminación: FLAT.";
-         else
-            cout << "Modo de iluminación: SMOOTH.";
-         break;
+         case 'F' :
+            modoIluminacion = !modoIluminacion;
+            if (modoIluminacion)
+               cout << "Modo de iluminación: FLAT.";
+            else
+               cout << "Modo de iluminación: SMOOTH.";
+            break;
+      }
    }
 
    // Modo selección de dibujado
-   switch(toupper(tecla)){
-      case '8' :
-         if (modoMenu == SELDIBUJADO){
+   if (modoMenu == SELDIBUJADO){
+      switch(toupper(tecla)){
+         case '8' :
             modoDibujado = INMEDIATO;
             cout << "Modo de dibujado: inmediato" << endl;
-         }
-         break;
+            break;
 
-      case '9' :
-         if (modoMenu == SELDIBUJADO){
+         case '9' :
             modoDibujado = DIFERIDO;
             cout << "Modo de dibujado: diferido" << endl;
-         }
-         break;
+            break;
+      }
    }
 
    return salir;

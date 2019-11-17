@@ -30,6 +30,10 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, ch
 
    // Normales
    calcular_normales();
+
+   // Material
+   Material mat(jade[0], jade[1], jade[2], jade_brillo);
+   setMaterial(mat);
 }
 
 // *****************************************************************************
@@ -49,6 +53,10 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, c
 
    // Normales
    calcular_normales();
+
+   // Material
+   Material mat(jade[0], jade[1], jade[2], jade_brillo);
+   setMaterial(mat);
 }
 
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_inf, bool tapa_sup, char eje_rotacion){

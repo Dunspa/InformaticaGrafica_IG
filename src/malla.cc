@@ -122,11 +122,16 @@ void Malla3D::draw_ModoAjedrez(){
 // Función de visualización de la malla,
 // puede llamar a draw_ModoInmediato o bien a draw_ModoDiferido
 void Malla3D::draw(dibujado modoDibuj, bool modoIluminacion){
+   // Aplicar material a la malla
+   m.aplicar();
+
+   // Modo de iluminación SMOOTH o FLAT
    if (modoIluminacion)
       glShadeModel(GL_SMOOTH);
    else
       glShadeModel(GL_FLAT);
 
+   // Dibujar en modo inmediato, diferido o ajedrez (inmediato por defecto)
    if (modoDibuj == INMEDIATO)
       draw_ModoInmediato();
    else if (modoDibuj == DIFERIDO)
@@ -230,4 +235,10 @@ void Malla3D::calcular_normales(){
    }
 
    numNormalesVertices = nv.size();
+}
+
+// -----------------------------------------------------------------------------
+// Aplica un material a la malla 3D
+void Malla3D::setMaterial(Material mat){
+   m = mat;
 }

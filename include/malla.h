@@ -12,6 +12,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "aux.h"
+#include "material.h"
 
 typedef enum{
    DIFERIDO, INMEDIATO, AJEDREZ
@@ -50,6 +51,7 @@ protected:
    void calcularColores(color col_inm, color col_dif); // Calcula las tablas de colores
    void calcularModoAjedrez();      // Calcula los colores de las caras para el modo ajedrez
    void calcular_normales();        // calcula tabla de normales de vértices (práctica 3)
+   void setMaterial(Material mat);
 
    // Geometría y topología
    std::vector<Tupla3f> v;    // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
@@ -68,6 +70,17 @@ protected:
    int numNormalesVertices;   // Número total de normales en los vértices
    int numVertices;           // Número total de vértices de la figura
    int numTriangulos;         // Número total de triángulos de la figura
+
+   // Material
+   Material m;
+
+   // Tipos de materiales (reflectividad difusa, especular y ambiente)
+   std::vector<Tupla4f> esmeralda = {{0.07568, 0.61424, 0.07568, 1.0}, {0.633, 0.727811, 0.633, 1.0}, {0.0215, 0.1745, 0.0215, 1.0}};
+   float esmeralda_brillo = 0.6;
+   std::vector<Tupla4f> jade = {{0.54, 0.89, 0.63, 1.0}, {0.316228, 0.316228, 0.316228, 1.0}, {0.135, 0.2225, 0.1575, 1.0}};
+   float jade_brillo = 0.1;
+   std::vector<Tupla4f> obsidiana = {{0.18275, 0.17, 0.22525, 1.0}, {0.332741, 0.328634, 0.346435, 1.0}, {0.05375, 0.05, 0.06625, 1.0}};
+   float obsidiana_brillo = 0.3;
 
    // Identificadores de VBOs, ambos inicialmente a 0 (VBO no creados)
    GLuint id_vbo_ver = 0;  // Identificador para el VBO de tabla de vértices

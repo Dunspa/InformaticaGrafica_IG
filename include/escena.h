@@ -14,11 +14,11 @@
 #include "luzposicional.h"
 
 typedef enum{
-   NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION
+   MENUPRINCIPAL, NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, PEON, CILINDRO, CONO, ESFERA
+   CUBO, TETRAEDRO, PEON, HORMIGA, CILINDRO, CONO, ESFERA
 } objetoEscena;
 
 class Escena{
@@ -45,21 +45,23 @@ private:
 
    // Objetos de la escena (importante inicializarlos a nullptr)
    Ejes ejes;
-   Cubo * cubo = nullptr;
+   Cubo * cubo           = nullptr;
    Tetraedro * tetraedro = nullptr;
-   ObjRevolucion * peon = nullptr;
-   Cilindro * cilindro = nullptr;
-   Cono * cono = nullptr;
-   Esfera * esfera = nullptr;
+   ObjRevolucion * peon  = nullptr;
+   ObjPLY * hormiga      = nullptr;
+   Cilindro * cilindro   = nullptr;
+   Cono * cono           = nullptr;
+   Esfera * esfera       = nullptr;
 
    // Luces de la escena
-   LuzPosicional * luzposicional = nullptr;
+   LuzPosicional * luzposicional   = nullptr;
    LuzDireccional * luzdireccional = nullptr;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible      = true;
    bool tetraedroVisible = true;
    bool peonVisible      = true;
+   bool hormigaVisible   = true;
    bool cilindroVisible  = true;
    bool conoVisible      = true;
    bool esferaVisible    = true;

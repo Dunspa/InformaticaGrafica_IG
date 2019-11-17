@@ -31,4 +31,11 @@ ObjPLY::ObjPLY(const std::string & nombre_archivo){
 
    // Colores
    calcularColores(ROJO, AZUL);
+
+   // Normales
+   calcular_normales();
+
+   // Material
+   Material mat(jade[0], jade[1], jade[2], jade_brillo);
+   setMaterial(mat);
 }

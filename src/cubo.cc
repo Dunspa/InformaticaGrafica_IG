@@ -42,4 +42,8 @@ Cubo::Cubo(float lado){
 
    // Normales
    calcular_normales();
+
+   // Material
+   Material mat(esmeralda[0], esmeralda[1], esmeralda[2], esmeralda_brillo);
+   setMaterial(mat);
 }

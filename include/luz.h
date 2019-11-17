@@ -19,10 +19,12 @@ protected:
    Tupla4f colorAmbiente;
    Tupla4f colorDifuso;
    Tupla4f colorEspecular;
-   bool activada;
 
 public:
+   bool activada;
+
    void activar();
+   void desactivar();
 };
 
 #endif
