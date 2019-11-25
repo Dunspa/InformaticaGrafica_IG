@@ -33,7 +33,7 @@ ObjPLY::ObjPLY(const std::string & nombre_archivo){
    calcularColores(VERDE, PUNTOS);
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
-   calcularColores(VERDE, DIFERIDO);
+   calcularColores(AZUL, DIFERIDO);
 
    // Normales
    calcular_normales();

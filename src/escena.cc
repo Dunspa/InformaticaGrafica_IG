@@ -299,8 +299,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             // ESTAMOS EN MODO SELECCION DE DIBUJADO
             modoMenu = SELDIBUJADO;
             cout << "Modo selección de dibujado. Opciones: " << endl
-                 << " - 8: Dibujado inmediato." << endl
-                 << " - 9: Dibujado diferido." << endl
+                 << " - 1: Dibujado inmediato." << endl
+                 << " - 2: Dibujado diferido." << endl
                  << "Q para salir al menú principal." << endl;
             break;
       }
@@ -487,12 +487,12 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    // Modo selección de dibujado
    if (modoMenu == SELDIBUJADO){
       switch(toupper(tecla)){
-         case '8' :
+         case '1' :
             modoDibujado = INMEDIATO;
             cout << "Modo de dibujado: inmediato" << endl;
             break;
 
-         case '9' :
+         case '2' :
             modoDibujado = DIFERIDO;
             cout << "Modo de dibujado: diferido" << endl;
             break;

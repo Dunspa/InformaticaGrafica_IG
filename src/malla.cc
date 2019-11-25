@@ -76,7 +76,7 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
 
    // Habilitar uso de array de colores
    glEnableClientState(GL_COLOR_ARRAY);
-   
+
    if (modoVisual == PUNTOS){
       // Colores de los vértices
       glColorPointer(3, GL_FLOAT, 0, c_vert.data());
@@ -87,7 +87,7 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
    }
    else if (modoVisual == SOLIDO){
       // Colores del sólido
-      glColorPointer(3, GL_FLOAT, 0, c.data());
+      glColorPointer(3, GL_FLOAT, 0, c_dif.data());
    }
 
    // Especificar localización y formato de la tabla de vértices y habilitarla

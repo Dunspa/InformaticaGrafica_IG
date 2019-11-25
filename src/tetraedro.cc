@@ -30,7 +30,7 @@ Tetraedro::Tetraedro(float lado){
    calcularColores(VERDE, PUNTOS);
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
-   calcularColores(VERDE, DIFERIDO);
+   calcularColores(AZUL, DIFERIDO);
 
    // Normales
    calcular_normales();

@@ -34,7 +34,7 @@ Cilindro::Cilindro(float h, float r, int num_instancias, char eje_rotacion){
    calcularColores(VERDE, PUNTOS);
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
-   calcularColores(VERDE, DIFERIDO);
+   calcularColores(AZUL, DIFERIDO);
 
    // Normales
    calcular_normales();

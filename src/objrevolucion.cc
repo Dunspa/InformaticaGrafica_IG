@@ -29,7 +29,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, ch
    calcularColores(VERDE, PUNTOS);
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
-   calcularColores(VERDE, DIFERIDO);
+   calcularColores(AZUL, DIFERIDO);
 
    // Normales
    calcular_normales();
@@ -55,7 +55,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, c
    calcularColores(VERDE, PUNTOS);
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
-   calcularColores(VERDE, DIFERIDO);
+   calcularColores(AZUL, DIFERIDO);
 
    // Normales
    calcular_normales();
