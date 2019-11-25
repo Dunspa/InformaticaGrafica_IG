@@ -15,7 +15,7 @@
 #include "material.h"
 
 typedef enum{
-   DIFERIDO, INMEDIATO, AJEDREZ
+   PUNTOS, LINEAS, SOLIDO, DIFERIDO, INMEDIATO, AJEDREZ
 } dibujado;
 
 typedef enum{
@@ -31,12 +31,12 @@ typedef enum{
 class Malla3D{
 public:
    // dibuja el objeto en modo inmediato
-   void draw_ModoInmediato();
+   void draw_ModoInmediato(dibujado modoVisual);
 
    // crea un VBO (Virtual Buffer Object)
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram);
    // dibuja el objeto en modo diferido (usando VBOs)
-   void draw_ModoDiferido();
+   void draw_ModoDiferido(dibujado modoVisual);
 
    // dibuja el objeto en modo inmediato y ajedrez
    void draw_ModoAjedrez();
@@ -45,10 +45,10 @@ public:
    // está función llama a 'draw_ModoInmediato' (modo inmediato)
    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
    // o bien a draw_ModoAjedrez (modo ajedrez con inmediato)
-   void draw(dibujado modoDibuj, bool modoIluminacion);
+   void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
 
 protected:
-   void calcularColores(color col_inm, color col_dif); // Calcula las tablas de colores
+   void calcularColores(color col_inm, dibujado modoVisual); // Calcula las tablas de colores
    void calcularModoAjedrez();      // Calcula los colores de las caras para el modo ajedrez
    void calcular_normales();        // calcula tabla de normales de vértices (práctica 3)
    void setMaterial(Material mat);
@@ -60,8 +60,16 @@ protected:
    std::vector<Tupla3i> f_impar;    // Tabla de triángulos impares (modo ajedrez)
 
    // Tabla de colores de vértices (una tupla por vértice, con tres floats)
-   std::vector<Tupla3f> c;       // Color modo inmediato (par en ajedrez)
-   std::vector<Tupla3f> c_dif;   // Color modo diferido (impar en ajedrez)
+   std::vector<Tupla3f> c;       // Color sólido modo inmediato (par en ajedrez)
+   std::vector<Tupla3f> c_dif;   // Color sólido modo diferido (impar en ajedrez)
+   std::vector<Tupla3f> c_vert;  // Color de los vértices
+   std::vector<Tupla3f> c_arist; // Color de las aristas
+
+   // Colores
+   Tupla3f colorRojo = {1, 0, 0};
+   Tupla3f colorAzul = {0, 0, 1};
+   Tupla3f colorVerde = {0, 0.8, 0};
+   Tupla3f colorAmarillo = {1, 0.8, 0};
 
    // Normales
    std::vector<Tupla3f> nf;   // tabla de normales de las caras

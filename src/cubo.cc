@@ -38,7 +38,10 @@ Cubo::Cubo(float lado){
    calcularModoAjedrez();
 
    // Colores
-   calcularColores(ROJO, AZUL);
+   calcularColores(VERDE, PUNTOS);
+   calcularColores(AMARILLO, LINEAS);
+   calcularColores(ROJO, SOLIDO);
+   calcularColores(VERDE, DIFERIDO);
 
    // Normales
    calcular_normales();

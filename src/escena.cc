@@ -1,3 +1,4 @@
+
 #include "aux.h"     // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
@@ -19,7 +20,7 @@ Escena::Escena(){
     cubo = new Cubo(50);                                       // Cubo(lado)
     tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
     peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
-    hormiga = new ObjPLY("plys/ant.ply");                      // Hormiga(ant.ply)
+    puertaMagica = new ObjPLY("plys/puerta_magica.ply");      // Puerta Mágica(ant.ply)
     cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
     cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
     esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
@@ -37,7 +38,7 @@ Escena::~Escena(){
    delete cubo;
    delete tetraedro;
    delete peon;
-   delete hormiga;
+   delete puertaMagica;
    delete cilindro;
    delete cono;
    delete esfera;
@@ -72,34 +73,34 @@ void Escena::inicializar(int UI_window_width, int UI_window_height){
 //
 // **************************************************************************
 
-void Escena::eligeObjetos(dibujado modoDibuj, objetoEscena obj){
+void Escena::eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena obj){
    if (obj == CUBO){
       if (cubo != nullptr && cuboVisible)
-         cubo->draw(modoDibuj, modoIluminacion);
+         cubo->draw(modoVisual, modoDibuj, modoIluminacion);
    }
    else if (obj == TETRAEDRO){
       if (tetraedro != nullptr && tetraedroVisible)
-         tetraedro->draw(modoDibuj, modoIluminacion);
+         tetraedro->draw(modoVisual, modoDibuj, modoIluminacion);
    }
    else if (obj == PEON){
       if (peon != nullptr && peonVisible)
-         peon->draw(modoDibuj, modoIluminacion);
+         peon->draw(modoVisual, modoDibuj, modoIluminacion);
    }
-   else if (obj == HORMIGA){
-      if (hormiga != nullptr && hormigaVisible)
-         hormiga->draw(modoDibuj, modoIluminacion);
+   else if (obj == PUERTAMAGICA){
+      if (puertaMagica != nullptr && puertaMagicaVisible)
+         puertaMagica->draw(modoVisual, modoDibuj, modoIluminacion);
    }
    else if (obj == CILINDRO){
       if (cilindro != nullptr && cilindroVisible)
-         cilindro->draw(modoDibuj, modoIluminacion);
+         cilindro->draw(modoVisual, modoDibuj, modoIluminacion);
    }
    else if (obj == CONO){
       if (cono != nullptr && conoVisible)
-         cono->draw(modoDibuj, modoIluminacion);
+         cono->draw(modoVisual, modoDibuj, modoIluminacion);
    }
    else if (obj == ESFERA){
       if (esfera != nullptr && esferaVisible)
-         esfera->draw(modoDibuj, modoIluminacion);
+         esfera->draw(modoVisual, modoDibuj, modoIluminacion);
    }
 }
 
@@ -107,7 +108,7 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
    // Modo ajedrez
    if (ajedrezVisible){
       glPolygonMode(GL_FRONT, GL_FILL);
-      eligeObjetos(modoDibuj, obj);
+      eligeObjetos(SOLIDO, modoDibuj, obj);
    }
    // Otros modos (no ajedrez)
    else{
@@ -115,19 +116,19 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
       if (puntosVisible){
          glPolygonMode(GL_FRONT, GL_POINT);
          glPointSize(5);   // Puntos más gordos para que se vean bien
-         eligeObjetos(modoDibuj, obj);
+         eligeObjetos(PUNTOS, modoDibuj, obj);
       }
 
       // Dibujar líneas
       if (lineasVisible){
          glPolygonMode(GL_FRONT, GL_LINE);
-         eligeObjetos(modoDibuj, obj);
+         eligeObjetos(LINEAS, modoDibuj, obj);
       }
 
       // Dibujar sólidos
       if (solidoVisible){
          glPolygonMode(GL_FRONT, GL_FILL);
-         eligeObjetos(modoDibuj, obj);
+         eligeObjetos(SOLIDO, modoDibuj, obj);
       }
    }
 }
@@ -193,11 +194,12 @@ void Escena::dibujar(){
       dibujaObjetos(modoDibujado, PEON);
    glPopMatrix();
 
-   // Hormiga
+   // Puerta Mágica
    glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-50.0, 30.0, 0.0);
-      dibujaObjetos(modoDibujado, HORMIGA);
+      glScalef(15.0, 15.0, 15.0);
+      glRotatef(90, 0, 1, 0);
+      glTranslatef(0.0, 4.5, -7.0);
+      dibujaObjetos(modoDibujado, PUERTAMAGICA);
    glPopMatrix();
 
    // Cilindro
@@ -273,6 +275,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - C: Cubo." << endl
                  << " - T: Tetraedro." << endl
                  << " - P: Peon." << endl
+                 << " - M: Puerta Mágica." << endl
                  << " - L: Cilindro." << endl
                  << " - O: Cono." << endl
                  << " - E: Esfera." << endl
@@ -319,12 +322,12 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
          case 'P' :
             peonVisible = !peonVisible;
-            cout << "Objeto: Peon" << endl;
+            cout << "Objeto: Peon (PLY revolucionado)" << endl;
             break;
 
-         case 'H' :
-            hormigaVisible = !hormigaVisible;
-            cout << "Objeto: Hormiga (PLY)" << endl;
+         case 'M' :
+            puertaMagicaVisible = !puertaMagicaVisible;
+            cout << "Objeto: Puerta Magica (PLY)" << endl;
             break;
 
          case 'L' :

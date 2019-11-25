@@ -26,7 +26,10 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, ch
    calcularModoAjedrez();
 
    // Colores
-   calcularColores(ROJO, AZUL);
+   calcularColores(VERDE, PUNTOS);
+   calcularColores(AMARILLO, LINEAS);
+   calcularColores(ROJO, SOLIDO);
+   calcularColores(VERDE, DIFERIDO);
 
    // Normales
    calcular_normales();
@@ -49,7 +52,10 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, c
    calcularModoAjedrez();
 
    // Colores
-   calcularColores(ROJO, AZUL);
+   calcularColores(VERDE, PUNTOS);
+   calcularColores(AMARILLO, LINEAS);
+   calcularColores(ROJO, SOLIDO);
+   calcularColores(VERDE, DIFERIDO);
 
    // Normales
    calcular_normales();

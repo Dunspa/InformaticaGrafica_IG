@@ -31,7 +31,10 @@ Cono::Cono(float h, float r, int num_instancias, char eje_rotacion){
    calcularModoAjedrez();
 
    // Colores
-   calcularColores(ROJO, AZUL);
+   calcularColores(VERDE, PUNTOS);
+   calcularColores(AMARILLO, LINEAS);
+   calcularColores(ROJO, SOLIDO);
+   calcularColores(VERDE, DIFERIDO);
 
    // Normales
    calcular_normales();

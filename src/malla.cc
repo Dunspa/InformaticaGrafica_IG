@@ -10,11 +10,22 @@
 // *****************************************************************************
 
 // Visualización en modo inmediato con 'glDrawElements'
-void Malla3D::draw_ModoInmediato(){
+void Malla3D::draw_ModoInmediato(dibujado modoVisual){
    // Habilitar uso de array de colores
    glEnableClientState(GL_COLOR_ARRAY);
-   // Colores de los vértices
-   glColorPointer(3, GL_FLOAT, 0, c.data());
+
+   if (modoVisual == PUNTOS){
+      // Colores de los vértices
+      glColorPointer(3, GL_FLOAT, 0, c_vert.data());
+   }
+   else if (modoVisual == LINEAS){
+      // Colores de las aristas
+      glColorPointer(3, GL_FLOAT, 0, c_arist.data());
+   }
+   else if (modoVisual == SOLIDO){
+      // Colores del sólido
+      glColorPointer(3, GL_FLOAT, 0, c.data());
+   }
 
    // Habilitar vertex arrays
    glEnableClientState(GL_VERTEX_ARRAY);
@@ -55,7 +66,7 @@ GLuint Malla3D::CrearVBO(GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
 // Dibuja en un color distinto al modo inmediato para distinguirlos
-void Malla3D::draw_ModoDiferido(){
+void Malla3D::draw_ModoDiferido(dibujado modoVisual){
    // Crear VBOs y guardar sus identificadores (si no existen)
    if (id_vbo_ver == 0)
       id_vbo_ver = CrearVBO(GL_ARRAY_BUFFER, 3*v.size()*sizeof(float), v.data());
@@ -65,8 +76,19 @@ void Malla3D::draw_ModoDiferido(){
 
    // Habilitar uso de array de colores
    glEnableClientState(GL_COLOR_ARRAY);
-   // Colores de los vértices
-   glColorPointer(3, GL_FLOAT, 0, c_dif.data());
+   
+   if (modoVisual == PUNTOS){
+      // Colores de los vértices
+      glColorPointer(3, GL_FLOAT, 0, c_vert.data());
+   }
+   else if (modoVisual == LINEAS){
+      // Colores de las aristas
+      glColorPointer(3, GL_FLOAT, 0, c_arist.data());
+   }
+   else if (modoVisual == SOLIDO){
+      // Colores del sólido
+      glColorPointer(3, GL_FLOAT, 0, c.data());
+   }
 
    // Especificar localización y formato de la tabla de vértices y habilitarla
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);   // Activar VBO de vértices
@@ -121,7 +143,7 @@ void Malla3D::draw_ModoAjedrez(){
 // -----------------------------------------------------------------------------
 // Función de visualización de la malla,
 // puede llamar a draw_ModoInmediato o bien a draw_ModoDiferido
-void Malla3D::draw(dibujado modoDibuj, bool modoIluminacion){
+void Malla3D::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
    // Aplicar material a la malla
    m.aplicar();
 
@@ -133,45 +155,86 @@ void Malla3D::draw(dibujado modoDibuj, bool modoIluminacion){
 
    // Dibujar en modo inmediato, diferido o ajedrez (inmediato por defecto)
    if (modoDibuj == INMEDIATO)
-      draw_ModoInmediato();
+      draw_ModoInmediato(modoVisual);
    else if (modoDibuj == DIFERIDO)
-      draw_ModoDiferido();
+      draw_ModoDiferido(modoVisual);
    else if (modoDibuj == AJEDREZ)
       draw_ModoAjedrez();
 }
 
 // -----------------------------------------------------------------------------
 // Calcula las tablas de colores de cualquier malla 3D (normal y diferido)
-void Malla3D::calcularColores(color col_inm, color col_dif){
-   c.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      if (col_inm == ROJO){
-         c[i] = {1, 0, 0};
-      }
-      else if (col_inm == VERDE){
-         c[i] = {0, 0.8, 0};
-      }
-      else if (col_inm == AZUL){
-         c[i] = {0, 0, 1};
-      }
-      else if (col_inm == AMARILLO){
-         c[i] = {1, 0.8, 0};
+void Malla3D::calcularColores(color col, dibujado modoVisual){
+   if (modoVisual == PUNTOS){
+      // Colores de los vértices
+      c_vert.resize(numVertices);
+      for (int i = 0 ; i < numVertices ; i++){
+         if (col == ROJO){
+            c_vert[i] = colorRojo;
+         }
+         else if (col == VERDE){
+            c_vert[i] = colorVerde;
+         }
+         else if (col == AZUL){
+            c_vert[i] = colorAzul;
+         }
+         else if (col == AMARILLO){
+            c_vert[i] = colorAmarillo;
+         }
       }
    }
-
-   c_dif.resize(numVertices);
-   for (int i = 0 ; i < numVertices ; i++){
-      if (col_dif == ROJO){
-         c_dif[i] = {1, 0, 0};
+   else if (modoVisual == LINEAS){
+      // Colores de las aristas
+      c_arist.resize(numVertices);
+      for (int i = 0 ; i < numVertices ; i++){
+         if (col == ROJO){
+            c_arist[i] = colorRojo;
+         }
+         else if (col == VERDE){
+            c_arist[i] = colorVerde;
+         }
+         else if (col == AZUL){
+            c_arist[i] = colorAzul;
+         }
+         else if (col == AMARILLO){
+            c_arist[i] = colorAmarillo;
+         }
       }
-      else if (col_dif == VERDE){
-         c_dif[i] = {0, 0.8, 0};
+   }
+   else if (modoVisual == SOLIDO){
+      // Colores del sólido
+      c.resize(numVertices);
+      for (int i = 0 ; i < numVertices ; i++){
+         if (col == ROJO){
+            c[i] = colorRojo;
+         }
+         else if (col == VERDE){
+            c[i] = colorVerde;
+         }
+         else if (col == AZUL){
+            c[i] = colorAzul;
+         }
+         else if (col == AMARILLO){
+            c[i] = colorAmarillo;
+         }
       }
-      else if (col_dif == AZUL){
-         c_dif[i] = {0, 0, 1};
-      }
-      else if (col_dif == AMARILLO){
-         c_dif[i] = {1, 0.8, 0};
+   }
+   else if (modoVisual == DIFERIDO){
+      // Colores del modo diferido (impar en ajedrez)
+      c_dif.resize(numVertices);
+      for (int i = 0 ; i < numVertices ; i++){
+         if (col == ROJO){
+            c_dif[i] = colorRojo;
+         }
+         else if (col == VERDE){
+            c_dif[i] = colorVerde;
+         }
+         else if (col == AZUL){
+            c_dif[i] = colorAzul;
+         }
+         else if (col == AMARILLO){
+            c_dif[i] = colorAmarillo;
+         }
       }
    }
 }

@@ -18,7 +18,7 @@ typedef enum{
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, PEON, HORMIGA, CILINDRO, CONO, ESFERA
+   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA
 } objetoEscena;
 
 class Escena{
@@ -48,7 +48,7 @@ private:
    Cubo * cubo           = nullptr;
    Tetraedro * tetraedro = nullptr;
    ObjRevolucion * peon  = nullptr;
-   ObjPLY * hormiga      = nullptr;
+   ObjPLY * puertaMagica = nullptr;
    Cilindro * cilindro   = nullptr;
    Cono * cono           = nullptr;
    Esfera * esfera       = nullptr;
@@ -61,7 +61,7 @@ private:
    bool cuboVisible      = true;
    bool tetraedroVisible = true;
    bool peonVisible      = true;
-   bool hormigaVisible   = true;
+   bool puertaMagicaVisible   = true;
    bool cilindroVisible  = true;
    bool conoVisible      = true;
    bool esferaVisible    = true;
@@ -87,7 +87,7 @@ public:
    void redimensionar(int newWidth, int newHeight);
 
 	// Dibujar
-   void eligeObjetos(dibujado modoDibuj, objetoEscena obj);
+   void eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena obj);
    void dibujaObjetos(dibujado modoDibuj, objetoEscena obj);
    void eliminaTapas();
    void dibujaTapas();

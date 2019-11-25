@@ -27,7 +27,10 @@ Tetraedro::Tetraedro(float lado){
    calcularModoAjedrez();
 
    // Colores
-   calcularColores(VERDE, AMARILLO);
+   calcularColores(VERDE, PUNTOS);
+   calcularColores(AMARILLO, LINEAS);
+   calcularColores(ROJO, SOLIDO);
+   calcularColores(VERDE, DIFERIDO);
 
    // Normales
    calcular_normales();
