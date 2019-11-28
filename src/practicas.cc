@@ -73,12 +73,22 @@ void normal_keys(unsigned char tecla, int x, int y){
 // codigo de la tecla
 // posicion x del raton
 // posicion y del raton
-
 //***************************************************************************
 
 void special_keys(int tecla, int x, int y){
 	if (escena != NULL)
 		escena->teclaEspecial(tecla, x, y);
+	glutPostRedisplay();
+}
+
+//***************************************************************************
+// Funcion que se encarga de llevar el IDLE en la escena para la animación
+//***************************************************************************
+
+void funcion_idle(){
+	if (escena != 0)
+		escena->animarModeloJerarquico();
+
 	glutPostRedisplay();
 }
 
@@ -130,6 +140,9 @@ int main(int argc, char **argv){
 
    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
    glutSpecialFunc(special_keys);
+
+	// Asignación de la función idle
+	glutIdleFunc(funcion_idle);
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef __linux__

@@ -16,6 +16,7 @@ ObjPLY::ObjPLY(const std::string & nombre_archivo){
 
    // Triángulos modo ajedrez
    int i_par = 0, i_impar = 0;
+
    for (int i = 0 ; i < numTriangulos ; i++){
       // Triángulos pares
       if (i % 2 == 0){
@@ -39,6 +40,6 @@ ObjPLY::ObjPLY(const std::string & nombre_archivo){
    calcular_normales();
 
    // Material
-   Material mat(jade[0], jade[1], jade[2], jade_brillo);
+   Material mat(cyanplastico[0], cyanplastico[1], cyanplastico[2], cyanplastico_brillo);
    setMaterial(mat);
 }

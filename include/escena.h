@@ -9,16 +9,18 @@
 #include "cilindro.h"
 #include "cono.h"
 #include "esfera.h"
+#include "doraemon.h"
 #include "luz.h"
 #include "luzdireccional.h"
 #include "luzposicional.h"
 
 typedef enum{
-   MENUPRINCIPAL, NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION
+   MENUPRINCIPAL, NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION,
+   JERARQUICOAUTOMATICO, JERARQUICOMANUAL
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA
+   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA, DORAEMON
 } objetoEscena;
 
 class Escena{
@@ -52,19 +54,21 @@ private:
    Cilindro * cilindro   = nullptr;
    Cono * cono           = nullptr;
    Esfera * esfera       = nullptr;
+   Doraemon * doraemon   = nullptr; // Modelo jerárquico
 
    // Luces de la escena
    LuzPosicional * luzposicional   = nullptr;
    LuzDireccional * luzdireccional = nullptr;
 
    // Controlan la visibilidad de los distintos objetos
-   bool cuboVisible      = true;
-   bool tetraedroVisible = true;
-   bool peonVisible      = true;
-   bool puertaMagicaVisible   = true;
-   bool cilindroVisible  = true;
-   bool conoVisible      = true;
-   bool esferaVisible    = true;
+   bool cuboVisible         = true;
+   bool tetraedroVisible    = true;
+   bool peonVisible         = true;
+   bool puertaMagicaVisible = true;
+   bool cilindroVisible     = true;
+   bool conoVisible         = true;
+   bool esferaVisible       = true;
+   bool doraemonVisible     = true;
 
    // Controlan la visibilidad de los distintos modos
    bool puntosVisible    = false;
@@ -80,6 +84,11 @@ private:
    bool anguloAlpha      = false;
    bool anguloBeta       = false;
 
+   // Controlan el modelo jerárquico
+   bool animarModelo = false; // Animar el modelo automáticamente o no
+   char controlarValor = '+'; // Controla si aumentar o disminuir el valor del grado de libertad
+   parteDoraemon parte;       // Parte del modelo jerárquico que se anima
+
 public:
    Escena();
    ~Escena();
@@ -92,6 +101,9 @@ public:
    void eliminaTapas();
    void dibujaTapas();
 	void dibujar();
+
+   // Animar el modelo jerárquico
+   void animarModeloJerarquico();
 
 	// Interacción con la escena
 	bool teclaPulsada(unsigned char Tecla1, int x, int y);

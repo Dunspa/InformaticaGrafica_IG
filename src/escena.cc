@@ -17,16 +17,17 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    cubo = new Cubo(50);                                       // Cubo(lado)
-    tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
-    peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
-    puertaMagica = new ObjPLY("plys/puerta_magica.ply");      // Puerta Mágica(ant.ply)
-    cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
-    cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
-    esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
+    //cubo = new Cubo(50);                                       // Cubo(lado)
+    //tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
+    //peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
+    //puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
+    //cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
+    //cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
+    //esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
+    doraemon = new Doraemon();
 
     // Crear las luces de la escena
-    luzposicional = new LuzPosicional({10.0, 10.0, 10.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzposicional = new LuzPosicional({40.0, 40.0, 40.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
     luzdireccional = new LuzDireccional({0.0, 30.0, 30.0}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
 }
 
@@ -42,6 +43,7 @@ Escena::~Escena(){
    delete cilindro;
    delete cono;
    delete esfera;
+   delete doraemon;
    delete luzposicional;
    delete luzdireccional;
 }
@@ -101,6 +103,10 @@ void Escena::eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena 
    else if (obj == ESFERA){
       if (esfera != nullptr && esferaVisible)
          esfera->draw(modoVisual, modoDibuj, modoIluminacion);
+   }
+   else if (obj == DORAEMON){
+      if (doraemon != nullptr && doraemonVisible)
+         doraemon->draw(modoVisual, modoDibuj, modoIluminacion);
    }
 }
 
@@ -222,6 +228,21 @@ void Escena::dibujar(){
       glTranslatef(0.0, 50.0, 0.0);
       dibujaObjetos(modoDibujado, ESFERA);
    glPopMatrix();
+
+   // Modelo jerárquico
+   dibujaObjetos(modoDibujado, DORAEMON);
+}
+
+// **************************************************************************
+//
+// función de animación del modelo jerárquico en la escena
+//
+// **************************************************************************
+
+void Escena::animarModeloJerarquico(){
+   if (animarModelo){
+      doraemon->animar(parte, controlarValor);
+   }
 }
 
 //**************************************************************************
@@ -240,7 +261,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    // Menús
    switch(toupper(tecla)){
       case 'Q' :
-         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO){
+         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO || modoMenu == JERARQUICOMANUAL || modoMenu == JERARQUICOAUTOMATICO){
             modoMenu = NADA;
             cout << "Menú principal. Opciones: " << endl
                  << " - O: Selección de objeto." << endl
@@ -257,6 +278,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - A: Visualizar modo ajedrez." << endl
                  << " - T: Visualizar tapas." << endl
                  << " - I: Visualizar iluminación." << endl
+                 << " - J: Animación automática del modelo jerárquico." << endl
+                 << " - V: Animación manual del modelo jerárquico." << endl
                  << "Q para salir al menú principal." << endl;
          }
          else if (modoMenu == NADA){
@@ -279,6 +302,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - L: Cilindro." << endl
                  << " - O: Cono." << endl
                  << " - E: Esfera." << endl
+                 << " - J: Doraemon (Modelo jerárquico)." << endl
                  << "Q para salir al menú principal." << endl;
             break;
 
@@ -292,6 +316,8 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - A: Visualizar modo ajedrez." << endl
                  << " - T: Visualizar tapas." << endl
                  << " - I: Visualizar iluminación." << endl
+                 << " - J: Animación automática del modelo jerárquico." << endl
+                 << " - V: Animación manual del modelo jerárquico." << endl
                  << "Q para salir al menú principal." << endl;
             break;
 
@@ -343,6 +369,11 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
          case 'E' :
             esferaVisible = !esferaVisible;
             cout << "Objeto: Esfera" << endl;
+            break;
+
+         case 'J' :
+            doraemonVisible = !doraemonVisible;
+            cout << "Objeto: Doraemon (Modelo jerárquico)" << endl;
             break;
       }
    }
@@ -397,7 +428,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
          case 'I' :
             modoMenu = ILUMINACION;
-            iluminado = true;
+            iluminado = !iluminado;
             solidoVisible = true;
             puntosVisible = false;
             lineasVisible = false;
@@ -406,6 +437,28 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - A: Modo variación del ángulo alpha." << endl
                  << " - B: Modo variación del ángulo beta." << endl
                  << " - F: Modo de iluminación FLAT o SMOOTH" << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
+
+         case 'J' :
+            modoMenu = JERARQUICOAUTOMATICO;
+            parte = TODO;
+            animarModelo = !animarModelo;
+            cout << "Modo de animación automática del modelo jerárquico. Opciones: " << endl
+                 << " - +: Aumentar la velocidad de la animación." << endl
+                 << " - -: Disminuir la velocidad de la animación." << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
+
+         case 'V' :
+            modoMenu = JERARQUICOMANUAL;
+            cout << "Modo de animación manual del modelo jerárquico. Opciones: " << endl
+                 << " - 0: Seleccionar grado de libertad 0 (giro brazo derecho)." << endl
+                 << " - 1: Seleccionar grado de libertad 1 (giro brazo izquierdo)." << endl
+                 << " - 2: Seleccionar grado de libertad 2 (giro cabeza)." << endl
+                 << " - 3: Seleccionar grado de libertad 3 (longitud cola)." << endl
+                 << " - +: Aumentar el valor del grado de libertad seleccionado." << endl
+                 << " - -: Disminuir el valor del grado de libertad seleccionado." << endl
                  << "Q para salir al menú principal." << endl;
             break;
       }
@@ -480,6 +533,94 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                cout << "Modo de iluminación: FLAT.";
             else
                cout << "Modo de iluminación: SMOOTH.";
+            break;
+      }
+   }
+
+   // Modo de animación automática del modelo jerárquico
+   if (modoMenu == JERARQUICOAUTOMATICO){
+      switch(toupper(tecla)){
+         case '+' :
+            controlarValor = '+';
+            cout << "Aumentando velocidad" << endl;
+            break;
+
+         case '-' :
+            controlarValor = '-';
+            cout << "Disminuyendo velocidad" << endl;
+            break;
+      }
+   }
+
+   // Modo de animación manual del modelo jearárquico
+   if (modoMenu == JERARQUICOMANUAL){
+      switch(toupper(tecla)){
+         case '0' :
+            parte = BRAZODERECHO;
+            cout << "Control del grado de libertad 0 (giro brazo derecho)." << endl;
+            break;
+
+         case '1' :
+            parte = BRAZOIZQUIERDO;
+            cout << "Control del grado de libertad 1 (giro brazo izquierdo)." << endl;
+            break;
+
+         case '2' :
+            parte = CABEZA;
+            cout << "Control del grado de libertad 2 (giro cabeza)." << endl;
+            break;
+
+         case '3' :
+            parte = COLA;
+            cout << "Control del grado de libertad 3 (longitud cola)." << endl;
+            break;
+
+         case '+' :
+            cout << "Aumentando valor del grado de libertad ";
+            if (parte == BRAZODERECHO){
+               controlarValor = '+';
+               doraemon->animar(BRAZODERECHO, controlarValor);
+               cout << "0 (giro brazo derecho)" << endl;
+            }
+            else if (parte == BRAZOIZQUIERDO){
+               controlarValor = '+';
+               doraemon->animar(BRAZOIZQUIERDO, controlarValor);
+               cout << "1 (giro brazo izquierd)" << endl;
+            }
+            else if (parte == CABEZA){
+               controlarValor = '+';
+               doraemon->animar(CABEZA, controlarValor);
+               cout << "2 (giro cabeza)" << endl;
+            }
+            else if (parte == COLA){
+               controlarValor = '+';
+               doraemon->animar(COLA, controlarValor);
+               cout << "3 (longitud cola)" << endl;
+            }
+            break;
+
+         case '-' :
+            cout << "Disminuyendo valor del grado de libertad ";
+            if (parte == BRAZODERECHO){
+               controlarValor = '-';
+               doraemon->animar(BRAZODERECHO, controlarValor);
+               cout << "0 (giro brazo derecho)" << endl;
+            }
+            else if (parte == BRAZOIZQUIERDO){
+               controlarValor = '-';
+               doraemon->animar(BRAZOIZQUIERDO, controlarValor);
+               cout << "1 (giro brazo izquierdo)" << endl;
+            }
+            else if (parte == CABEZA){
+               controlarValor = '-';
+               doraemon->animar(CABEZA, controlarValor);
+               cout << "2 (giro cabeza)" << endl;
+            }
+            else if (parte == COLA){
+               controlarValor = '-';
+               doraemon->animar(COLA, controlarValor);
+               cout << "3 (longitud cola)" << endl;
+            }
             break;
       }
    }

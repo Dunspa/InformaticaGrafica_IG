@@ -89,6 +89,8 @@ protected:
    float jade_brillo = 0.1;
    std::vector<Tupla4f> obsidiana = {{0.18275, 0.17, 0.22525, 1.0}, {0.332741, 0.328634, 0.346435, 1.0}, {0.05375, 0.05, 0.06625, 1.0}};
    float obsidiana_brillo = 0.3;
+   std::vector<Tupla4f> cyanplastico = {{0.0, 0.50980392, 0.50980392, 1.0}, {0.50196078, 0.50196078, 0.50196078, 1.0}, {0.0, 0.1, 0.06, 1.0}};
+   float cyanplastico_brillo = 0.25;
 
    // Identificadores de VBOs, ambos inicialmente a 0 (VBO no creados)
    GLuint id_vbo_ver = 0;  // Identificador para el VBO de tabla de vértices
