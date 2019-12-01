@@ -12,7 +12,7 @@ Doraemon::Doraemon(){
    incrementoCabeza = 1.0;
 
    longitudCola = 0.0;
-   incrementoCola = 1.0;
+   incrementoCola = 0.1;
 
    // Crear las partes del modelo jerárquico
    cabeza = new CabezaDoraemon();
@@ -24,10 +24,10 @@ Doraemon::Doraemon(){
 
 void Doraemon::modificaGiroBrazoDcho(float valor){
    if (giroBrazoDcho >= 15.0){
-      incrementoBrazoDcho *= -valor;
+      incrementoBrazoDcho = -valor;
    }
    else if (giroBrazoDcho <= -15.0){
-      incrementoBrazoDcho *= -valor;
+      incrementoBrazoDcho = -valor;
    }
 
    giroBrazoDcho += incrementoBrazoDcho;
@@ -35,10 +35,10 @@ void Doraemon::modificaGiroBrazoDcho(float valor){
 
 void Doraemon::modificaGiroBrazoIzdo(float valor){
    if (giroBrazoIzdo <= -15.0){
-      incrementoBrazoIzdo *= -valor;
+      incrementoBrazoIzdo = -valor;
    }
    else if (giroBrazoIzdo >= 15.0){
-      incrementoBrazoIzdo *= -valor;
+      incrementoBrazoIzdo = -valor;
    }
 
    giroBrazoIzdo += incrementoBrazoIzdo;
@@ -46,7 +46,7 @@ void Doraemon::modificaGiroBrazoIzdo(float valor){
 
 void Doraemon::modificaGiroCabeza(float valor){
    if (giroCabeza <= 360.0){
-      incrementoCabeza *= valor;
+      incrementoCabeza = valor;
    }
    else{
       giroCabeza = 0.0;
@@ -57,10 +57,10 @@ void Doraemon::modificaGiroCabeza(float valor){
 
 void Doraemon::modificaLongitudCola(float valor){
    if (longitudCola <= -10.0){
-      incrementoCola *= -valor;
+      incrementoCola = -valor;
    }
    else if (longitudCola >= 0.0){
-      incrementoCola *= -valor;
+      incrementoCola = -valor;
    }
 
    longitudCola += incrementoCola;
@@ -114,32 +114,51 @@ void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacio
 }
 
 void Doraemon::animar(parteDoraemon parte, char controlarValor){
-   float valor = 0.0;
-   if (controlarValor == '+'){
-      valor = 1.0;
-   }
-   else if (controlarValor == '-'){
-      valor = -1.0;
+   if (controlarValor != '='){
+      if (controlarValor == '+'){
+         incrementoBrazoDcho += 0.5;
+         incrementoBrazoIzdo += 0.5;
+         incrementoCabeza += 0.5;
+         incrementoCola += 0.5;
+      }
+      else if (controlarValor == '-'){
+         incrementoBrazoDcho -= 0.5;
+         incrementoBrazoIzdo -= 0.5;
+         incrementoCabeza -= 0.5;
+         incrementoCola -= 0.5;
+
+         if (incrementoBrazoDcho <= 0.0)
+            incrementoBrazoDcho = 0.0;
+
+         if (incrementoBrazoIzdo <= 0.0)
+            incrementoBrazoIzdo = 0.0;
+
+         if (incrementoCabeza <= 0.0)
+            incrementoCabeza = 0.0;
+
+         if (incrementoCola <= 0.0)
+            incrementoCola = 0.0;
+      }
    }
 
    if (parte == TODO){
-      modificaGiroBrazoDcho(valor);
-      modificaGiroBrazoIzdo(valor);
-      modificaGiroCabeza(valor);
-      modificaLongitudCola(valor);
+      modificaGiroBrazoDcho(incrementoBrazoDcho);
+      modificaGiroBrazoIzdo(incrementoBrazoIzdo);
+      modificaGiroCabeza(incrementoCabeza);
+      modificaLongitudCola(incrementoCola);
    }
    else{
       if (parte == BRAZODERECHO){
-         modificaGiroBrazoDcho(valor);
+         modificaGiroBrazoDcho(incrementoBrazoDcho);
       }
       else if (parte == BRAZOIZQUIERDO){
-         modificaGiroBrazoIzdo(valor);
+         modificaGiroBrazoIzdo(incrementoBrazoIzdo);
       }
       else if (parte == CABEZA){
-         modificaGiroCabeza(valor);
+         modificaGiroCabeza(incrementoCabeza);
       }
       else if (parte == COLA){
-         modificaLongitudCola(valor);
+         modificaLongitudCola(incrementoCola);
       }
    }
 }

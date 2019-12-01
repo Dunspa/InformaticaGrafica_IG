@@ -44,14 +44,14 @@ private:
    float longitudCola;
    float incrementoCola;
 
+public:
+   Doraemon();
+
    // Modificar valores del modelo jerárquico (cuatro grados de libertad)
    void modificaGiroBrazoDcho(float valor);
    void modificaGiroBrazoIzdo(float valor);
    void modificaGiroCabeza(float valor);
    void modificaLongitudCola(float valor);
-
-public:
-   Doraemon();
 
    // Construir el modelo jerárquico
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);

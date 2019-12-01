@@ -242,6 +242,7 @@ void Escena::dibujar(){
 void Escena::animarModeloJerarquico(){
    if (animarModelo){
       doraemon->animar(parte, controlarValor);
+      controlarValor = '=';
    }
 }
 
@@ -579,22 +580,22 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             cout << "Aumentando valor del grado de libertad ";
             if (parte == BRAZODERECHO){
                controlarValor = '+';
-               doraemon->animar(BRAZODERECHO, controlarValor);
+               doraemon->modificaGiroBrazoDcho(0.5);
                cout << "0 (giro brazo derecho)" << endl;
             }
             else if (parte == BRAZOIZQUIERDO){
                controlarValor = '+';
-               doraemon->animar(BRAZOIZQUIERDO, controlarValor);
+               doraemon->modificaGiroBrazoIzdo(0.5);
                cout << "1 (giro brazo izquierd)" << endl;
             }
             else if (parte == CABEZA){
                controlarValor = '+';
-               doraemon->animar(CABEZA, controlarValor);
+               doraemon->modificaGiroCabeza(1.0);
                cout << "2 (giro cabeza)" << endl;
             }
             else if (parte == COLA){
                controlarValor = '+';
-               doraemon->animar(COLA, controlarValor);
+               doraemon->modificaLongitudCola(0.5);
                cout << "3 (longitud cola)" << endl;
             }
             break;
@@ -603,22 +604,22 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             cout << "Disminuyendo valor del grado de libertad ";
             if (parte == BRAZODERECHO){
                controlarValor = '-';
-               doraemon->animar(BRAZODERECHO, controlarValor);
+               doraemon->modificaGiroBrazoDcho(-0.5);
                cout << "0 (giro brazo derecho)" << endl;
             }
             else if (parte == BRAZOIZQUIERDO){
                controlarValor = '-';
-               doraemon->animar(BRAZOIZQUIERDO, controlarValor);
+               doraemon->modificaGiroBrazoIzdo(-0.5);
                cout << "1 (giro brazo izquierdo)" << endl;
             }
             else if (parte == CABEZA){
                controlarValor = '-';
-               doraemon->animar(CABEZA, controlarValor);
+               doraemon->modificaGiroCabeza(-1.0);
                cout << "2 (giro cabeza)" << endl;
             }
             else if (parte == COLA){
                controlarValor = '-';
-               doraemon->animar(COLA, controlarValor);
+               doraemon->modificaLongitudCola(-0.5);
                cout << "3 (longitud cola)" << endl;
             }
             break;
