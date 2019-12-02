@@ -23,47 +23,42 @@ Doraemon::Doraemon(){
 }
 
 void Doraemon::modificaGiroBrazoDcho(float valor){
+   giroBrazoDcho += valor;
+
    if (giroBrazoDcho >= 15.0){
-      incrementoBrazoDcho = -valor;
+      giroBrazoDcho = 15.0;
    }
    else if (giroBrazoDcho <= -15.0){
-      incrementoBrazoDcho = -valor;
+      giroBrazoDcho = -15.0;
    }
-
-   giroBrazoDcho += incrementoBrazoDcho;
 }
 
 void Doraemon::modificaGiroBrazoIzdo(float valor){
+   giroBrazoIzdo += valor;
+
    if (giroBrazoIzdo <= -15.0){
-      incrementoBrazoIzdo = -valor;
+      giroBrazoIzdo = -15.0;
    }
    else if (giroBrazoIzdo >= 15.0){
-      incrementoBrazoIzdo = -valor;
+      giroBrazoIzdo = 15.0;
    }
-
-   giroBrazoIzdo += incrementoBrazoIzdo;
 }
 
 void Doraemon::modificaGiroCabeza(float valor){
-   if (giroCabeza <= 360.0){
-      incrementoCabeza = valor;
-   }
-   else{
-      giroCabeza = 0.0;
-   }
+   giroCabeza += valor;
 
-   giroCabeza += incrementoCabeza;
+   fmod(giroCabeza, 360.0);
 }
 
 void Doraemon::modificaLongitudCola(float valor){
+   longitudCola += valor;
+
    if (longitudCola <= -10.0){
-      incrementoCola = -valor;
+      longitudCola = -10.0;
    }
    else if (longitudCola >= 0.0){
-      incrementoCola = -valor;
+      longitudCola = 0.0;
    }
-
-   longitudCola += incrementoCola;
 }
 
 void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
@@ -97,6 +92,7 @@ void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacio
 
          glPushMatrix();
             glTranslatef(15.0, 17.0, -1.0);
+            glRotatef(15.0, 0.0, 0.0, 1.0);
             glRotatef(giroBrazoDcho, 0.0, 0.0, 1.0);
             glScalef(23.0, 23.0, 23.0);
             brazo_derecho->draw(modoVisual, modoDibuj, modoIluminacion);
@@ -141,24 +137,20 @@ void Doraemon::animar(parteDoraemon parte, char controlarValor){
       }
    }
 
-   if (parte == TODO){
-      modificaGiroBrazoDcho(incrementoBrazoDcho);
-      modificaGiroBrazoIzdo(incrementoBrazoIzdo);
-      modificaGiroCabeza(incrementoCabeza);
-      modificaLongitudCola(incrementoCola);
+   if (giroBrazoDcho >= 15.0 || giroBrazoDcho <= -15.0){
+      incrementoBrazoDcho *= -1.0;
    }
-   else{
-      if (parte == BRAZODERECHO){
-         modificaGiroBrazoDcho(incrementoBrazoDcho);
-      }
-      else if (parte == BRAZOIZQUIERDO){
-         modificaGiroBrazoIzdo(incrementoBrazoIzdo);
-      }
-      else if (parte == CABEZA){
-         modificaGiroCabeza(incrementoCabeza);
-      }
-      else if (parte == COLA){
-         modificaLongitudCola(incrementoCola);
-      }
+
+   if (giroBrazoIzdo <= -15.0 || giroBrazoIzdo >= 15.0){
+      incrementoBrazoIzdo *= -1.0;
    }
+
+   if (longitudCola <= -10.0 || longitudCola >= 0.0){
+      incrementoCola *= -1.0;
+   }
+
+   modificaGiroBrazoDcho(incrementoBrazoDcho);
+   modificaGiroBrazoIzdo(incrementoBrazoIzdo);
+   modificaGiroCabeza(incrementoCabeza);
+   modificaLongitudCola(incrementoCola);
 }

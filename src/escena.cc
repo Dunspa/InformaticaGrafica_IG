@@ -262,7 +262,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    // Menús
    switch(toupper(tecla)){
       case 'Q' :
-         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO || modoMenu == JERARQUICOMANUAL || modoMenu == JERARQUICOAUTOMATICO){
+         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO){
             modoMenu = NADA;
             cout << "Menú principal. Opciones: " << endl
                  << " - O: Selección de objeto." << endl
@@ -270,7 +270,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - D: Selección de dibujado." << endl
                  << "Q para salir del programa." << endl;
          }
-         else if (modoMenu == ILUMINACION){
+         else if (modoMenu == ILUMINACION || modoMenu == JERARQUICOAUTOMATICO || modoMenu == JERARQUICOMANUAL){
             modoMenu = SELVISUALIZACION;
             cout << "Modo selección de visualización. Opciones: " << endl
                  << " - P: Visualizar puntos." << endl
@@ -453,6 +453,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
          case 'V' :
             modoMenu = JERARQUICOMANUAL;
+            animarModelo = false;
             cout << "Modo de animación manual del modelo jerárquico. Opciones: " << endl
                  << " - 0: Seleccionar grado de libertad 0 (giro brazo derecho)." << endl
                  << " - 1: Seleccionar grado de libertad 1 (giro brazo izquierdo)." << endl
@@ -595,7 +596,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             }
             else if (parte == COLA){
                controlarValor = '+';
-               doraemon->modificaLongitudCola(0.5);
+               doraemon->modificaLongitudCola(-0.5);
                cout << "3 (longitud cola)" << endl;
             }
             break;
@@ -619,7 +620,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             }
             else if (parte == COLA){
                controlarValor = '-';
-               doraemon->modificaLongitudCola(-0.5);
+               doraemon->modificaLongitudCola(0.5);
                cout << "3 (longitud cola)" << endl;
             }
             break;
