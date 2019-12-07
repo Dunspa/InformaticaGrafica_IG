@@ -10,17 +10,18 @@
 #include "cono.h"
 #include "esfera.h"
 #include "doraemon.h"
+#include "lienzo.h"
 #include "luz.h"
 #include "luzdireccional.h"
 #include "luzposicional.h"
 
 typedef enum{
    MENUPRINCIPAL, NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION,
-   JERARQUICOAUTOMATICO, JERARQUICOMANUAL
+   JERARQUICOAUTOMATICO, JERARQUICOMANUAL, ANIMACIONAUTOMATICA, ANIMACIONMANUAL
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA, DORAEMON
+   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA, DORAEMON, LIENZO
 } objetoEscena;
 
 class Escena{
@@ -55,6 +56,7 @@ private:
    Cono * cono           = nullptr;
    Esfera * esfera       = nullptr;
    Doraemon * doraemon   = nullptr; // Modelo jerárquico
+   Lienzo * lienzo       = nullptr;
 
    // Luces de la escena
    LuzPosicional * luzposicional   = nullptr;
@@ -69,6 +71,7 @@ private:
    bool conoVisible         = true;
    bool esferaVisible       = true;
    bool doraemonVisible     = true;
+   bool lienzoVisible       = true;
 
    // Controlan la visibilidad de los distintos modos
    bool puntosVisible    = false;

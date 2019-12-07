@@ -91,7 +91,7 @@ void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacio
          glPopMatrix();
 
          glPushMatrix();
-            glTranslatef(15.0, 17.0, -1.0);
+            glTranslatef(14.5, 17.5, -1.0);
             glRotatef(15.0, 0.0, 0.0, 1.0);
             glRotatef(giroBrazoDcho, 0.0, 0.0, 1.0);
             glScalef(23.0, 23.0, 23.0);
@@ -99,7 +99,7 @@ void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacio
          glPopMatrix();
 
          glPushMatrix();
-            glTranslatef(-15.0, 17.0, -1.0);
+            glTranslatef(-14.5, 17.5, -1.0);
             glRotatef(-180.0, 0.0, 1.0, 0.0);
             glRotatef(giroBrazoIzdo, 0.0, 0.0, 1.0);
             glScalef(23.0, 23.0, 23.0);

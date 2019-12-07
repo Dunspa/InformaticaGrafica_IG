@@ -28,7 +28,7 @@ public:
    Cubo(float lado = 1);
 
 private:
-   int lado;
+   float lado;
 };
 
 #endif

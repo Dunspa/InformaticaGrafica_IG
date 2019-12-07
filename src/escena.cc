@@ -17,14 +17,15 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    //cubo = new Cubo(50);                                       // Cubo(lado)
-    //tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
-    //peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
-    //puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
-    //cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
-    //cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
-    //esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
+    cubo = new Cubo(50);                                       // Cubo(lado)
+    tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
+    peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
+    puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
+    cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
+    cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
+    esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
     doraemon = new Doraemon();
+    lienzo = new Lienzo(50);
 
     // Crear las luces de la escena
     luzposicional = new LuzPosicional({40.0, 40.0, 40.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
@@ -57,9 +58,9 @@ Escena::~Escena(){
 void Escena::inicializar(int UI_window_width, int UI_window_height){
 	glClearColor(1.0, 1.0, 1.0, 1.0);// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 
-	glEnable(GL_DEPTH_TEST);  // se habilita el z-bufer
-   glEnable(GL_CULL_FACE);   // se habilita el cull face
-   glEnable(GL_NORMALIZE);   // normales invariantes a transformaciones geométricas
+	glEnable(GL_DEPTH_TEST);   // Se habilita el z-bufer
+   glEnable(GL_CULL_FACE);    // Se habilita el cull face
+   glEnable(GL_NORMALIZE);    // Normales invariantes a transformaciones geométricas
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -107,6 +108,10 @@ void Escena::eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena 
    else if (obj == DORAEMON){
       if (doraemon != nullptr && doraemonVisible)
          doraemon->draw(modoVisual, modoDibuj, modoIluminacion);
+   }
+   else if (obj == LIENZO){
+      if (lienzo != nullptr && lienzoVisible)
+         lienzo->draw(modoVisual, modoDibuj, modoIluminacion);
    }
 }
 
@@ -182,7 +187,7 @@ void Escena::dibujar(){
 
 	// Cubo
 	glPushMatrix();
-      //glScalef(1.0, 1.6, 1.0);
+      glScalef(1.0, 1.0, 1.0);
 		glTranslatef(25.0, 0.0, 0.0);
 		dibujaObjetos(modoDibujado, CUBO);
 	glPopMatrix();
@@ -196,7 +201,7 @@ void Escena::dibujar(){
    // Peon
    glPushMatrix();
       glScalef(15.0, 15.0, 15.0);
-      glTranslatef(0.0, 0.0, 0.0);
+      glTranslatef(-7.5, 5.0, 0.0);
       dibujaObjetos(modoDibujado, PEON);
    glPopMatrix();
 
@@ -204,7 +209,7 @@ void Escena::dibujar(){
    glPushMatrix();
       glScalef(15.0, 15.0, 15.0);
       glRotatef(90, 0, 1, 0);
-      glTranslatef(0.0, 4.5, -7.0);
+      glTranslatef(0.0, 1.2, -2.4);
       dibujaObjetos(modoDibujado, PUERTAMAGICA);
    glPopMatrix();
 
@@ -230,7 +235,15 @@ void Escena::dibujar(){
    glPopMatrix();
 
    // Modelo jerárquico
-   dibujaObjetos(modoDibujado, DORAEMON);
+   glPushMatrix();
+      dibujaObjetos(modoDibujado, DORAEMON);
+   glPopMatrix();
+
+   // Lienzo
+   glPushMatrix();
+      glTranslatef(25.0, 50.0, 50.0);
+      dibujaObjetos(modoDibujado, LIENZO);
+   glPopMatrix();
 }
 
 // **************************************************************************
@@ -262,15 +275,17 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    // Menús
    switch(toupper(tecla)){
       case 'Q' :
-         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO){
+         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO || modoMenu == JERARQUICOAUTOMATICO || modoMenu == JERARQUICOMANUAL){
             modoMenu = NADA;
             cout << "Menú principal. Opciones: " << endl
                  << " - O: Selección de objeto." << endl
                  << " - V: Selección de visualización." << endl
                  << " - D: Selección de dibujado." << endl
+                 << " - A: Animación automática de los objetos de la escena." << endl
+                 << " - M: Animación manual del modelo jerárquico." << endl
                  << "Q para salir del programa." << endl;
          }
-         else if (modoMenu == ILUMINACION || modoMenu == JERARQUICOAUTOMATICO || modoMenu == JERARQUICOMANUAL){
+         else if (modoMenu == ILUMINACION){
             modoMenu = SELVISUALIZACION;
             cout << "Modo selección de visualización. Opciones: " << endl
                  << " - P: Visualizar puntos." << endl
@@ -279,8 +294,6 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - A: Visualizar modo ajedrez." << endl
                  << " - T: Visualizar tapas." << endl
                  << " - I: Visualizar iluminación." << endl
-                 << " - J: Animación automática del modelo jerárquico." << endl
-                 << " - V: Animación manual del modelo jerárquico." << endl
                  << "Q para salir al menú principal." << endl;
          }
          else if (modoMenu == NADA){
@@ -317,8 +330,6 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - A: Visualizar modo ajedrez." << endl
                  << " - T: Visualizar tapas." << endl
                  << " - I: Visualizar iluminación." << endl
-                 << " - J: Animación automática del modelo jerárquico." << endl
-                 << " - V: Animación manual del modelo jerárquico." << endl
                  << "Q para salir al menú principal." << endl;
             break;
 
@@ -328,6 +339,29 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             cout << "Modo selección de dibujado. Opciones: " << endl
                  << " - 1: Dibujado inmediato." << endl
                  << " - 2: Dibujado diferido." << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
+
+         case 'A' :
+            modoMenu = JERARQUICOAUTOMATICO;
+            parte = TODO;
+            animarModelo = !animarModelo;
+            cout << "Modo animación automática de los objetos de la escena. Opciones: " << endl
+                 << "- +: Aumenta la velocidad de la animación." << endl
+                 << "- -: Disminuye la velocidad de la animación." << endl
+                 << "Q para salir al menú principal." << endl;
+            break;
+
+         case 'M' :
+            modoMenu = JERARQUICOMANUAL;
+            animarModelo = false;
+            cout << "Modo animación manual del grado de libertad del objeto jerárquico. Opciones: " << endl
+                 << " - 0: Seleccionar grado de libertad 0 (giro brazo derecho)." << endl
+                 << " - 1: Seleccionar grado de libertad 1 (giro brazo izquierdo)." << endl
+                 << " - 2: Seleccionar grado de libertad 2 (giro cabeza)." << endl
+                 << " - 3: Seleccionar grado de libertad 3 (longitud cola)." << endl
+                 << " - +: Aumentar el valor del grado de libertad seleccionado." << endl
+                 << " - -: Disminuir el valor del grado de libertad seleccionado." << endl
                  << "Q para salir al menú principal." << endl;
             break;
       }
@@ -438,29 +472,6 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - A: Modo variación del ángulo alpha." << endl
                  << " - B: Modo variación del ángulo beta." << endl
                  << " - F: Modo de iluminación FLAT o SMOOTH" << endl
-                 << "Q para salir al menú principal." << endl;
-            break;
-
-         case 'J' :
-            modoMenu = JERARQUICOAUTOMATICO;
-            parte = TODO;
-            animarModelo = !animarModelo;
-            cout << "Modo de animación automática del modelo jerárquico. Opciones: " << endl
-                 << " - +: Aumentar la velocidad de la animación." << endl
-                 << " - -: Disminuir la velocidad de la animación." << endl
-                 << "Q para salir al menú principal." << endl;
-            break;
-
-         case 'V' :
-            modoMenu = JERARQUICOMANUAL;
-            animarModelo = false;
-            cout << "Modo de animación manual del modelo jerárquico. Opciones: " << endl
-                 << " - 0: Seleccionar grado de libertad 0 (giro brazo derecho)." << endl
-                 << " - 1: Seleccionar grado de libertad 1 (giro brazo izquierdo)." << endl
-                 << " - 2: Seleccionar grado de libertad 2 (giro cabeza)." << endl
-                 << " - 3: Seleccionar grado de libertad 3 (longitud cola)." << endl
-                 << " - +: Aumentar el valor del grado de libertad seleccionado." << endl
-                 << " - -: Disminuir el valor del grado de libertad seleccionado." << endl
                  << "Q para salir al menú principal." << endl;
             break;
       }

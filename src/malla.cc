@@ -37,6 +37,12 @@ void Malla3D::draw_ModoInmediato(dibujado modoVisual){
    // Especificar puntero a tabla de normales
    glNormalPointer(GL_FLOAT, 0, nv.data());
 
+   // Habilitar coordenadas de texturas (en caso de que existan)
+   if (!ct.empty()){
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+   }
+
    // Dibujar usando vertices indexados
    glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, f.data());
 
@@ -46,6 +52,8 @@ void Malla3D::draw_ModoInmediato(dibujado modoVisual){
    glDisableClientState(GL_VERTEX_ARRAY);
    // Deshabilitar array de normales
    glDisableClientState(GL_NORMAL_ARRAY);
+   // Deshabilitar coordenadas de texturas
+   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 // -----------------------------------------------------------------------------
@@ -96,6 +104,17 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
    glBindBuffer(GL_ARRAY_BUFFER, 0);            // Desactivar VBO de vértices
    glEnableClientState(GL_VERTEX_ARRAY);        // Habilitar tabla de vértices
 
+   // Habilitar normales
+   glEnableClientState(GL_NORMAL_ARRAY);
+   // Especificar puntero a tabla de normales
+   glNormalPointer(GL_FLOAT, 0, nv.data());
+
+   // Habilitar coordenadas de texturas (en caso de que existan)
+   if (ct.size() != 0){
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+   }
+
    // Visualizar triángulos con glDrawElements (puntero a tabla == 0)
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // Activar VBO de triángulos
    glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0);
@@ -105,6 +124,8 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
    glDisableClientState(GL_COLOR_ARRAY);
    // Desactivar uso de array de vértices
    glDisableClientState(GL_VERTEX_ARRAY);
+   // Desactivar uso de array de normales
+   glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 // -----------------------------------------------------------------------------
@@ -147,6 +168,10 @@ void Malla3D::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion
    // Aplicar material a la malla
    m.aplicar();
 
+   // Activar textura
+   if (textura != nullptr && !ct.empty())
+      textura->activar();
+
    // Modo de iluminación SMOOTH o FLAT
    if (modoIluminacion)
       glShadeModel(GL_SMOOTH);
@@ -181,6 +206,9 @@ void Malla3D::calcularColores(color col, dibujado modoVisual){
          else if (col == AMARILLO){
             c_vert[i] = colorAmarillo;
          }
+         else if (col == TEXTURA){
+            c_vert[i] = colorTextura;
+         }
       }
    }
    else if (modoVisual == LINEAS){
@@ -198,6 +226,9 @@ void Malla3D::calcularColores(color col, dibujado modoVisual){
          }
          else if (col == AMARILLO){
             c_arist[i] = colorAmarillo;
+         }
+         else if (col == TEXTURA){
+            c_arist[i] = colorTextura;
          }
       }
    }
@@ -217,6 +248,9 @@ void Malla3D::calcularColores(color col, dibujado modoVisual){
          else if (col == AMARILLO){
             c[i] = colorAmarillo;
          }
+         else if (col == TEXTURA){
+            c[i] = colorTextura;
+         }
       }
    }
    else if (modoVisual == DIFERIDO){
@@ -234,6 +268,9 @@ void Malla3D::calcularColores(color col, dibujado modoVisual){
          }
          else if (col == AMARILLO){
             c_dif[i] = colorAmarillo;
+         }
+         else if (col == TEXTURA){
+            c_dif[i] = colorTextura;
          }
       }
    }
@@ -304,4 +341,20 @@ void Malla3D::calcular_normales(){
 // Aplica un material a la malla 3D
 void Malla3D::setMaterial(Material mat){
    m = mat;
+}
+
+// -----------------------------------------------------------------------------
+// Aplica una textura a la malla 3D
+void Malla3D::setTextura(std::string archivo){
+   textura = new Textura(archivo);
+}
+
+// -----------------------------------------------------------------------------
+// Calcula las coordenadas de textura para un plano
+// Los métodos que hereden de Malla3D podrán sobreescribir su propio método específico
+void Malla3D::calcularTexturas(){
+   ct.push_back({0, 0});
+   ct.push_back({1, 0});
+   ct.push_back({0, 1});
+   ct.push_back({1, 1});
 }

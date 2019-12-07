@@ -13,13 +13,14 @@
 
 #include "aux.h"
 #include "material.h"
+#include "textura.h"
 
 typedef enum{
    PUNTOS, LINEAS, SOLIDO, DIFERIDO, INMEDIATO, AJEDREZ
 } dibujado;
 
 typedef enum{
-   ROJO, AZUL, VERDE, AMARILLO
+   ROJO, AZUL, VERDE, AMARILLO, TEXTURA
 } color;
 
 // *****************************************************************************
@@ -52,6 +53,8 @@ protected:
    void calcularModoAjedrez();      // Calcula los colores de las caras para el modo ajedrez
    void calcular_normales();        // calcula tabla de normales de vértices (práctica 3)
    void setMaterial(Material mat);
+   void setTextura(std::string archivo);
+   virtual void calcularTexturas(); // Calcula las coordenadas de texturas para un plano
 
    // Geometría y topología
    std::vector<Tupla3f> v;    // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
@@ -66,10 +69,11 @@ protected:
    std::vector<Tupla3f> c_arist; // Color de las aristas
 
    // Colores
-   Tupla3f colorRojo = {1, 0, 0};
-   Tupla3f colorAzul = {0, 0, 1};
-   Tupla3f colorVerde = {0, 0.8, 0};
-   Tupla3f colorAmarillo = {1, 0.8, 0};
+   Tupla3f colorRojo = {1.0, 0.0, 0.0};
+   Tupla3f colorAzul = {0.0, 0.0, 1.0};
+   Tupla3f colorVerde = {0.0, 0.8, 0.0};
+   Tupla3f colorAmarillo = {1.0, 0.8, 0.0};
+   Tupla3f colorTextura = {1.0, 1.0, 1.0};
 
    // Normales
    std::vector<Tupla3f> nf;   // tabla de normales de las caras
@@ -78,6 +82,12 @@ protected:
    int numNormalesVertices;   // Número total de normales en los vértices
    int numVertices;           // Número total de vértices de la figura
    int numTriangulos;         // Número total de triángulos de la figura
+
+   // Texturas
+   Textura * textura = nullptr;
+
+   // Tabla de coordenadas de texturas
+   std::vector<Tupla2f> ct;   // Asocia coordenadas de textura a cada vértice
 
    // Material
    Material m;
