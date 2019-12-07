@@ -254,7 +254,16 @@ void Escena::dibujar(){
 
 void Escena::animarModeloJerarquico(){
    if (animarModelo){
-      doraemon->animar(parte, controlarValor);
+      if (controlarValor == '+'){
+         std::cout << "holaaalalalala" << std::endl;
+         doraemon->aumentarVelocidad();
+      }
+      else if (controlarValor == '-'){
+         doraemon->disminuirVelocidad();
+      }
+      else{
+         doraemon->animar();
+      }
       controlarValor = '=';
    }
 }
@@ -344,7 +353,6 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 
          case 'A' :
             modoMenu = JERARQUICOAUTOMATICO;
-            parte = TODO;
             animarModelo = !animarModelo;
             cout << "Modo animación automática de los objetos de la escena. Opciones: " << endl
                  << "- +: Aumenta la velocidad de la animación." << endl

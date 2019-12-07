@@ -109,34 +109,7 @@ void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacio
    glPopMatrix();
 }
 
-void Doraemon::animar(parteDoraemon parte, char controlarValor){
-   if (controlarValor != '='){
-      if (controlarValor == '+'){
-         incrementoBrazoDcho += 0.5;
-         incrementoBrazoIzdo += 0.5;
-         incrementoCabeza += 0.5;
-         incrementoCola += 0.5;
-      }
-      else if (controlarValor == '-'){
-         incrementoBrazoDcho -= 0.5;
-         incrementoBrazoIzdo -= 0.5;
-         incrementoCabeza -= 0.5;
-         incrementoCola -= 0.5;
-
-         if (incrementoBrazoDcho <= 0.0)
-            incrementoBrazoDcho = 0.0;
-
-         if (incrementoBrazoIzdo <= 0.0)
-            incrementoBrazoIzdo = 0.0;
-
-         if (incrementoCabeza <= 0.0)
-            incrementoCabeza = 0.0;
-
-         if (incrementoCola <= 0.0)
-            incrementoCola = 0.0;
-      }
-   }
-
+void Doraemon::animar(){
    if (giroBrazoDcho >= 15.0 || giroBrazoDcho <= -15.0){
       incrementoBrazoDcho *= -1.0;
    }
@@ -153,4 +126,34 @@ void Doraemon::animar(parteDoraemon parte, char controlarValor){
    modificaGiroBrazoIzdo(incrementoBrazoIzdo);
    modificaGiroCabeza(incrementoCabeza);
    modificaLongitudCola(incrementoCola);
+}
+
+void Doraemon::aumentarVelocidad(){
+   incrementoBrazoDcho += 0.5;
+   incrementoBrazoIzdo += 0.5;
+   incrementoCabeza += 0.5;
+   incrementoCola += 0.5;
+
+   animar();
+}
+
+void Doraemon::disminuirVelocidad(){
+   incrementoBrazoDcho -= 0.5;
+   incrementoBrazoIzdo -= 0.5;
+   incrementoCabeza -= 0.5;
+   incrementoCola -= 0.5;
+
+   if (incrementoBrazoDcho <= 0.0)
+      incrementoBrazoDcho = 0.0;
+
+   if (incrementoBrazoIzdo <= 0.0)
+      incrementoBrazoIzdo = 0.0;
+
+   if (incrementoCabeza <= 0.0)
+      incrementoCabeza = 0.0;
+
+   if (incrementoCola <= 0.0)
+      incrementoCola = 0.0;
+
+   animar();
 }

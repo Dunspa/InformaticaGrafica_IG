@@ -19,7 +19,7 @@
 #include "cola_doraemon.h"
 
 typedef enum {
-   BRAZODERECHO, BRAZOIZQUIERDO, CABEZA, COLA, TODO
+   BRAZODERECHO, BRAZOIZQUIERDO, CABEZA, COLA
 } parteDoraemon;
 
 class Doraemon{
@@ -57,7 +57,10 @@ public:
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
 
    // Animar el modelo jerárquico
-   void animar(parteDoraemon parte, char controlarValor);
+   void animar();
+   // Animar el modelo jerárquico con mayor o menor velocidad
+   void aumentarVelocidad();
+   void disminuirVelocidad();
 };
 
 #endif
