@@ -21,8 +21,6 @@ protected:
    Tupla4f colorEspecular;
 
 public:
-   bool activada;
-
    void activar();
    void desactivar();
 };

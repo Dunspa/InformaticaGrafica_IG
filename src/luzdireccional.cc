@@ -6,7 +6,6 @@ LuzDireccional::LuzDireccional(const Tupla3f & orientacion, GLenum idLuzOpenGL, 
    colorAmbiente = ambiente;
    colorDifuso = difuso;
    colorEspecular = especular;
-   activada = false;
 
    float radio = sqrt(pow(posicion(X), 2.0) + pow(posicion(Y), 2.0) + pow(posicion(Z), 2.0));
    alpha = acos(posicion(Z) / radio);

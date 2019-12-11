@@ -22,9 +22,9 @@ public:
    ObjRevolucion(std::vector<Tupla3f> perfil, int num_instancias, char eje_rotacion='Y');
 
    // Añade las tapas al objeto de revolución (1 o 2 tapas)
-   void crearTapas(int numTapas, char eje_rotacion);
+   void crearTapas();
    // Elimina las tapas del objeto de revolución (1 o 2 tapas)
-   void eliminarTapas(int numTapas);
+   void eliminarTapas();
 
    bool getTapaInf();
    bool getTapaSup();
@@ -32,6 +32,10 @@ public:
    char eje;               // Eje por el cual está rotado el objeto
 
 protected:
+   // Realiza un glDrawElements según tapas
+   void dibujarElementos() override;
+   void dibujarCarasPares() override;
+   void dibujarCarasImpares() override;
    // Crea la malla del objeto de revolución con NM vértices
    void crearMalla(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_inf, bool tapa_sup, char eje_rotacion);
    // Crear las tapas del objeto de revolución

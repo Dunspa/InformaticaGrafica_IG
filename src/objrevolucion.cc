@@ -1,4 +1,5 @@
 #include "aux.h"
+#include <algorithm>
 #include "objrevolucion.h"
 
 // *****************************************************************************
@@ -65,6 +66,33 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, c
    setMaterial(mat);
 }
 
+void ObjRevolucion::dibujarElementos(){
+   if (!tapaSup && !tapaInf){
+      glDrawElements(GL_TRIANGLES, 3*f.size() - (3*numInstancias)*2, GL_UNSIGNED_INT, f.data());
+   }
+   else{
+      glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, f.data());
+   }
+}
+
+void ObjRevolucion::dibujarCarasPares(){
+   if (!tapaSup && !tapaInf){
+      glDrawElements(GL_TRIANGLES, 3*f_par.size() - (3*numInstancias), GL_UNSIGNED_INT, f_par.data());
+   }
+   else{
+      glDrawElements(GL_TRIANGLES, 3*f_par.size(), GL_UNSIGNED_INT, f_par.data());
+   }
+}
+
+void ObjRevolucion::dibujarCarasImpares(){
+   if (!tapaSup && !tapaInf){
+      glDrawElements(GL_TRIANGLES, 3*f_impar.size() - (3*numInstancias), GL_UNSIGNED_INT, f_impar.data());
+   }
+   else{
+      glDrawElements(GL_TRIANGLES, 3*f_impar.size(), GL_UNSIGNED_INT, f_impar.data());
+   }
+}
+
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, bool tapa_inf, bool tapa_sup, char eje_rotacion){
    // Se supone que el perfil se da de abajo a arriba
    bool sentido_perfil_ascendente;
@@ -81,14 +109,21 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    // Comprobar sentido del perfil
    switch (toupper(eje_rotacion)){
       case 'X' :
-
+         sentido_perfil_ascendente = (perfil.front()(X) < perfil.back()(X));
          break;
 
       case 'Y' :
+         sentido_perfil_ascendente = (perfil.front()(Y) < perfil.back()(Y));
          break;
 
       case 'Z' :
+         sentido_perfil_ascendente = (perfil.front()(Z) < perfil.back()(Z));
          break;
+   }
+
+   // Si el perfil está en sentido descendente, poner en ascendente por defecto
+   if (!sentido_perfil_ascendente){
+      std::reverse(perfil.begin(), perfil.end());
    }
 
    // Comprobación de polos en el perfil original
@@ -264,78 +299,12 @@ void ObjRevolucion::crearTapaSup(char eje_rotacion){
    numTriangulos = f.size();
 }
 
-void ObjRevolucion::crearTapas(int numTapas, char eje_rotacion){
-   if (numTapas == 1){
-      bool tapaInf = true;
-      float x, y, z;
-      std::vector<Tupla3i>::iterator it = f.begin();
-      int i;
-
-      // Índice del polo sur en la tabla de vértices (para triangulos)
-      int i_sur = numInstancias * numVerticesPerfil;
-
-      // Insertar triángulos de la tapa
-      for (int i = 0 ; i < numInstancias ; i++){
-         f.insert(it, {(numVerticesPerfil + numVerticesPerfil * i)%i_sur, numVerticesPerfil * i, i_sur});
-         ++it;
-      }
-
-      numTriangulos = f.size();
-
-      // Triángulos modo ajedrez
-      for (int i = 0 ; i < numInstancias ; i++){
-         // Triángulos pares
-         if (i % 2 == 0){
-            f_par.push_back(f[i]);
-         }
-         // Triángulos impares
-         else{
-            f_impar.push_back(f[i]);
-         }
-      }
-   }
-   else{
-      crearTapaInf(eje_rotacion);
-      crearTapaSup(eje_rotacion);
-
-      // Triángulos modo ajedrez
-      calcularModoAjedrez();
-   }
-
-   numVertices = v.size();
-   numTriangulos = f.size();
+void ObjRevolucion::crearTapas(){
+   tapaSup = true;
+   tapaInf = true;
 }
 
-void ObjRevolucion::eliminarTapas(int numTapas){
-   // Si es una tapa, se elimina la inferior
-   if (numTapas == 1){
-      std::vector<Tupla3i>::iterator it = f.end();
-      --it;
-      int i;
-      // Índice del polo sur en la tabla de vértices (para triangulos)
-      int i_sur = numInstancias * numVerticesPerfil;
-
-      // Pasar tapa superior sin tocarla
-      for (i = 0 ; i < numInstancias ; --it, i++);
-      // Eliminar solo tapa inferior
-      for (i = 0 ; i < numInstancias ; i++){
-         f.erase(it);
-         --it;
-      }
-   }
-   // Si son dos tapas, se eliminan la superior y la inferior
-   else{
-      for (int i = 0 ; i < numInstancias*2 ; i++){
-         f.pop_back();
-      }
-   }
-
-   numVertices = v.size();
-   numTriangulos = f.size();
-   f_par.clear();
-   f_impar.clear();
-
-   // Triángulos modo ajedrez
-   int i_par = 0, i_impar = 0;
-   calcularModoAjedrez();
+void ObjRevolucion::eliminarTapas(){
+   tapaSup = false;
+   tapaInf = false;
 }

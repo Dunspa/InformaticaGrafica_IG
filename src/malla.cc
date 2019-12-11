@@ -32,26 +32,32 @@ void Malla3D::draw_ModoInmediato(dibujado modoVisual){
    // Especificar puntero a tabla de vertices
    glVertexPointer(3, GL_FLOAT, 0, v.data());
 
-   // Habilitar normales
-   glEnableClientState(GL_NORMAL_ARRAY);
-   // Especificar puntero a tabla de normales
-   glNormalPointer(GL_FLOAT, 0, nv.data());
+
+   if (glIsEnabled(GL_LIGHTING)){
+      // Habilitar normales
+      glEnableClientState(GL_NORMAL_ARRAY);
+      // Especificar puntero a tabla de normales
+      glNormalPointer(GL_FLOAT, 0, nv.data());
+   }
+
 
    // Habilitar coordenadas de texturas (en caso de que existan)
-   if (!ct.empty()){
+   if (textura != nullptr && !ct.empty()){
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
       glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
    }
 
    // Dibujar usando vertices indexados
-   glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, f.data());
+   dibujarElementos();
 
    // Deshabilitar array de colores
    glDisableClientState(GL_COLOR_ARRAY);
    // Deshabilitar vertex arrays
    glDisableClientState(GL_VERTEX_ARRAY);
-   // Deshabilitar array de normales
-   glDisableClientState(GL_NORMAL_ARRAY);
+   if (glIsEnabled(GL_LIGHTING)){
+      // Habilitar normales
+      glDisableClientState(GL_NORMAL_ARRAY);
+   }
    // Deshabilitar coordenadas de texturas
    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
@@ -104,28 +110,34 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
    glBindBuffer(GL_ARRAY_BUFFER, 0);            // Desactivar VBO de vértices
    glEnableClientState(GL_VERTEX_ARRAY);        // Habilitar tabla de vértices
 
-   // Habilitar normales
-   glEnableClientState(GL_NORMAL_ARRAY);
-   // Especificar puntero a tabla de normales
-   glNormalPointer(GL_FLOAT, 0, nv.data());
+   if (glIsEnabled(GL_LIGHTING)){
+      // Habilitar normales
+      glEnableClientState(GL_NORMAL_ARRAY);
+      // Especificar puntero a tabla de normales
+      glNormalPointer(GL_FLOAT, 0, nv.data());
+   }
 
    // Habilitar coordenadas de texturas (en caso de que existan)
-   if (ct.size() != 0){
+   if (!ct.empty()){
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
       glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
    }
 
    // Visualizar triángulos con glDrawElements (puntero a tabla == 0)
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri); // Activar VBO de triángulos
-   glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, 0);
+   dibujarElementos(); // Dibujar usando vertices indexados
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Desactivar VBO de triángulos
 
    // Desactivar uso de array de colores
    glDisableClientState(GL_COLOR_ARRAY);
    // Desactivar uso de array de vértices
    glDisableClientState(GL_VERTEX_ARRAY);
-   // Desactivar uso de array de normales
-   glDisableClientState(GL_NORMAL_ARRAY);
+   if (glIsEnabled(GL_LIGHTING)){
+      // Desactivar uso de array de normales
+      glDisableClientState(GL_NORMAL_ARRAY);
+   }
+   // Deshabilitar coordenadas de texturas
+   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 // -----------------------------------------------------------------------------
@@ -142,7 +154,7 @@ void Malla3D::draw_ModoAjedrez(){
    // Especificar puntero a tabla de vertices
    glVertexPointer(3, GL_FLOAT, 0, v.data());
    // Dibujar usando vertices indexados
-   glDrawElements(GL_TRIANGLES, 3*f_par.size(), GL_UNSIGNED_INT, f_par.data());
+   dibujarCarasPares();
    // Deshabilitar vertex arrays
    glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -153,7 +165,7 @@ void Malla3D::draw_ModoAjedrez(){
    // Especificar puntero a tabla de vertices
    glVertexPointer(3, GL_FLOAT, 0, v.data());
    // Dibujar usando vertices indexados
-   glDrawElements(GL_TRIANGLES, 3*f_impar.size(), GL_UNSIGNED_INT, f_impar.data());
+   dibujarCarasImpares();
    // Deshabilitar vertex arrays
    glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -185,6 +197,20 @@ void Malla3D::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion
       draw_ModoDiferido(modoVisual);
    else if (modoDibuj == AJEDREZ)
       draw_ModoAjedrez();
+
+   glDisable(GL_TEXTURE_2D);
+}
+
+void Malla3D::dibujarElementos(){
+   glDrawElements(GL_TRIANGLES, 3*f.size(), GL_UNSIGNED_INT, f.data());
+}
+
+void Malla3D::dibujarCarasPares(){
+   glDrawElements(GL_TRIANGLES, 3*f_par.size(), GL_UNSIGNED_INT, f_par.data());
+}
+
+void Malla3D::dibujarCarasImpares(){
+   glDrawElements(GL_TRIANGLES, 3*f_impar.size(), GL_UNSIGNED_INT, f_impar.data());
 }
 
 // -----------------------------------------------------------------------------
@@ -347,14 +373,4 @@ void Malla3D::setMaterial(Material mat){
 // Aplica una textura a la malla 3D
 void Malla3D::setTextura(std::string archivo){
    textura = new Textura(archivo);
-}
-
-// -----------------------------------------------------------------------------
-// Calcula las coordenadas de textura para un plano
-// Los métodos que hereden de Malla3D podrán sobreescribir su propio método específico
-void Malla3D::calcularTexturas(){
-   ct.push_back({0, 0});
-   ct.push_back({1, 0});
-   ct.push_back({0, 1});
-   ct.push_back({1, 1});
 }

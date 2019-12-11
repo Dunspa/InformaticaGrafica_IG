@@ -14,9 +14,9 @@ Textura::Textura(std::string archivo){
    for (int i = height - 1 ; i >= 0 ; i--){
       for (int j = 0 ; j < width ; j++){
          unsigned char * d = pimg->leerPixel(j, i);
-         data.push_back(d[0]);
-         data.push_back(d[1]);
-         data.push_back(d[2]);
+         data.push_back(d[0]); // R
+         data.push_back(d[1]); // G
+         data.push_back(d[2]); // B
       }
    }
 }

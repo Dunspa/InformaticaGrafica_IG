@@ -6,5 +6,10 @@ LuzPosicional::LuzPosicional(const Tupla3f & posicion, GLenum idLuzOpenGL, Tupla
    colorAmbiente = ambiente;
    colorDifuso = difuso;
    colorEspecular = especular;
-   activada = false;
+}
+
+void LuzPosicional::animar(){
+   giroLuz += 1.0;
+
+   fmod(giroLuz, 360.0);
 }

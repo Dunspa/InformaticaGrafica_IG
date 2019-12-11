@@ -3,7 +3,6 @@
 void Luz::activar(){
    // Habilitar uso
    glEnable(id);
-   activada = true;
 
    // Configurar parámetros de la luz
    glLightfv(id, GL_POSITION, posicion);        // Posición de la luz
@@ -15,5 +14,4 @@ void Luz::activar(){
 void Luz::desactivar(){
    // Deshabilitar usando
    glDisable(id);
-   activada = false;
 }

@@ -1,6 +1,11 @@
 #include "material.h"
 
-Material::Material(){}
+Material::Material(){
+   difuso = {0.8, 0.8, 0.8, 1.0};
+   especular = {0.0, 0.0, 0.0, 1.0};
+   ambiente = {0.2, 0.2, 0.2, 1.0};
+   brillo = 0.0;
+}
 
 Material::Material(Tupla4f mdifuso, Tupla4f mespecular, Tupla4f mambiente, float brillo){
    difuso = mdifuso;

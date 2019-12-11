@@ -17,19 +17,19 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    cubo = new Cubo(50);                                       // Cubo(lado)
-    tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
-    peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
-    puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
+    //cubo = new Cubo(50);                                       // Cubo(lado)
+    //tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
+    //peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
+    //puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
     cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
-    cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
-    esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
-    doraemon = new Doraemon();
-    lienzo = new Lienzo(50);
+    //cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
+    //esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
+    //doraemon = new Doraemon();
+    //lienzo = new Lienzo(50);
 
     // Crear las luces de la escena
-    luzposicional = new LuzPosicional({40.0, 40.0, 40.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
-    luzdireccional = new LuzDireccional({0.0, 30.0, 30.0}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzposicional = new LuzPosicional({100.0, 100.0, 100.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+    luzdireccional = new LuzDireccional({0.0, 100.0, 100.0}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
 }
 
 //**************************************************************************
@@ -146,30 +146,30 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
 
 void Escena::eliminaTapas(){
    if (peon != nullptr)
-      peon->eliminarTapas(2);
+      peon->eliminarTapas();
 
    if (cilindro != nullptr)
-      cilindro->eliminarTapas(2);
+      cilindro->eliminarTapas();
 
    if (cono != nullptr)
-      cono->eliminarTapas(1);
+      cono->eliminarTapas();
 
    if (esfera != nullptr)
-      esfera->eliminarTapas(2);
+      esfera->eliminarTapas();
 }
 
 void Escena::dibujaTapas(){
    if (peon != nullptr)
-      peon->crearTapas(2, peon->eje);
+      peon->crearTapas();
 
    if (cilindro != nullptr)
-      cilindro->crearTapas(2, cilindro->eje);
+      cilindro->crearTapas();
 
    if (cono != nullptr)
-      cono->crearTapas(1, cono->eje);
+      cono->crearTapas();
 
    if (esfera != nullptr)
-      esfera->crearTapas(2, esfera->eje);
+      esfera->crearTapas();
 }
 
 void Escena::dibujar(){
@@ -244,6 +244,23 @@ void Escena::dibujar(){
       glTranslatef(25.0, 50.0, 50.0);
       dibujaObjetos(modoDibujado, LIENZO);
    glPopMatrix();
+
+   if (luzposicionalVisible){
+      glPushMatrix();
+         glRotatef(luzposicional->giroLuz, 0.0, 1.0, 0.0);
+         luzposicional->activar();
+      glPopMatrix();
+   }
+   else{
+      luzposicional->desactivar();
+   }
+
+   if (luzdireccionalVisible){
+      luzdireccional->activar();
+   }
+   else{
+      luzdireccional->desactivar();
+   }
 }
 
 // **************************************************************************
@@ -255,7 +272,6 @@ void Escena::dibujar(){
 void Escena::animarModeloJerarquico(){
    if (animarModelo){
       if (controlarValor == '+'){
-         std::cout << "holaaalalalala" << std::endl;
          doraemon->aumentarVelocidad();
       }
       else if (controlarValor == '-'){
@@ -264,6 +280,9 @@ void Escena::animarModeloJerarquico(){
       else{
          doraemon->animar();
       }
+
+      luzposicional->animar();
+
       controlarValor = '=';
    }
 }
@@ -490,18 +509,22 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
       switch (toupper(tecla)){
          case '0' :
             cout << "Luz 0 activada: posicional" << endl;
-            if (!luzposicional->activada)
-               luzposicional->activar();
-            else
-               luzposicional->desactivar();
+            if (!luzposicionalVisible){
+               luzposicionalVisible = true;
+            }
+            else{
+               luzposicionalVisible = false;
+            }
             break;
 
          case '1' :
             cout << "Luz 1 activada: direccional" << endl;
-            if (!luzdireccional->activada)
-               luzdireccional->activar();
-            else
-               luzdireccional->desactivar();
+            if (!luzdireccionalVisible){
+               luzdireccionalVisible = true;
+            }
+            else{
+               luzdireccionalVisible = false;
+            }
             break;
 
          case 'A' :

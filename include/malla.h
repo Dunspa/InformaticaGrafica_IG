@@ -49,12 +49,14 @@ public:
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
 
 protected:
+   virtual void dibujarElementos(); // Realiza un glDrawElements
+   virtual void dibujarCarasPares(); // Realiza un glDrawElements de las caras pares (ajedrez)
+   virtual void dibujarCarasImpares(); // Realiza un glDrawElements de las caras impares (ajedrez)
    void calcularColores(color col_inm, dibujado modoVisual); // Calcula las tablas de colores
    void calcularModoAjedrez();      // Calcula los colores de las caras para el modo ajedrez
    void calcular_normales();        // calcula tabla de normales de vértices (práctica 3)
    void setMaterial(Material mat);
    void setTextura(std::string archivo);
-   virtual void calcularTexturas(); // Calcula las coordenadas de texturas para un plano
 
    // Geometría y topología
    std::vector<Tupla3f> v;    // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
@@ -73,7 +75,7 @@ protected:
    Tupla3f colorAzul = {0.0, 0.0, 1.0};
    Tupla3f colorVerde = {0.0, 0.8, 0.0};
    Tupla3f colorAmarillo = {1.0, 0.8, 0.0};
-   Tupla3f colorTextura = {1.0, 1.0, 1.0};
+   Tupla3f colorTextura = {0.9, 0.9, 0.9};
 
    // Normales
    std::vector<Tupla3f> nf;   // tabla de normales de las caras
@@ -101,6 +103,8 @@ protected:
    float obsidiana_brillo = 0.3;
    std::vector<Tupla4f> cyanplastico = {{0.0, 0.50980392, 0.50980392, 1.0}, {0.50196078, 0.50196078, 0.50196078, 1.0}, {0.0, 0.1, 0.06, 1.0}};
    float cyanplastico_brillo = 0.25;
+   std::vector<Tupla4f> blanco = {{0.0, 0.0, 0.0, 1.0}, {0.0, 0.0, 0.0, 1.0}, {0.0, 0.0, 0.0, 1.0}};
+   float blanco_brillo = 0.25;
 
    // Identificadores de VBOs, ambos inicialmente a 0 (VBO no creados)
    GLuint id_vbo_ver = 0;  // Identificador para el VBO de tabla de vértices

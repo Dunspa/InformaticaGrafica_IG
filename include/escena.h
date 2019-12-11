@@ -73,6 +73,10 @@ private:
    bool doraemonVisible     = true;
    bool lienzoVisible       = true;
 
+   // Controlan la visibilidad de las distintas luces
+   bool luzposicionalVisible  = false;
+   bool luzdireccionalVisible = false;
+
    // Controlan la visibilidad de los distintos modos
    bool puntosVisible    = false;
    bool lineasVisible    = false;

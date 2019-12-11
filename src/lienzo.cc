@@ -27,11 +27,10 @@ Lienzo::Lienzo(float l){
    // Normales
    calcular_normales();
 
-   // Material
-   Material mat(esmeralda[0], esmeralda[1], esmeralda[2], esmeralda_brillo);
-   setMaterial(mat);
-
    // Textura
    setTextura("mapa.jpg");
-   calcularTexturas();
+   ct.push_back({0, 0});
+   ct.push_back({1, 0});
+   ct.push_back({0, 1});
+   ct.push_back({1, 1});
 }
