@@ -14,9 +14,10 @@
 #include "luz.h"
 #include "luzdireccional.h"
 #include "luzposicional.h"
+#include "camara.h"
 
 typedef enum{
-   MENUPRINCIPAL, NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, ILUMINACION,
+   MENUPRINCIPAL, NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO, SELCAMARA, ILUMINACION,
    JERARQUICOAUTOMATICO, JERARQUICOMANUAL, ANIMACIONAUTOMATICA, ANIMACIONMANUAL
 } menu;
 
@@ -26,13 +27,6 @@ typedef enum{
 
 class Escena{
 private:
-   // ** PARÁMETROS DE LA CÁMARA (PROVISIONAL)
-
-   // variables que definen la posicion de la camara en coordenadas polares
-   GLfloat Observer_distance;
-   GLfloat Observer_angle_x;
-   GLfloat Observer_angle_y;
-
    // variables que controlan la ventana y la transformacion de perspectiva
    GLfloat Width, Height, Front_plane, Back_plane;
 
@@ -61,6 +55,14 @@ private:
    // Luces de la escena
    LuzPosicional * luzposicional   = nullptr;
    LuzDireccional * luzdireccional = nullptr;
+
+   // Cámaras de la escena
+   std::vector<Camara> camaras;
+   int camaraActiva = 0;  // Cámaras activas: 0 (perspectiva), 1 (ortogonal) y 2
+
+   // Parámetros del raton para las cámaras
+   int Xraton, Yraton;  // Posición X e Y anterior del raton
+   estadoRaton estadoR;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible         = true;
@@ -115,6 +117,13 @@ public:
 	// Interacción con la escena
 	bool teclaPulsada(unsigned char Tecla1, int x, int y);
 	void teclaEspecial(int Tecla1, int x, int y);
+
+   // Interacción con las cámaras
+   void ratonMovido(int x, int y);
+
+   // Interacción de raton para las cámaras
+   void actualizarPosicionRaton(int x, int y);
+   void actualizarEstadoRaton(estadoRaton estado);
 };
 
 #endif

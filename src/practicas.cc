@@ -67,6 +67,47 @@ void normal_keys(unsigned char tecla, int x, int y){
 }
 
 //***************************************************************************
+// Funcion llamada cuando se produce un click en el ratón
+//
+// el evento manda a la funcion:
+// click del raton
+// estado del raton
+// posición x e y del ratón en la ventana
+//***************************************************************************
+
+void clickRaton(int boton, int estado, int x, int y){
+	if (boton == GLUT_RIGHT_BUTTON){
+		escena->actualizarPosicionRaton(x, y);
+
+		// Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
+		if (estado == GLUT_DOWN){
+			escena->actualizarEstadoRaton(MOVIENDO_CAMARA_FIRSTPERSON);
+		}
+		// Se levanta el botón, por lo que se sale del estado "moviendo cámara"
+		else if (estado == GLUT_UP){
+			escena->actualizarEstadoRaton(QUIETA);
+		}
+	}
+
+	glutPostRedisplay();
+}
+
+//***************************************************************************
+// Funcion llamada cuando se produce un movimiento en el ratón manteniendo un boton
+// Gestiona el cambio de orientación de una cámara activa
+//
+// el evento manda a la funcion:
+// posición x e y del ratón en la ventana
+//***************************************************************************
+
+void ratonMovido(int x, int y){
+	if (escena != nullptr)
+		escena->ratonMovido(x, y);
+
+	glutPostRedisplay();
+}
+
+//***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla especial
 //
 // el evento manda a la funcion:
@@ -78,6 +119,7 @@ void normal_keys(unsigned char tecla, int x, int y){
 void special_keys(int tecla, int x, int y){
 	if (escena != NULL)
 		escena->teclaEspecial(tecla, x, y);
+
 	glutPostRedisplay();
 }
 
@@ -137,6 +179,10 @@ int main(int argc, char **argv){
 
    // asignación de la funcion llamada "tecla_normal" al evento correspondiente
    glutKeyboardFunc(normal_keys);
+
+	// Procesar eventos de ratón
+	glutMouseFunc(clickRaton);
+	glutMotionFunc(ratonMovido);
 
    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
    glutSpecialFunc(special_keys);

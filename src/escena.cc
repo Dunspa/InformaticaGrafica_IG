@@ -10,9 +10,6 @@
 Escena::Escena(){
     Front_plane       = 50.0;
     Back_plane        = 2000.0;
-    Observer_distance = 4*Front_plane;
-    Observer_angle_x  = 0.0;
-    Observer_angle_y  = 0.0;
 
     ejes.changeAxisSize(5000);
 
@@ -21,15 +18,20 @@ Escena::Escena(){
     //tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
     //peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
     //puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
-    cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
+    //cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
     //cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
     //esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
-    //doraemon = new Doraemon();
-    //lienzo = new Lienzo(50);
+    doraemon = new Doraemon();
+    lienzo = new Lienzo(50);
 
     // Crear las luces de la escena
     luzposicional = new LuzPosicional({100.0, 100.0, 100.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
     luzdireccional = new LuzDireccional({0.0, 100.0, 100.0}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
+
+    // Crear las cámaras de la escena
+    camaras.push_back(Camara({0.0, 100.0, 300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, PERSPECTIVA));
+    camaras.push_back(Camara({0.0, 150.0, 1.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -50.0, 50.0, -50.0, 50.0, 100.0, 2000.0, ORTOGONAL));
+     camaras.push_back(Camara({0.0, 100.0, -300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -1000.0, 1000.0, -1000.0, 1000.0, 100.0, 2000.0, PERSPECTIVA));
 }
 
 //**************************************************************************
@@ -47,6 +49,7 @@ Escena::~Escena(){
    delete doraemon;
    delete luzposicional;
    delete luzdireccional;
+   delete lienzo;
 }
 
 //**************************************************************************
@@ -241,7 +244,9 @@ void Escena::dibujar(){
 
    // Lienzo
    glPushMatrix();
-      glTranslatef(25.0, 50.0, 50.0);
+      glScalef(10.0, 10.0, 10.0);
+      glRotatef(-90.0, 1.0, 0.0, 0.0);
+      glTranslatef(-25.0, -25.0, -0.5);
       dibujaObjetos(modoDibujado, LIENZO);
    glPopMatrix();
 
@@ -303,7 +308,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
    // Menús
    switch(toupper(tecla)){
       case 'Q' :
-         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO || modoMenu == JERARQUICOAUTOMATICO || modoMenu == JERARQUICOMANUAL){
+         if (modoMenu == SELOBJETO || modoMenu == SELVISUALIZACION || modoMenu == SELDIBUJADO || modoMenu == SELCAMARA || modoMenu == JERARQUICOAUTOMATICO || modoMenu == JERARQUICOMANUAL){
             modoMenu = NADA;
             cout << "Menú principal. Opciones: " << endl
                  << " - O: Selección de objeto." << endl
@@ -311,6 +316,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - D: Selección de dibujado." << endl
                  << " - A: Animación automática de los objetos de la escena." << endl
                  << " - M: Animación manual del modelo jerárquico." << endl
+                 << " - C: Selección de cámara" << endl
                  << "Q para salir del programa." << endl;
          }
          else if (modoMenu == ILUMINACION){
@@ -391,6 +397,14 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
                  << " - -: Disminuir el valor del grado de libertad seleccionado." << endl
                  << "Q para salir al menú principal." << endl;
             break;
+
+         case 'C' :
+            modoMenu = SELCAMARA;
+            cout << "Modo selección de cámara. Opciones: " << endl
+                 << " - 0: Seleccionar cámara 0 (Perspectiva)." << endl
+                 << " - 1: Seleccionar cámara 1 (Ortogonal)." << endl
+                 << " - 2: Seleccionar cámara 2 (Perspectiva)." << endl
+                 << "Q para salir al menú principal." << endl;
       }
       tecla = 0;
    }
@@ -674,12 +688,32 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
       switch(toupper(tecla)){
          case '1' :
             modoDibujado = INMEDIATO;
-            cout << "Modo de dibujado: inmediato" << endl;
+            cout << "Modo de dibujado: inmediato." << endl;
             break;
 
          case '2' :
             modoDibujado = DIFERIDO;
-            cout << "Modo de dibujado: diferido" << endl;
+            cout << "Modo de dibujado: diferido." << endl;
+            break;
+      }
+   }
+
+   // Modo selección de cámara
+   if (modoMenu == SELCAMARA){
+      switch (toupper(tecla)){
+         case '0' :
+            camaraActiva = 0;
+            cout << "Cámara 0 seleccionada (Perspectiva)." << endl;
+            break;
+
+         case '1' :
+            camaraActiva = 1;
+            cout << "Cámara 1 seleccionada (Ortogonal)." << endl;
+            break;
+
+         case '2':
+            camaraActiva = 2;
+            cout << "Cámara 2 seleccionada (Perspectiva)." << endl;
             break;
       }
    }
@@ -692,26 +726,47 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
 void Escena::teclaEspecial(int Tecla1, int x, int y){
    switch (Tecla1){
 	   case GLUT_KEY_LEFT:
-         Observer_angle_y--;
+         camaras[camaraActiva].rotarYExaminar(-0.1);
          break;
 	   case GLUT_KEY_RIGHT:
-         Observer_angle_y++;
+         camaras[camaraActiva].rotarYExaminar(0.1);
          break;
 	   case GLUT_KEY_UP:
-         Observer_angle_x--;
+         camaras[camaraActiva].rotarXExaminar(0.1);
          break;
 	   case GLUT_KEY_DOWN:
-         Observer_angle_x++;
+         camaras[camaraActiva].rotarXExaminar(-0.1);
          break;
 	   case GLUT_KEY_PAGE_UP:
-         Observer_distance *=1.2;
+         camaras[camaraActiva].zoom(1);
          break;
 	   case GLUT_KEY_PAGE_DOWN:
-         Observer_distance /= 1.2;
+         camaras[camaraActiva].zoom(-1);
          break;
 	}
 
 	//std::cout << Observer_distance << std::endl;
+}
+
+//**************************************************************************
+
+void Escena::ratonMovido(int x, int y){
+   if (estadoR == MOVIENDO_CAMARA_FIRSTPERSON){
+      camaras[camaraActiva].girar(x - Xraton, y - Yraton);
+      Xraton = x;
+      Yraton = y;
+   }
+}
+
+//**************************************************************************
+
+void Escena::actualizarPosicionRaton(int x, int y){
+	Xraton = x;
+	Yraton = y;
+}
+
+void Escena::actualizarEstadoRaton(estadoRaton estado){
+   estadoR = estado;
 }
 
 //**************************************************************************
@@ -724,8 +779,7 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
 void Escena::change_projection(const float ratio_xy){
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   const float wx = float(Height)*ratio_xy;
-   glFrustum(-wx, wx, -Height, Height, Front_plane, Back_plane);
+   camaras[camaraActiva].setProyeccion();
 }
 
 //**************************************************************************
@@ -747,7 +801,5 @@ void Escena::change_observer(){
    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-   glTranslatef(0.0, 0.0, -Observer_distance);
-   glRotatef(Observer_angle_y, 0.0 ,1.0, 0.0);
-   glRotatef(Observer_angle_x, 1.0, 0.0, 0.0);
+   camaras[camaraActiva].setObserver();
 }

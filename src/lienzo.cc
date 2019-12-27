@@ -28,7 +28,7 @@ Lienzo::Lienzo(float l){
    calcular_normales();
 
    // Textura
-   setTextura("mapa.jpg");
+   setTextura("text-madera.jpg");
    ct.push_back({0, 0});
    ct.push_back({1, 0});
    ct.push_back({0, 1});
