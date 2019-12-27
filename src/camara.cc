@@ -33,20 +33,24 @@ void Camara::rotarYExaminar(float angle){
    eye(Z) = z + at(Z);
 }
 
-void Camara::rotarZExaminar(float angle){
-
-}
-
 void Camara::rotarXFirstPerson(float angle){
+   float x = at(X) - eye(X);
+   float y = cos(angle)*(at(Y) - eye(Y)) - sin(angle)*(at(Z) - eye(Z));
+   float z = sin(angle)*(at(Y) - eye(Y)) + cos(angle)*(at(Z) - eye(Z));
 
+   at(X) = x + eye(X);
+   at(Y) = y + eye(Y);
+   at(Z) = z + eye(Z);
 }
 
 void Camara::rotarYFirstPerson(float angle){
+   float x = cos(angle)*(at(X) - eye(X)) + sin(angle)*(at(Z) - eye(Z));
+   float y = at(Y) - eye(Y);
+   float z = -sin(angle)*(at(X) - eye(X)) + cos(angle)*(at(Z) - eye(Z));
 
-}
-
-void Camara::rotarZFirstPerson(float angle){
-
+   at(X) = x + eye(X);
+   at(Y) = y + eye(Y);
+   at(Z) = z + eye(Z);
 }
 
 void Camara::mover(float x, float y, float z){
@@ -54,15 +58,23 @@ void Camara::mover(float x, float y, float z){
 }
 
 void Camara::zoom(float factor){
-   left *= factor;
-   right *= factor;
-   bottom *= factor;
-   top *= factor;
+   if (factor <= 0){
+      left /= -factor;
+      right /= -factor;
+      bottom /= -factor;
+      top /= -factor;
+   }
+   else{
+      left *= factor;
+      right *= factor;
+      bottom *= factor;
+      top *= factor;
+   }
 }
 
 void Camara::girar(float x, float y){
-   eye(X) = x;
-   eye(Y) = y;
+   at(X) = x;
+   at(Y) = y;
 }
 
 void Camara::setObserver(){
@@ -76,4 +88,20 @@ void Camara::setProyeccion(){
    else if (tipo == PERSPECTIVA){
       glFrustum(left, right, bottom, top, near, far);
    }
+}
+
+void Camara::setLeft(float valor){
+   left = valor;
+}
+
+void Camara::setRight(float valor){
+   right = valor;
+}
+
+float Camara::getBottom(){
+   return bottom;
+}
+
+float Camara::getTop(){
+   return top;
 }

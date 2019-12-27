@@ -31,7 +31,7 @@ Escena::Escena(){
     // Crear las cámaras de la escena
     camaras.push_back(Camara({0.0, 100.0, 300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, PERSPECTIVA));
     camaras.push_back(Camara({0.0, 150.0, 1.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -50.0, 50.0, -50.0, 50.0, 100.0, 2000.0, ORTOGONAL));
-     camaras.push_back(Camara({0.0, 100.0, -300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -1000.0, 1000.0, -1000.0, 1000.0, 100.0, 2000.0, PERSPECTIVA));
+    camaras.push_back(Camara({0.0, 100.0, -300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -1000.0, 1000.0, -1000.0, 1000.0, 100.0, 2000.0, PERSPECTIVA));
 }
 
 //**************************************************************************
@@ -738,10 +738,12 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
          camaras[camaraActiva].rotarXExaminar(-0.1);
          break;
 	   case GLUT_KEY_PAGE_UP:
-         camaras[camaraActiva].zoom(1);
+         camaras[camaraActiva].zoom(-1.1);
+         change_projection(1);
          break;
 	   case GLUT_KEY_PAGE_DOWN:
-         camaras[camaraActiva].zoom(-1);
+         camaras[camaraActiva].zoom(1.1);
+         change_projection(1);
          break;
 	}
 
@@ -787,8 +789,13 @@ void Escena::change_projection(const float ratio_xy){
 //***************************************************************************
 
 void Escena::redimensionar(int newWidth, int newHeight){
-   Width  = newWidth/10;
-   Height = newHeight/10;
+   // Cambiar left y right para adaptarse a la redimensión de la ventana (en todas las cámaras)
+   float ratio = float(newWidth/10.0)/float(newHeight/10.0);
+   for (int i = 0 ; i < camaras.size() ; i++){
+      camaras[i].setLeft(camaras[i].getBottom() * ratio);
+      camaras[i].setRight(camaras[i].getTop() * ratio);
+   }
+
    change_projection(float(newHeight)/float(newWidth));
    glViewport(0, 0, newWidth, newHeight);
 }

@@ -36,12 +36,10 @@ public:
    // Mover dónde está la cámara (eye)
    void rotarXExaminar(float angle);
    void rotarYExaminar(float angle);
-   void rotarZExaminar(float angle);
 
    // Mover dirección en la que mira la cámara (at)
    void rotarXFirstPerson(float angle);
    void rotarYFirstPerson(float angle);
-   void rotarZFirstPerson(float angle);
 
    void mover(float x, float y, float z);
    void zoom(float factor);
@@ -49,6 +47,11 @@ public:
 
    void setObserver();
    void setProyeccion();
+
+   void setLeft(float valor);
+   void setRight(float valor);
+   float getBottom();
+   float getTop();
 };
 
 #endif

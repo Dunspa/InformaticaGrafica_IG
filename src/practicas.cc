@@ -81,7 +81,7 @@ void clickRaton(int boton, int estado, int x, int y){
 
 		// Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
 		if (estado == GLUT_DOWN){
-			escena->actualizarEstadoRaton(MOVIENDO_CAMARA_FIRSTPERSON);
+ 			escena->actualizarEstadoRaton(MOVIENDO_CAMARA_FIRSTPERSON);
 		}
 		// Se levanta el botón, por lo que se sale del estado "moviendo cámara"
 		else if (estado == GLUT_UP){
