@@ -10,6 +10,8 @@
 Escena::Escena(){
     Front_plane       = 50.0;
     Back_plane        = 2000.0;
+    Xraton = 0.0;
+    Yraton = 0.0;
 
     ejes.changeAxisSize(5000);
 

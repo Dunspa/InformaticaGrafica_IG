@@ -31,6 +31,8 @@ public:
 
    char eje;               // Eje por el cual está rotado el objeto
 
+   const float PI = atan(1)*4.0;	// Número pi
+
 protected:
    // Realiza un glDrawElements según tapas
    void dibujarElementos() override;
@@ -49,8 +51,6 @@ protected:
    int numVerticesPerfil;  // Número total de vértices en el perfil original (M)
    bool tapaSup = true;    // El objeto tiene tapa superior
    bool tapaInf = true;    // El objeto tiene tapa inferior
-
-	const float PI = atan(1)*4.0;	// Número pi
 };
 
 #endif

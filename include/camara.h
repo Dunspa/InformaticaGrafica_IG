@@ -30,6 +30,8 @@ private:
    TipoCamara tipo;  // Ortogonal o Perspectiva
    float left, right, bottom, top, near, far;
 
+   const float PI = atan(1)*4.0;	// Número pi
+
 public:
    Camara(Tupla3f e, Tupla3f a, Tupla3f u, float l, float r, float b, float t, float n, float f, TipoCamara tip);
 

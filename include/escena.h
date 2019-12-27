@@ -98,6 +98,8 @@ private:
    char controlarValor = '+'; // Controla si aumentar o disminuir el valor del grado de libertad
    parteDoraemon parte;       // Parte del modelo jerárquico que se anima
 
+   const float PI = atan(1)*4.0;	// Número pi
+
 public:
    Escena();
    ~Escena();

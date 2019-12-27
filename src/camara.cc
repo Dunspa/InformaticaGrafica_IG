@@ -73,8 +73,9 @@ void Camara::zoom(float factor){
 }
 
 void Camara::girar(float x, float y){
-   at(X) = x;
-   at(Y) = y;
+   // Rotar en primera persona con el ratón (angulo en radianes)
+   rotarXFirstPerson(y*(PI/180.0));
+   rotarYFirstPerson(x*(PI/180.0));
 }
 
 void Camara::setObserver(){
