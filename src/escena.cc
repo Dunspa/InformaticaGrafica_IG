@@ -18,10 +18,10 @@ Escena::Escena(){
     // Crear los objetos de la escena
     //cubo = new Cubo(50);                                       // Cubo(lado)
     //tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
-    //peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
+    peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
     //puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
-    //cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
-    //cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
+    cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
+    cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
     //esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
     doraemon = new Doraemon();
     lienzo = new Lienzo(50);
@@ -730,20 +730,35 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
 	   case GLUT_KEY_LEFT:
          camaras[camaraActiva].rotarYExaminar(-0.1);
          break;
+
 	   case GLUT_KEY_RIGHT:
          camaras[camaraActiva].rotarYExaminar(0.1);
          break;
+
 	   case GLUT_KEY_UP:
          camaras[camaraActiva].rotarXExaminar(0.1);
          break;
+
 	   case GLUT_KEY_DOWN:
          camaras[camaraActiva].rotarXExaminar(-0.1);
          break;
+
 	   case GLUT_KEY_PAGE_UP:
          camaras[camaraActiva].zoom(-1.1);
          change_projection(1);
          break;
+
 	   case GLUT_KEY_PAGE_DOWN:
+         camaras[camaraActiva].zoom(1.1);
+         change_projection(1);
+         break;
+
+      case 3:
+         camaras[camaraActiva].zoom(-1.1);
+         change_projection(1);
+         break;
+
+      case 4:
          camaras[camaraActiva].zoom(1.1);
          change_projection(1);
          break;

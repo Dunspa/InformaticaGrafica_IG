@@ -333,7 +333,6 @@ void Malla3D::calcular_normales(){
       Tupla3f m = a.cross(b);
       // Vector perpendicular a la cara, normalizado
       Tupla3f n = m.normalized();
-
       // Añadir normal de la cara i
       nf.push_back(n);
    }

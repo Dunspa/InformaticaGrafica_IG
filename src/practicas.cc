@@ -76,6 +76,7 @@ void normal_keys(unsigned char tecla, int x, int y){
 //***************************************************************************
 
 void clickRaton(int boton, int estado, int x, int y){
+	// Click derecho del ratón
 	if (boton == GLUT_RIGHT_BUTTON){
 		escena->actualizarPosicionRaton(x, y);
 
@@ -87,6 +88,11 @@ void clickRaton(int boton, int estado, int x, int y){
 		else if (estado == GLUT_UP){
 			escena->actualizarEstadoRaton(QUIETA);
 		}
+	}
+	// Scroll del raton
+	else if (boton == 3 || boton == 4){
+		if (escena != NULL)
+			escena->teclaEspecial(boton, x, y);
 	}
 
 	glutPostRedisplay();
