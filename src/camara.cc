@@ -58,18 +58,10 @@ void Camara::mover(float x, float y, float z){
 }
 
 void Camara::zoom(float factor){
-   if (factor <= 0){
-      left /= -factor;
-      right /= -factor;
-      bottom /= -factor;
-      top /= -factor;
-   }
-   else{
-      left *= factor;
-      right *= factor;
-      bottom *= factor;
-      top *= factor;
-   }
+   left *= factor;
+   right *= factor;
+   bottom *= factor;
+   top *= factor;
 }
 
 void Camara::girar(float x, float y){

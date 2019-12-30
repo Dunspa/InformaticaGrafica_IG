@@ -16,13 +16,13 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    //cubo = new Cubo(50);                                       // Cubo(lado)
-    //tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
+    cubo = new Cubo(50);                                       // Cubo(lado)
+    tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
     peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
-    //puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
+    puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
     cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
     cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
-    //esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
+    esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
     doraemon = new Doraemon();
     lienzo = new Lienzo(50);
 
@@ -32,7 +32,7 @@ Escena::Escena(){
 
     // Crear las cámaras de la escena
     camaras.push_back(Camara({0.0, 100.0, 300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, PERSPECTIVA));
-    camaras.push_back(Camara({0.0, 150.0, 1.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -50.0, 50.0, -50.0, 50.0, 100.0, 2000.0, ORTOGONAL));
+    camaras.push_back(Camara({-100.0, 150.0, 150.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, ORTOGONAL));
     camaras.push_back(Camara({0.0, 100.0, -300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -1000.0, 1000.0, -1000.0, 1000.0, 100.0, 2000.0, PERSPECTIVA));
 }
 
@@ -718,6 +718,9 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
             cout << "Cámara 2 seleccionada (Perspectiva)." << endl;
             break;
       }
+
+      change_observer();
+      change_projection(1);
    }
 
    return salir;
@@ -744,22 +747,22 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
          break;
 
 	   case GLUT_KEY_PAGE_UP:
-         camaras[camaraActiva].zoom(-1.1);
+         camaras[camaraActiva].zoom(1.1);
          change_projection(1);
          break;
 
 	   case GLUT_KEY_PAGE_DOWN:
-         camaras[camaraActiva].zoom(1.1);
+         camaras[camaraActiva].zoom(0.9);
          change_projection(1);
          break;
 
       case 3:
-         camaras[camaraActiva].zoom(-1.1);
+         camaras[camaraActiva].zoom(1.1);
          change_projection(1);
          break;
 
       case 4:
-         camaras[camaraActiva].zoom(1.1);
+         camaras[camaraActiva].zoom(0.9);
          change_projection(1);
          break;
 	}
