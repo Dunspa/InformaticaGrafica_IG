@@ -76,37 +76,8 @@ void normal_keys(unsigned char tecla, int x, int y){
 //***************************************************************************
 
 void clickRaton(int boton, int estado, int x, int y){
-	// Click derecho del ratón para mover la cámara en primera persona
-	if (boton == GLUT_RIGHT_BUTTON){
-		escena->actualizarPosicionRaton(x, y);
-
-		// Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
-		if (estado == GLUT_DOWN){
- 			escena->actualizarEstadoRaton(MOVIENDO_CAMARA_FIRSTPERSON);
-		}
-		// Se levanta el botón, por lo que se sale del estado "moviendo cámara"
-		else if (estado == GLUT_UP){
-			escena->actualizarEstadoRaton(QUIETA);
-		}
-	}
-	// Click izquierdo del raton selecciona objetos
-	else if (boton == GLUT_LEFT_BUTTON){
-		escena->dibujaSeleccion();
-
-		// Leer el pixel dado por la función gestora del evento de ratón
-		GLint viewport[4];
-		GLfloat pixeles[3];
-		glGetIntegerv(GL_VIEWPORT, viewport);
-		glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_FLOAT, (void *)pixeles);
-
-		// Averiguar a qué objeto hemos asignado el color de dicho píxel
-		escena->objetoSeleccionado(pixeles);
-	}
-	// Scroll del raton
-	else if (boton == 3 || boton == 4){
-		if (escena != NULL)
-			escena->teclaEspecial(boton, x, y);
-	}
+	if (escena != nullptr)
+		escena->clickRaton(boton, estado, x, y);
 
 	glutPostRedisplay();
 }
@@ -122,8 +93,6 @@ void clickRaton(int boton, int estado, int x, int y){
 void ratonMovido(int x, int y){
 	if (escena != nullptr)
 		escena->ratonMovido(x, y);
-
-	glutPostRedisplay();
 }
 
 //***************************************************************************
@@ -136,10 +105,8 @@ void ratonMovido(int x, int y){
 //***************************************************************************
 
 void special_keys(int tecla, int x, int y){
-	if (escena != NULL)
+	if (escena != nullptr)
 		escena->teclaEspecial(tecla, x, y);
-
-	glutPostRedisplay();
 }
 
 //***************************************************************************
@@ -147,7 +114,7 @@ void special_keys(int tecla, int x, int y){
 //***************************************************************************
 
 void funcion_idle(){
-	if (escena != 0)
+	if (escena != nullptr)
 		escena->animarModeloJerarquico();
 
 	glutPostRedisplay();

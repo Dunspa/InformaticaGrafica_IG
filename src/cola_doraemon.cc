@@ -7,3 +7,7 @@ ColaDoraemon::ColaDoraemon(){
 void ColaDoraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
    cola->draw(modoVisual, modoDibuj, modoIluminacion);
 }
+
+void ColaDoraemon::setColorSeleccion(color col){
+   cola->setColorSeleccion(col);
+}

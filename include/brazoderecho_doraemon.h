@@ -24,6 +24,7 @@ public:
 
    // Dibujar la parte del modelo jerárquico
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
+   void setColorSeleccion(color col) override;
 };
 
 #endif

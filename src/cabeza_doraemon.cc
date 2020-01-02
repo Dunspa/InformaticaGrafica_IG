@@ -7,3 +7,7 @@ CabezaDoraemon::CabezaDoraemon(){
 void CabezaDoraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
    cabeza->draw(modoVisual, modoDibuj, modoIluminacion);
 }
+
+void CabezaDoraemon::setColorSeleccion(color col){
+   cabeza->setColorSeleccion(col);
+}

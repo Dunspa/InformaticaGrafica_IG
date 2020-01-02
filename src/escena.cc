@@ -139,6 +139,12 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
    }
    // Otros modos (no ajedrez)
    else{
+      // Dibujar modo selección
+      if (seleccionVisible){
+         glPolygonMode(GL_FRONT, GL_FILL);
+         eligeObjetos(SELECCION, modoDibuj, obj);
+      }
+
       // Dibujar puntos
       if (puntosVisible){
          glPolygonMode(GL_FRONT, GL_POINT);
@@ -287,15 +293,8 @@ void Escena::dibujaSeleccion(){
    glDisable(GL_TEXTURE);  // Deshabilita texturas
 
    // Un color para cada objeto
-   cubo->draw(SELECCION, INMEDIATO, true);
-   tetraedro->draw(SELECCION, INMEDIATO, true);
-   peon->draw(SELECCION, INMEDIATO, true);
-   puertaMagica->draw(SELECCION, INMEDIATO, true);
-   cilindro->draw(SELECCION, INMEDIATO, true);
-   cono->draw(SELECCION, INMEDIATO, true);
-   esfera->draw(SELECCION, INMEDIATO, true);
-   doraemon->draw(SELECCION, INMEDIATO, true);
-   lienzo->draw(SELECCION, INMEDIATO, true);
+   seleccionVisible = true;
+   dibujar();
 
    glEnable(GL_DITHER);
    glEnable(GL_LIGHTING);
@@ -304,16 +303,41 @@ void Escena::dibujaSeleccion(){
 
 void Escena::objetoSeleccionado(GLfloat * pixeles){
    Tupla3f p;
-   for (int i = 0 ; i < 2 ; i++)
+   for (int i = 0 ; i <= 2 ; i++)
       p(i) = pixeles[i];
 
-   std::cout << p(0) << " " << pixeles[0] << " ";
-   std::cout << p(1) << " " << pixeles[1] << " ";
-   std::cout << p(2) << " " << pixeles[2] << " ";
-
-   if (p == colorSel1){
+   if (comparaColores(p, colorSel1)){
       std::cout << "Es un cubo!" << std::endl;
    }
+   else if (comparaColores(p, colorSel2)){
+      std::cout << "Es un tetraedro!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel3)){
+      std::cout << "Es un peon!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel4)){
+      std::cout << "Es una puerta magica!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel5)){
+      std::cout << "Es un cilindro!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel6)){
+      std::cout << "Es un cono!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel7)){
+      std::cout << "Es una esfera!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel8)){
+      std::cout << "Es un doraemon!" << std::endl;
+   }
+   else if (comparaColores(p, colorSel9)){
+      std::cout << "Es un lienzo!" << std::endl;
+   }
+}
+
+bool Escena::comparaColores(Tupla3f c1, Tupla3f c2){
+   // Comparar tuplas3f de colores, si su diferencia es menor que un umbral, son el mismo color
+   return (fabs(c1(X) - c2(X)) < 0.003) && (fabs(c1(Y) - c2(Y)) < 0.003) && (fabs(c1(Z) - c2(Z)) < 0.003);
 }
 
 // **************************************************************************
@@ -824,6 +848,41 @@ void Escena::ratonMovido(int x, int y){
       Xraton = x;
       Yraton = y;
    }
+}
+
+void Escena::clickRaton(int boton, int estado, int x, int y){
+   // Click derecho del ratón para mover la cámara en primera persona
+	if (boton == GLUT_RIGHT_BUTTON){
+		actualizarPosicionRaton(x, y);
+
+		// Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
+		if (estado == GLUT_DOWN){
+ 			actualizarEstadoRaton(MOVIENDO_CAMARA_FIRSTPERSON);
+		}
+		// Se levanta el botón, por lo que se sale del estado "moviendo cámara"
+		else if (estado == GLUT_UP){
+			actualizarEstadoRaton(QUIETA);
+		}
+	}
+	// Click izquierdo del raton selecciona objetos
+	else if (boton == GLUT_LEFT_BUTTON){
+		if (estado == GLUT_DOWN){
+         dibujaSeleccion();
+
+   		// Leer el pixel dado por la función gestora del evento de ratón
+   		GLint viewport[4];
+   		GLfloat pixeles[3];
+   		glGetIntegerv(GL_VIEWPORT, viewport);
+   		glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_FLOAT, (void *)pixeles);
+
+   		// Averiguar a qué objeto hemos asignado el color de dicho píxel
+   		objetoSeleccionado(pixeles);
+      }
+	}
+	// Scroll del raton
+	else if (boton == 3 || boton == 4){
+		teclaEspecial(boton, x, y);
+	}
 }
 
 //**************************************************************************

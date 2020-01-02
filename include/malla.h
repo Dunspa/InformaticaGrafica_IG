@@ -43,7 +43,7 @@ const Tupla3f colorSel3 = {0.0, 0.0, 1.0};
 const Tupla3f colorSel4 = {0.0, 1.0, 1.0};
 const Tupla3f colorSel5 = {1.0, 0.0, 1.0};
 const Tupla3f colorSel6 = {1.0, 1.0, 0.0};
-const Tupla3f colorSel7 = {1.0, 1.0, 1.0};
+const Tupla3f colorSel7 = {0.1, 0.2, 0.3};
 const Tupla3f colorSel8 = {0.0, 0.0, 0.0};
 const Tupla3f colorSel9 = {0.9, 0.9, 0.9};
 
@@ -67,7 +67,7 @@ public:
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
 
    // Asigna colores especificos para el modo selección
-   void setColorSeleccion(color col);
+   virtual void setColorSeleccion(color col);
 
 protected:
    virtual void dibujarElementos(); // Realiza un glDrawElements

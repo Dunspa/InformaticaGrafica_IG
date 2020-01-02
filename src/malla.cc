@@ -107,6 +107,10 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
       // Colores del sólido
       glColorPointer(3, GL_FLOAT, 0, c_dif.data());
    }
+   else if (modoVisual == SELECCION){
+      // Colores de la seleccion
+      glColorPointer(3, GL_FLOAT, 0, c_selec.data());
+   }
 
    // Especificar localización y formato de la tabla de vértices y habilitarla
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);   // Activar VBO de vértices

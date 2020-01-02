@@ -62,7 +62,7 @@ private:
 
    // Parámetros del raton para las cámaras
    int Xraton, Yraton;  // Posición X e Y anterior del raton
-   estadoRaton estadoR;
+   estadoRaton estadoR = QUIETA;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible         = true;
@@ -85,6 +85,7 @@ private:
    bool solidoVisible    = true;
    bool ajedrezVisible   = false;   // Si ajedrez visible, los otros modos invisibles
    bool tapasVisible     = true;
+   bool seleccionVisible = false;
 
    bool modoIluminacion  = true;    // Modo iluminación: SMOOTH o FLAT
    bool iluminado        = false;   // Luces encendidas
@@ -114,6 +115,7 @@ public:
 	void dibujar();
    void dibujaSeleccion();
    void objetoSeleccionado(GLfloat * pixeles);
+   bool comparaColores(Tupla3f c1, Tupla3f c2);
 
    // Animar el modelo jerárquico
    void animarModeloJerarquico();
@@ -124,6 +126,7 @@ public:
 
    // Interacción con las cámaras
    void ratonMovido(int x, int y);
+   void clickRaton(int boton, int estado, int x, int y);
 
    // Interacción de raton para las cámaras
    void actualizarPosicionRaton(int x, int y);

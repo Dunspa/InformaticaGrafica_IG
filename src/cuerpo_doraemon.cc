@@ -7,3 +7,7 @@ CuerpoDoraemon::CuerpoDoraemon(){
 void CuerpoDoraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
    cuerpo->draw(modoVisual, modoDibuj, modoIluminacion);
 }
+
+void CuerpoDoraemon::setColorSeleccion(color col){
+   cuerpo->setColorSeleccion(col);
+}

@@ -7,3 +7,7 @@ BrazoDerechoDoraemon::BrazoDerechoDoraemon(){
 void BrazoDerechoDoraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
    brazo_derecho->draw(modoVisual, modoDibuj, modoIluminacion);
 }
+
+void BrazoDerechoDoraemon::setColorSeleccion(color col){
+   brazo_derecho->setColorSeleccion(col);
+}
