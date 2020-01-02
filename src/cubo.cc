@@ -42,7 +42,7 @@ Cubo::Cubo(float lado){
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
    calcularColores(AZUL, DIFERIDO);
-
+   
    // Normales
    calcular_normales();
 

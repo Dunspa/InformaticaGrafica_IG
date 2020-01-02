@@ -56,6 +56,8 @@ public:
    // Construir el modelo jerárquico
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
 
+   void setColorSeleccion(color col);
+
    // Animar el modelo jerárquico
    void animar();
    // Animar el modelo jerárquico con mayor o menor velocidad

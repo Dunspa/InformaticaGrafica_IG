@@ -34,6 +34,17 @@ Escena::Escena(){
     camaras.push_back(Camara({0.0, 100.0, 300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, PERSPECTIVA));
     camaras.push_back(Camara({-100.0, 150.0, 150.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, ORTOGONAL));
     camaras.push_back(Camara({0.0, 100.0, -300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -1000.0, 1000.0, -1000.0, 1000.0, 100.0, 2000.0, PERSPECTIVA));
+
+    // Asignar colores de selección a los objetos de la escena
+    cubo->setColorSeleccion(SEL1);
+    tetraedro->setColorSeleccion(SEL2);
+    peon->setColorSeleccion(SEL3);
+    puertaMagica->setColorSeleccion(SEL4);
+    cilindro->setColorSeleccion(SEL5);
+    cono->setColorSeleccion(SEL6);
+    esfera->setColorSeleccion(SEL7);
+    doraemon->setColorSeleccion(SEL8);
+    lienzo->setColorSeleccion(SEL9);
 }
 
 //**************************************************************************
@@ -267,6 +278,41 @@ void Escena::dibujar(){
    }
    else{
       luzdireccional->desactivar();
+   }
+}
+
+void Escena::dibujaSeleccion(){
+   glDisable(GL_DITHER);   // Deshabilita el degradado para tener colores homogeneos
+   glDisable(GL_LIGHTING); // Deshabilita luces
+   glDisable(GL_TEXTURE);  // Deshabilita texturas
+
+   // Un color para cada objeto
+   cubo->draw(SELECCION, INMEDIATO, true);
+   tetraedro->draw(SELECCION, INMEDIATO, true);
+   peon->draw(SELECCION, INMEDIATO, true);
+   puertaMagica->draw(SELECCION, INMEDIATO, true);
+   cilindro->draw(SELECCION, INMEDIATO, true);
+   cono->draw(SELECCION, INMEDIATO, true);
+   esfera->draw(SELECCION, INMEDIATO, true);
+   doraemon->draw(SELECCION, INMEDIATO, true);
+   lienzo->draw(SELECCION, INMEDIATO, true);
+
+   glEnable(GL_DITHER);
+   glEnable(GL_LIGHTING);
+   glEnable(GL_TEXTURE);
+}
+
+void Escena::objetoSeleccionado(GLfloat * pixeles){
+   Tupla3f p;
+   for (int i = 0 ; i < 2 ; i++)
+      p(i) = pixeles[i];
+
+   std::cout << p(0) << " " << pixeles[0] << " ";
+   std::cout << p(1) << " " << pixeles[1] << " ";
+   std::cout << p(2) << " " << pixeles[2] << " ";
+
+   if (p == colorSel1){
+      std::cout << "Es un cubo!" << std::endl;
    }
 }
 
@@ -747,22 +793,22 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
          break;
 
 	   case GLUT_KEY_PAGE_UP:
-         camaras[camaraActiva].zoom(1.1);
+         camaras[camaraActiva].zoom(0.9);
          change_projection(1);
          break;
 
 	   case GLUT_KEY_PAGE_DOWN:
-         camaras[camaraActiva].zoom(0.9);
-         change_projection(1);
-         break;
-
-      case 3:
          camaras[camaraActiva].zoom(1.1);
          change_projection(1);
          break;
 
-      case 4:
+      case 3:
          camaras[camaraActiva].zoom(0.9);
+         change_projection(1);
+         break;
+
+      case 4:
+         camaras[camaraActiva].zoom(1.1);
          change_projection(1);
          break;
 	}

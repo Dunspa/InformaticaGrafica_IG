@@ -109,6 +109,14 @@ void Doraemon::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacio
    glPopMatrix();
 }
 
+void Doraemon::setColorSeleccion(color col){
+   cola->setColorSeleccion(col);
+   cuerpo->setColorSeleccion(col);
+   cabeza->setColorSeleccion(col);
+   brazo_derecho->setColorSeleccion(col);
+   brazo_izquierdo->setColorSeleccion(col);
+}
+
 void Doraemon::animar(){
    if (giroBrazoDcho >= 15.0 || giroBrazoDcho <= -15.0){
       incrementoBrazoDcho *= -1.0;

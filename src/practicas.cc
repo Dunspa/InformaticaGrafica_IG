@@ -76,7 +76,7 @@ void normal_keys(unsigned char tecla, int x, int y){
 //***************************************************************************
 
 void clickRaton(int boton, int estado, int x, int y){
-	// Click derecho del ratón
+	// Click derecho del ratón para mover la cámara en primera persona
 	if (boton == GLUT_RIGHT_BUTTON){
 		escena->actualizarPosicionRaton(x, y);
 
@@ -88,6 +88,19 @@ void clickRaton(int boton, int estado, int x, int y){
 		else if (estado == GLUT_UP){
 			escena->actualizarEstadoRaton(QUIETA);
 		}
+	}
+	// Click izquierdo del raton selecciona objetos
+	else if (boton == GLUT_LEFT_BUTTON){
+		escena->dibujaSeleccion();
+
+		// Leer el pixel dado por la función gestora del evento de ratón
+		GLint viewport[4];
+		GLfloat pixeles[3];
+		glGetIntegerv(GL_VIEWPORT, viewport);
+		glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_FLOAT, (void *)pixeles);
+
+		// Averiguar a qué objeto hemos asignado el color de dicho píxel
+		escena->objetoSeleccionado(pixeles);
 	}
 	// Scroll del raton
 	else if (boton == 3 || boton == 4){

@@ -112,6 +112,8 @@ public:
    void eliminaTapas();
    void dibujaTapas();
 	void dibujar();
+   void dibujaSeleccion();
+   void objetoSeleccionado(GLfloat * pixeles);
 
    // Animar el modelo jerárquico
    void animarModeloJerarquico();

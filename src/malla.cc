@@ -26,6 +26,10 @@ void Malla3D::draw_ModoInmediato(dibujado modoVisual){
       // Colores del sólido
       glColorPointer(3, GL_FLOAT, 0, c.data());
    }
+   else if (modoVisual == SELECCION){
+      // Colores de la seleccion
+      glColorPointer(3, GL_FLOAT, 0, c_selec.data());
+   }
 
    // Habilitar vertex arrays
    glEnableClientState(GL_VERTEX_ARRAY);
@@ -298,6 +302,40 @@ void Malla3D::calcularColores(color col, dibujado modoVisual){
          else if (col == TEXTURA){
             c_dif[i] = colorTextura;
          }
+      }
+   }
+}
+
+void Malla3D::setColorSeleccion(color col){
+   // Colores del modo seleccion
+   c_selec.resize(numVertices);
+   for (int i = 0 ; i < numVertices ; i++){
+      if (col == SEL1){
+         c_selec[i] = colorSel1;
+      }
+      else if (col == SEL2){
+         c_selec[i] = colorSel2;
+      }
+      else if (col == SEL3){
+         c_selec[i] = colorSel3;
+      }
+      else if (col == SEL4){
+         c_selec[i] = colorSel4;
+      }
+      else if (col == SEL5){
+         c_selec[i] = colorSel5;
+      }
+      else if (col == SEL6){
+         c_selec[i] = colorSel6;
+      }
+      else if (col == SEL7){
+         c_selec[i] = colorSel7;
+      }
+      else if (col == SEL8){
+         c_selec[i] = colorSel8;
+      }
+      else if (col == SEL9){
+         c_selec[i] = colorSel9;
       }
    }
 }
