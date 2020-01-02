@@ -290,15 +290,81 @@ void Escena::dibujar(){
 void Escena::dibujaSeleccion(){
    glDisable(GL_DITHER);   // Deshabilita el degradado para tener colores homogeneos
    glDisable(GL_LIGHTING); // Deshabilita luces
-   glDisable(GL_TEXTURE);  // Deshabilita texturas
+   glDisable(GL_TEXTURE_2D);  // Deshabilita texturas
+
+   seleccionVisible = true;
+
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
+	change_observer();
 
    // Un color para cada objeto
-   seleccionVisible = true;
-   dibujar();
+   // Cubo
+	glPushMatrix();
+      glScalef(1.0, 1.0, 1.0);
+		glTranslatef(25.0, 0.0, 0.0);
+		dibujaObjetos(modoDibujado, CUBO);
+	glPopMatrix();
+
+   // Tetraedro
+   glPushMatrix();
+      glTranslatef(50.0, 80.0, 0.0);
+      dibujaObjetos(modoDibujado, TETRAEDRO);
+   glPopMatrix();
+
+   // Peon
+   glPushMatrix();
+      glScalef(15.0, 15.0, 15.0);
+      glTranslatef(-7.5, 5.0, 0.0);
+      dibujaObjetos(modoDibujado, PEON);
+   glPopMatrix();
+
+   // Puerta Mágica
+   glPushMatrix();
+      glScalef(15.0, 15.0, 15.0);
+      glRotatef(90, 0, 1, 0);
+      glTranslatef(0.0, 1.2, -2.4);
+      dibujaObjetos(modoDibujado, PUERTAMAGICA);
+   glPopMatrix();
+
+   // Cilindro
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(-50.0, 0.0, 0.0);
+      dibujaObjetos(modoDibujado, CILINDRO);
+   glPopMatrix();
+
+   // Cono
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(-50.0, 60.0, 0.0);
+      dibujaObjetos(modoDibujado, CONO);
+   glPopMatrix();
+
+   // Esfera
+   glPushMatrix();
+      glScalef(2.0, 2.0, 2.0);
+      glTranslatef(0.0, 50.0, 0.0);
+      dibujaObjetos(modoDibujado, ESFERA);
+   glPopMatrix();
+
+   // Modelo jerárquico
+   glPushMatrix();
+      dibujaObjetos(modoDibujado, DORAEMON);
+   glPopMatrix();
+
+   // Lienzo
+   glPushMatrix();
+      glScalef(10.0, 10.0, 10.0);
+      glRotatef(-90.0, 1.0, 0.0, 0.0);
+      glTranslatef(-25.0, -25.0, -0.5);
+      dibujaObjetos(modoDibujado, LIENZO);
+   glPopMatrix();
 
    glEnable(GL_DITHER);
    glEnable(GL_LIGHTING);
-   glEnable(GL_TEXTURE);
+   glEnable(GL_TEXTURE_2D);
+
+   seleccionVisible = false;
 }
 
 void Escena::objetoSeleccionado(GLfloat * pixeles){

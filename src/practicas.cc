@@ -24,6 +24,7 @@ Escena *escena = nullptr ;
 void draw_scene(void){
 	if (escena != nullptr)
       escena->dibujar();
+
 	glutSwapBuffers();
 }
 
@@ -78,8 +79,6 @@ void normal_keys(unsigned char tecla, int x, int y){
 void clickRaton(int boton, int estado, int x, int y){
 	if (escena != nullptr)
 		escena->clickRaton(boton, estado, x, y);
-
-	glutPostRedisplay();
 }
 
 //***************************************************************************
@@ -107,6 +106,8 @@ void ratonMovido(int x, int y){
 void special_keys(int tecla, int x, int y){
 	if (escena != nullptr)
 		escena->teclaEspecial(tecla, x, y);
+
+	glutPostRedisplay();
 }
 
 //***************************************************************************
