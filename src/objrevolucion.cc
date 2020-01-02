@@ -31,6 +31,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, ch
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
    calcularColores(AZUL, DIFERIDO);
+   calcularColores(AMARILLO, SELECCIONADO);
 
    // Normales
    calcular_normales();
@@ -38,6 +39,8 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, ch
    // Material
    Material mat(jade[0], jade[1], jade[2], jade_brillo);
    setMaterial(mat);
+   Material mat2(amarillo[0], amarillo[1], amarillo[2], amarillo_brillo);
+   setMaterialSeleccionado(mat2);
 }
 
 // *****************************************************************************
@@ -64,6 +67,8 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, c
    // Material
    Material mat(jade[0], jade[1], jade[2], jade_brillo);
    setMaterial(mat);
+   Material mat2(amarillo[0], amarillo[1], amarillo[2], amarillo_brillo);
+   setMaterialSeleccionado(mat2);
 }
 
 void ObjRevolucion::dibujarElementos(){

@@ -22,7 +22,7 @@ typedef enum{
 } menu;
 
 typedef enum{
-   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA, DORAEMON, LIENZO
+   CUBO, TETRAEDRO, PEON, PUERTAMAGICA, CILINDRO, CONO, ESFERA, DORAEMON, LIENZO, NINGUNO
 } objetoEscena;
 
 class Escena{
@@ -63,6 +63,8 @@ private:
    // Parámetros del raton para las cámaras
    int Xraton, Yraton;  // Posición X e Y anterior del raton
    estadoRaton estadoR = QUIETA;
+
+   objetoEscena objetoSelec = NINGUNO;
 
    // Controlan la visibilidad de los distintos objetos
    bool cuboVisible         = true;
@@ -110,11 +112,13 @@ public:
 	// Dibujar
    void eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena obj);
    void dibujaObjetos(dibujado modoDibuj, objetoEscena obj);
+   void posicionaObjetos();
    void eliminaTapas();
    void dibujaTapas();
 	void dibujar();
    void dibujaSeleccion();
    void objetoSeleccionado(GLfloat * pixeles);
+   void seleccionarObjeto();
    bool comparaColores(Tupla3f c1, Tupla3f c2);
 
    // Animar el modelo jerárquico

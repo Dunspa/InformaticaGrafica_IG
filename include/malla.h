@@ -16,7 +16,7 @@
 #include "textura.h"
 
 typedef enum{
-   PUNTOS, LINEAS, SOLIDO, DIFERIDO, INMEDIATO, AJEDREZ, SELECCION
+   PUNTOS, LINEAS, SOLIDO, DIFERIDO, INMEDIATO, AJEDREZ, SELECCION, SELECCIONADO
 } dibujado;
 
 typedef enum{
@@ -69,6 +69,9 @@ public:
    // Asigna colores especificos para el modo selección
    virtual void setColorSeleccion(color col);
 
+   void setMaterial(Material mat);
+   void setMaterialSeleccionado(Material mat);
+
 protected:
    virtual void dibujarElementos(); // Realiza un glDrawElements
    virtual void dibujarCarasPares(); // Realiza un glDrawElements de las caras pares (ajedrez)
@@ -76,7 +79,6 @@ protected:
    void calcularColores(color col_inm, dibujado modoVisual); // Calcula las tablas de colores
    void calcularModoAjedrez();      // Calcula los colores de las caras para el modo ajedrez
    void calcular_normales();        // calcula tabla de normales de vértices (práctica 3)
-   void setMaterial(Material mat);
    void setTextura(std::string archivo);
 
    // Geometría y topología
@@ -91,6 +93,7 @@ protected:
    std::vector<Tupla3f> c_vert;  // Color de los vértices
    std::vector<Tupla3f> c_arist; // Color de las aristas
    std::vector<Tupla3f> c_selec; // Color para las selecciones
+   std::vector<Tupla3f> c_seleccionado; // Color del objeto seleccionado (amarillo)
 
    // Normales
    std::vector<Tupla3f> nf;   // tabla de normales de las caras
@@ -108,6 +111,7 @@ protected:
 
    // Material
    Material m;
+   Material m_seleccionado;
 
    // Tipos de materiales (reflectividad difusa, especular y ambiente)
    std::vector<Tupla4f> esmeralda = {{0.07568, 0.61424, 0.07568, 1.0}, {0.633, 0.727811, 0.633, 1.0}, {0.0215, 0.1745, 0.0215, 1.0}};

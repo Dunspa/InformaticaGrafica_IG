@@ -57,6 +57,7 @@ public:
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
 
    void setColorSeleccion(color col);
+   void setColorSeleccionado();
 
    // Animar el modelo jerárquico
    void animar();

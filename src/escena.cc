@@ -2,7 +2,7 @@
 #include "aux.h"     // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
-
+using namespace std;
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
 //**************************************************************************
@@ -145,159 +145,34 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
          eligeObjetos(SELECCION, modoDibuj, obj);
       }
 
-      // Dibujar puntos
-      if (puntosVisible){
-         glPolygonMode(GL_FRONT, GL_POINT);
-         glPointSize(5);   // Puntos más gordos para que se vean bien
-         eligeObjetos(PUNTOS, modoDibuj, obj);
-      }
-
-      // Dibujar líneas
-      if (lineasVisible){
-         glPolygonMode(GL_FRONT, GL_LINE);
-         eligeObjetos(LINEAS, modoDibuj, obj);
-      }
-
-      // Dibujar sólidos
-      if (solidoVisible){
+      if (objetoSelec == obj){
          glPolygonMode(GL_FRONT, GL_FILL);
-         eligeObjetos(SOLIDO, modoDibuj, obj);
+         eligeObjetos(SELECCIONADO, modoDibuj, obj);
+      }
+      else{
+         // Dibujar puntos
+         if (puntosVisible){
+            glPolygonMode(GL_FRONT, GL_POINT);
+            glPointSize(5);   // Puntos más gordos para que se vean bien
+            eligeObjetos(PUNTOS, modoDibuj, obj);
+         }
+
+         // Dibujar líneas
+         if (lineasVisible){
+            glPolygonMode(GL_FRONT, GL_LINE);
+            eligeObjetos(LINEAS, modoDibuj, obj);
+         }
+
+         // Dibujar sólidos
+         if (solidoVisible){
+            glPolygonMode(GL_FRONT, GL_FILL);
+            eligeObjetos(SOLIDO, modoDibuj, obj);
+         }
       }
    }
 }
 
-void Escena::eliminaTapas(){
-   if (peon != nullptr)
-      peon->eliminarTapas();
-
-   if (cilindro != nullptr)
-      cilindro->eliminarTapas();
-
-   if (cono != nullptr)
-      cono->eliminarTapas();
-
-   if (esfera != nullptr)
-      esfera->eliminarTapas();
-}
-
-void Escena::dibujaTapas(){
-   if (peon != nullptr)
-      peon->crearTapas();
-
-   if (cilindro != nullptr)
-      cilindro->crearTapas();
-
-   if (cono != nullptr)
-      cono->crearTapas();
-
-   if (esfera != nullptr)
-      esfera->crearTapas();
-}
-
-void Escena::dibujar(){
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
-	change_observer();
-   glDisable(GL_LIGHTING);
-   ejes.draw();
-
-   if (iluminado){
-      glEnable(GL_LIGHTING);
-      //glEnable(GL_LIGHT0); // Luz 0 por defecto
-   }
-
-	// Dibujar todos los objetos de la escena
-
-	// Cubo
-	glPushMatrix();
-      glScalef(1.0, 1.0, 1.0);
-		glTranslatef(25.0, 0.0, 0.0);
-		dibujaObjetos(modoDibujado, CUBO);
-	glPopMatrix();
-
-   // Tetraedro
-   glPushMatrix();
-      glTranslatef(50.0, 80.0, 0.0);
-      dibujaObjetos(modoDibujado, TETRAEDRO);
-   glPopMatrix();
-
-   // Peon
-   glPushMatrix();
-      glScalef(15.0, 15.0, 15.0);
-      glTranslatef(-7.5, 5.0, 0.0);
-      dibujaObjetos(modoDibujado, PEON);
-   glPopMatrix();
-
-   // Puerta Mágica
-   glPushMatrix();
-      glScalef(15.0, 15.0, 15.0);
-      glRotatef(90, 0, 1, 0);
-      glTranslatef(0.0, 1.2, -2.4);
-      dibujaObjetos(modoDibujado, PUERTAMAGICA);
-   glPopMatrix();
-
-   // Cilindro
-   glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-50.0, 0.0, 0.0);
-      dibujaObjetos(modoDibujado, CILINDRO);
-   glPopMatrix();
-
-   // Cono
-   glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-50.0, 60.0, 0.0);
-      dibujaObjetos(modoDibujado, CONO);
-   glPopMatrix();
-
-   // Esfera
-   glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(0.0, 50.0, 0.0);
-      dibujaObjetos(modoDibujado, ESFERA);
-   glPopMatrix();
-
-   // Modelo jerárquico
-   glPushMatrix();
-      dibujaObjetos(modoDibujado, DORAEMON);
-   glPopMatrix();
-
-   // Lienzo
-   glPushMatrix();
-      glScalef(10.0, 10.0, 10.0);
-      glRotatef(-90.0, 1.0, 0.0, 0.0);
-      glTranslatef(-25.0, -25.0, -0.5);
-      dibujaObjetos(modoDibujado, LIENZO);
-   glPopMatrix();
-
-   if (luzposicionalVisible){
-      glPushMatrix();
-         glRotatef(luzposicional->giroLuz, 0.0, 1.0, 0.0);
-         luzposicional->activar();
-      glPopMatrix();
-   }
-   else{
-      luzposicional->desactivar();
-   }
-
-   if (luzdireccionalVisible){
-      luzdireccional->activar();
-   }
-   else{
-      luzdireccional->desactivar();
-   }
-}
-
-void Escena::dibujaSeleccion(){
-   glDisable(GL_DITHER);   // Deshabilita el degradado para tener colores homogeneos
-   glDisable(GL_LIGHTING); // Deshabilita luces
-   glDisable(GL_TEXTURE_2D);  // Deshabilita texturas
-
-   seleccionVisible = true;
-
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
-	change_observer();
-
-   // Un color para cada objeto
+void Escena::posicionaObjetos(){
    // Cubo
 	glPushMatrix();
       glScalef(1.0, 1.0, 1.0);
@@ -359,6 +234,80 @@ void Escena::dibujaSeleccion(){
       glTranslatef(-25.0, -25.0, -0.5);
       dibujaObjetos(modoDibujado, LIENZO);
    glPopMatrix();
+}
+
+void Escena::eliminaTapas(){
+   if (peon != nullptr)
+      peon->eliminarTapas();
+
+   if (cilindro != nullptr)
+      cilindro->eliminarTapas();
+
+   if (cono != nullptr)
+      cono->eliminarTapas();
+
+   if (esfera != nullptr)
+      esfera->eliminarTapas();
+}
+
+void Escena::dibujaTapas(){
+   if (peon != nullptr)
+      peon->crearTapas();
+
+   if (cilindro != nullptr)
+      cilindro->crearTapas();
+
+   if (cono != nullptr)
+      cono->crearTapas();
+
+   if (esfera != nullptr)
+      esfera->crearTapas();
+}
+
+void Escena::dibujar(){
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
+	change_observer();
+   glDisable(GL_LIGHTING);
+   ejes.draw();
+
+   if (iluminado){
+      glEnable(GL_LIGHTING);
+      //glEnable(GL_LIGHT0); // Luz 0 por defecto
+   }
+
+	// Dibujar y posicionar todos los objetos de la escena
+   posicionaObjetos();
+
+   if (luzposicionalVisible){
+      glPushMatrix();
+         glRotatef(luzposicional->giroLuz, 0.0, 1.0, 0.0);
+         luzposicional->activar();
+      glPopMatrix();
+   }
+   else{
+      luzposicional->desactivar();
+   }
+
+   if (luzdireccionalVisible){
+      luzdireccional->activar();
+   }
+   else{
+      luzdireccional->desactivar();
+   }
+}
+
+void Escena::dibujaSeleccion(){
+   glDisable(GL_DITHER);   // Deshabilita el degradado para tener colores homogeneos
+   glDisable(GL_LIGHTING); // Deshabilita luces
+   glDisable(GL_TEXTURE_2D);  // Deshabilita texturas
+
+   seleccionVisible = true;
+
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
+	change_observer();
+
+   // Un color para cada objeto
+   posicionaObjetos();
 
    glEnable(GL_DITHER);
    glEnable(GL_LIGHTING);
@@ -372,34 +321,73 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
    for (int i = 0 ; i <= 2 ; i++)
       p(i) = pixeles[i];
 
+   // Primero, deseleccionar antes de seleccionar otro objeto
+
    if (comparaColores(p, colorSel1)){
-      std::cout << "Es un cubo!" << std::endl;
+      cout << "Objeto seleccionado: Cubo" << endl;
+      if (objetoSelec == CUBO)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = CUBO;
    }
    else if (comparaColores(p, colorSel2)){
-      std::cout << "Es un tetraedro!" << std::endl;
+      cout << "Objeto seleccionado: Tetraedro" << endl;
+      if (objetoSelec == TETRAEDRO)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = TETRAEDRO;
    }
    else if (comparaColores(p, colorSel3)){
-      std::cout << "Es un peon!" << std::endl;
+      cout << "Objeto seleccionado: Peon" << endl;
+      if (objetoSelec == PEON)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = PEON;
    }
    else if (comparaColores(p, colorSel4)){
-      std::cout << "Es una puerta magica!" << std::endl;
+      cout << "Objeto seleccionado: Puerta Mágica" << endl;
+      if (objetoSelec == PUERTAMAGICA)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = PUERTAMAGICA;
    }
    else if (comparaColores(p, colorSel5)){
-      std::cout << "Es un cilindro!" << std::endl;
+      cout << "Objeto seleccionado: Cilindro" << endl;
+      if (objetoSelec == CILINDRO)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = CILINDRO;
    }
    else if (comparaColores(p, colorSel6)){
-      std::cout << "Es un cono!" << std::endl;
+      cout << "Objeto seleccionado: Cono" << endl;
+      if (objetoSelec == CONO)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = CONO;
    }
    else if (comparaColores(p, colorSel7)){
-      std::cout << "Es una esfera!" << std::endl;
+      cout << "Objeto seleccionado: Esfera" << endl;
+      if (objetoSelec == ESFERA)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = ESFERA;
    }
    else if (comparaColores(p, colorSel8)){
-      std::cout << "Es un doraemon!" << std::endl;
+      cout << "Objeto seleccionado: Doraemon" << endl;
+      if (objetoSelec == DORAEMON)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = DORAEMON;
    }
    else if (comparaColores(p, colorSel9)){
-      std::cout << "Es un lienzo!" << std::endl;
+      cout << "Objeto seleccionado: Lienzo" << endl;
+      if (objetoSelec == LIENZO)
+         objetoSelec = NINGUNO;
+      else
+         objetoSelec = LIENZO;
    }
 }
+
 
 bool Escena::comparaColores(Tupla3f c1, Tupla3f c2){
    // Comparar tuplas3f de colores, si su diferencia es menor que un umbral, son el mismo color
@@ -439,7 +427,6 @@ void Escena::animarModeloJerarquico(){
 //**************************************************************************
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y){
-   using namespace std;
    cout << "Tecla pulsada: '" << tecla << "'" << endl;
    bool salir = false;
 

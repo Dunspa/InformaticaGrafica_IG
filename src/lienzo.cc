@@ -23,6 +23,7 @@ Lienzo::Lienzo(float l){
    calcularColores(TEXTURA, LINEAS);
    calcularColores(TEXTURA, SOLIDO);
    calcularColores(TEXTURA, DIFERIDO);
+   calcularColores(AMARILLO, SELECCIONADO);
 
    // Normales
    calcular_normales();
@@ -33,4 +34,7 @@ Lienzo::Lienzo(float l){
    ct.push_back({1, 0});
    ct.push_back({0, 1});
    ct.push_back({1, 1});
+
+   Material mat2(amarillo[0], amarillo[1], amarillo[2], amarillo_brillo);
+   setMaterialSeleccionado(mat2);
 }

@@ -30,6 +30,10 @@ void Malla3D::draw_ModoInmediato(dibujado modoVisual){
       // Colores de la seleccion
       glColorPointer(3, GL_FLOAT, 0, c_selec.data());
    }
+   else if (modoVisual == SELECCIONADO){
+      // Colores del objeto seleccionado
+      glColorPointer(3, GL_FLOAT, 0, c_seleccionado.data());
+   }
 
    // Habilitar vertex arrays
    glEnableClientState(GL_VERTEX_ARRAY);
@@ -186,7 +190,10 @@ void Malla3D::draw_ModoAjedrez(){
 // puede llamar a draw_ModoInmediato o bien a draw_ModoDiferido
 void Malla3D::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion){
    // Aplicar material a la malla
-   m.aplicar();
+   if (modoVisual == SELECCIONADO)
+      m_seleccionado.aplicar();
+   else
+      m.aplicar();
 
    // Activar textura
    if (textura != nullptr && !ct.empty())
@@ -308,6 +315,27 @@ void Malla3D::calcularColores(color col, dibujado modoVisual){
          }
       }
    }
+   else if (modoVisual == SELECCIONADO){
+      // Colores del modo diferido (impar en ajedrez)
+      c_seleccionado.resize(numVertices);
+      for (int i = 0 ; i < numVertices ; i++){
+         if (col == ROJO){
+            c_seleccionado[i] = colorRojo;
+         }
+         else if (col == VERDE){
+            c_seleccionado[i] = colorVerde;
+         }
+         else if (col == AZUL){
+            c_seleccionado[i] = colorAzul;
+         }
+         else if (col == AMARILLO){
+            c_seleccionado[i] = colorAmarillo;
+         }
+         else if (col == TEXTURA){
+            c_seleccionado[i] = colorTextura;
+         }
+      }
+   }
 }
 
 void Malla3D::setColorSeleccion(color col){
@@ -343,6 +371,12 @@ void Malla3D::setColorSeleccion(color col){
       }
    }
 }
+
+/*void Malla3D::setColorSeleccionado(){
+   std::vector<Tupla3f> intercambio = c;
+   c = c_anterior;
+   c_anterior = intercambio;
+}*/
 
 // -----------------------------------------------------------------------------
 // Calcula las caras para el modo ajedrez de cualquier malla 3D
@@ -408,6 +442,10 @@ void Malla3D::calcular_normales(){
 // Aplica un material a la malla 3D
 void Malla3D::setMaterial(Material mat){
    m = mat;
+}
+
+void Malla3D::setMaterialSeleccionado(Material mat){
+   m_seleccionado = mat;
 }
 
 // -----------------------------------------------------------------------------

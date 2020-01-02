@@ -35,6 +35,7 @@ Cilindro::Cilindro(float h, float r, int num_instancias, char eje_rotacion){
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
    calcularColores(AZUL, DIFERIDO);
+   calcularColores(AMARILLO, SELECCIONADO);
 
    // Normales
    calcular_normales();
@@ -42,4 +43,6 @@ Cilindro::Cilindro(float h, float r, int num_instancias, char eje_rotacion){
    // Material
    Material mat(obsidiana[0], obsidiana[1], obsidiana[2], obsidiana_brillo);
    setMaterial(mat);
+   Material mat2(amarillo[0], amarillo[1], amarillo[2], amarillo_brillo);
+   setMaterialSeleccionado(mat2);
 }

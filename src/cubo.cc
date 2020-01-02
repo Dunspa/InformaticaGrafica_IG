@@ -42,11 +42,14 @@ Cubo::Cubo(float lado){
    calcularColores(AMARILLO, LINEAS);
    calcularColores(ROJO, SOLIDO);
    calcularColores(AZUL, DIFERIDO);
-   
+   calcularColores(AMARILLO, SELECCIONADO);
+
    // Normales
    calcular_normales();
 
    // Material
    Material mat(esmeralda[0], esmeralda[1], esmeralda[2], esmeralda_brillo);
    setMaterial(mat);
+   Material mat2(amarillo[0], amarillo[1], amarillo[2], amarillo_brillo);
+   setMaterialSeleccionado(mat2);
 }
