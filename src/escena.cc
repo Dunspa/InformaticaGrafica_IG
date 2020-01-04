@@ -323,7 +323,7 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
 
    // Primero, deseleccionar antes de seleccionar otro objeto
 
-   estadoR = MOVIENDO_CAMARA_EXAMINAR;
+   //estadoR = MOVIENDO_CAMARA_EXAMINAR;
    if (comparaColores(p, colorSel1)){
       cout << "Objeto seleccionado: Cubo" << endl;
       if (objetoSelec == CUBO)

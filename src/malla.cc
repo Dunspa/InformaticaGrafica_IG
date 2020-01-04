@@ -50,7 +50,7 @@ void Malla3D::draw_ModoInmediato(dibujado modoVisual){
 
 
    // Habilitar coordenadas de texturas (en caso de que existan)
-   if (textura != nullptr && !ct.empty()){
+   if (textura != nullptr && !ct.empty() && modoVisual){
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
       glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
    }
@@ -196,7 +196,7 @@ void Malla3D::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion
       m.aplicar();
 
    // Activar textura
-   if (textura != nullptr && !ct.empty() && modoVisual != SELECCIONADO)
+   if (textura != nullptr && !ct.empty() && modoVisual != SELECCION)
       textura->activar();
 
    // Modo de iluminación SMOOTH o FLAT
