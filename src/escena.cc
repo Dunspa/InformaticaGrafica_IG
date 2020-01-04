@@ -323,6 +323,7 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
 
    // Primero, deseleccionar antes de seleccionar otro objeto
 
+   estadoR = MOVIENDO_CAMARA_EXAMINAR;
    if (comparaColores(p, colorSel1)){
       cout << "Objeto seleccionado: Cubo" << endl;
       if (objetoSelec == CUBO)
@@ -896,7 +897,7 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
 //**************************************************************************
 
 void Escena::ratonMovido(int x, int y){
-   if (estadoR == MOVIENDO_CAMARA_FIRSTPERSON){
+   if (estadoR == MOVIENDO_CAMARA_FIRSTPERSON && objetoSelec == NINGUNO){
       camaras[camaraActiva].girar(x - Xraton, y - Yraton);
       Xraton = x;
       Yraton = y;

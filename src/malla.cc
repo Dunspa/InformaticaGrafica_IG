@@ -196,7 +196,7 @@ void Malla3D::draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion
       m.aplicar();
 
    // Activar textura
-   if (textura != nullptr && !ct.empty())
+   if (textura != nullptr && !ct.empty() && modoVisual != SELECCIONADO)
       textura->activar();
 
    // Modo de iluminación SMOOTH o FLAT
