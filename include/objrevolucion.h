@@ -47,10 +47,14 @@ protected:
    void eliminarTapaInf(char eje_rotacion);
    void eliminarTapaSup(char eje_rotacion);
 
+   // Calcula las coordenadas de textura para un objeto de revolucion cilindro
+   void calcularTexturas();
+
    int numInstancias;      // Número total de réplicas rotadas (N)
    int numVerticesPerfil;  // Número total de vértices en el perfil original (M)
    bool tapaSup = true;    // El objeto tiene tapa superior
    bool tapaInf = true;    // El objeto tiene tapa inferior
+   std::vector<float> distanciasPerfil;   // Calculo de las distancias en el perfil para coordenadas textura
 };
 
 #endif

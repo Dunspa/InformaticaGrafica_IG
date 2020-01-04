@@ -407,10 +407,12 @@ void Malla3D::calcular_normales(){
       Tupla3f b = r - p;
       // Vector perpendicular a la cara
       Tupla3f m = a.cross(b);
-      // Vector perpendicular a la cara, normalizado
-      Tupla3f n = m.normalized();
-      // Añadir normal de la cara i
-      nf.push_back(n);
+      if (m.lengthSq() > 0){
+         // Vector perpendicular a la cara, normalizado
+         Tupla3f n = m.normalized();
+         // Añadir normal de la cara i
+         nf.push_back(n);
+      }
    }
 
    numNormalesCaras = nf.size();
@@ -429,10 +431,12 @@ void Malla3D::calcular_normales(){
    }
 
    for (int i = 0 ; i < v.size() ; i++){
-      // Vector perpendicular al vértice, normalizado
-      Tupla3f n = m[i].normalized();
-      // Añadir normal del vértice i
-      nv.push_back(n);
+      if (m[i].lengthSq() > 0){
+         // Vector perpendicular al vértice, normalizado
+         Tupla3f n = m[i].normalized();
+         // Añadir normal del vértice i
+         nv.push_back(n);
+      }
    }
 
    numNormalesVertices = nv.size();

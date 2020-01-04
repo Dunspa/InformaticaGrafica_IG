@@ -10,18 +10,18 @@ Cilindro::Cilindro(float h, float r, int num_instancias, char eje_rotacion){
 
    switch (toupper(eje_rotacion)){
       case 'X' :
-         perfil[0] = {0, radio, 0};
-         perfil[1] = {altura, radio, 0};
+         perfil[0] = {0.0, radio, 0.0};
+         perfil[1] = {altura, radio, 0.0};
          break;
 
       case 'Y' :
-         perfil[1] = {radio, 0, 0};
-         perfil[0] = {radio, altura, 0};
+         perfil[1] = {radio, 0.0, 0.0};
+         perfil[0] = {radio, altura, 0.0};
          break;
 
       case 'Z' :
-         perfil[0] = {0, radio, 0};
-         perfil[1] = {0, radio, altura};
+         perfil[0] = {0.0, radio, 0.0};
+         perfil[1] = {0.0, radio, altura};
          break;
    }
 
@@ -33,12 +33,16 @@ Cilindro::Cilindro(float h, float r, int num_instancias, char eje_rotacion){
    // Colores
    calcularColores(VERDE, PUNTOS);
    calcularColores(AMARILLO, LINEAS);
-   calcularColores(ROJO, SOLIDO);
+   calcularColores(TEXTURA, SOLIDO);
    calcularColores(AZUL, DIFERIDO);
    calcularColores(AMARILLO, SELECCIONADO);
 
    // Normales
    calcular_normales();
+
+   // Textura
+   setTextura("text-lata-1.jpg");
+   calcularTexturas();
 
    // Material
    Material mat(obsidiana[0], obsidiana[1], obsidiana[2], obsidiana_brillo);

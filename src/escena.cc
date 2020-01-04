@@ -16,15 +16,15 @@ Escena::Escena(){
     ejes.changeAxisSize(5000);
 
     // Crear los objetos de la escena
-    cubo = new Cubo(50);                                       // Cubo(lado)
-    tetraedro = new Tetraedro(50);                             // Tetraedro(lado)
-    peon = new ObjRevolucion("plys/peon.ply", 20);             // Peon(perfil.ply, num_instancias)
+    cubo = new Cubo(50.0);                                       // Cubo(lado)
+    tetraedro = new Tetraedro(50.0);                             // Tetraedro(lado)
+    peon = new ObjRevolucion("plys/peon.ply", 20.0);             // Peon(perfil.ply, num_instancias)
     puertaMagica = new ObjPLY("plys/puerta_magica.ply");         // Puerta Mágica(ant.ply)
-    cilindro = new Cilindro(20, 20, 20);                       // Cilindro(altura, radio, num_instancias)
-    cono = new Cono(20, 20, 20);                               // Cono(altura, radio, num_instancias)
-    esfera = new Esfera(20, 20, 20);                           // Esfera(radio, num_instancias, num_vert_perfil)
+    cilindro = new Cilindro(50.0, 20.0, 20.0);                       // Cilindro(altura, radio, num_instancias)
+    cono = new Cono(20.0, 20.0, 20.0);                               // Cono(altura, radio, num_instancias)
+    esfera = new Esfera(20.0, 20.0, 20.0);                           // Esfera(radio, num_instancias, num_vert_perfil)
     doraemon = new Doraemon();
-    lienzo = new Lienzo(50);
+    lienzo = new Lienzo(50.0);
 
     // Crear las luces de la escena
     luzposicional = new LuzPosicional({100.0, 100.0, 100.0}, GL_LIGHT0, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});

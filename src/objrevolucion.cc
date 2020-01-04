@@ -103,9 +103,16 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    bool sentido_perfil_ascendente;
    float x, y, z;
    Tupla3f polo_sur, polo_norte;
-   numInstancias = num_instancias;
+   numInstancias = num_instancias + 1;
    numVerticesPerfil = perfil.size();
    eje = eje_rotacion;
+
+   // Creación del vector de distancias para calcular coordenadas de textura
+   distanciasPerfil.push_back(0.0);
+   for (int i = 1 ; i < numVerticesPerfil ; i++){
+      Tupla3f p = perfil[i] - perfil[i-1];
+      distanciasPerfil.push_back(distanciasPerfil[i-1] + p.lengthSq());
+   }
 
    // Se parte de la tabla de vértices y triángulos vacías
    v.clear();
@@ -214,7 +221,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    numVerticesPerfil = perfil.size();
 
    // Creación de la tabla de vértices
-   for (int i = 0 ; i < numInstancias ; i++){	// Réplicas rotadas
+   for (int i = 0 ; i <= numInstancias ; i++){	// Réplicas rotadas
       for (int j = 0 ; j < numVerticesPerfil ; j++){	// Vértices de una réplica
          // Vértice obtenido rotando 2*PI*i / N en el eje elegido
          switch (toupper(eje_rotacion)){
@@ -250,7 +257,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    for (int i = 0 ; i < numInstancias ; i++){
       for (int j = 0 ; j < numVerticesPerfil - 1 ; j++){
          int a = numVerticesPerfil * i + j;
-         int b = numVerticesPerfil * ((i + 1) % numInstancias) + j;
+         int b = numVerticesPerfil * ((i + 1)) + j;
 
          // Triángulo por los índices a, b y b+1 (pares)
          Tupla3i t1 = {a, b, b+1};
@@ -275,7 +282,7 @@ void ObjRevolucion::crearTapaInf(char eje_rotacion){
    bool tapaInf = true;
 
    // Índice del polo sur en la tabla de vértices (para triangulos)
-   int i_sur = numInstancias * numVerticesPerfil;
+   int i_sur = v.size() - 2;
 
    // Insertar triángulos de la tapa
    for (int i = 0 ; i < numInstancias ; i++){
@@ -290,7 +297,7 @@ void ObjRevolucion::crearTapaSup(char eje_rotacion){
    bool tapaSup = true;
 
    // Índice del polo norte en la tabla de vértices (para triangulos)
-   int i_norte = numInstancias * numVerticesPerfil + 1;
+   int i_norte = v.size() - 1;;
 
    // Insertar triángulos de la tapa
    for (int i = 0 ; i < numInstancias - 1 ; i++){
@@ -312,4 +319,21 @@ void ObjRevolucion::crearTapas(){
 void ObjRevolucion::eliminarTapas(){
    tapaSup = false;
    tapaInf = false;
+}
+
+void ObjRevolucion::calcularTexturas(){
+   float s, t;
+   for (int i = 0 ; i < numInstancias ; i++){
+      s = i/(numInstancias-1.0);
+      for (int j = 0 ; j < numVerticesPerfil ; j++){
+         t = distanciasPerfil[j]/distanciasPerfil[numVerticesPerfil-1];
+         ct.push_back({s, t});
+      }
+   }
+
+   /*for (int i = 0 ; i < (numInstancias + 1) * numVerticesPerfil ; i++){
+      s = 0.5 + (atan2(v[i](Z), v[i](X)) / (2.0*PI));
+      t = (v[i](Y) - v[0](Y)) / (v[v.size()-1](Y) - v[0](Y));
+      ct.push_back({s, t});
+   }*/
 }
