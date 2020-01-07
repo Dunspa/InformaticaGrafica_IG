@@ -117,6 +117,14 @@ void Doraemon::setColorSeleccion(color col){
    brazo_izquierdo->setColorSeleccion(col);
 }
 
+void Doraemon::calcularCentro(const GLfloat * v_matrix){
+   cuerpo->calcularCentro(v_matrix);
+}
+
+GLfloat * Doraemon::getCentro(){
+   return cuerpo->getCentro();
+}
+
 void Doraemon::animar(){
    if (giroBrazoDcho >= 15.0 || giroBrazoDcho <= -15.0){
       incrementoBrazoDcho *= -1.0;

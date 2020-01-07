@@ -153,8 +153,8 @@ void Escena::eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena 
       if (doraemon != nullptr && doraemonVisible){
          doraemon->draw(modoVisual, modoDibuj, modoIluminacion);
 
-         /*if (modoVisual == SELECCIONADO)
-            doraemon->calcularCentro(camaras[camaraActiva].getMVista());*/
+         if (modoVisual == SELECCION)
+            doraemon->calcularCentro(m_vista);
       }
    }
    else if (obj == LIENZO){

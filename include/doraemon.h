@@ -58,6 +58,8 @@ public:
 
    void setColorSeleccion(color col);
    void setColorSeleccionado();
+   void calcularCentro(const GLfloat * v_matrix);
+   GLfloat * getCentro();
 
    // Animar el modelo jerárquico
    void animar();

@@ -25,6 +25,9 @@ public:
    // Dibujar la parte del modelo jerárquico
    void draw(dibujado modoVisual, dibujado modoDibuj, bool modoIluminacion);
    void setColorSeleccion(color col) override;
+
+   void calcularCentro(const GLfloat * v_matrix);
+   GLfloat * getCentro();
 };
 
 #endif
