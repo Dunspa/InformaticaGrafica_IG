@@ -103,6 +103,8 @@ private:
 
    const float PI = atan(1)*4.0;	// Número pi
 
+   GLfloat m_vista[16]; // Matriz de vista parte de la matriz modelview
+
 public:
    Escena();
    ~Escena();
@@ -131,10 +133,13 @@ public:
    // Interacción con las cámaras
    void ratonMovido(int x, int y);
    void clickRaton(int boton, int estado, int x, int y);
+   void enfocarObjeto(objetoEscena obj);
 
    // Interacción de raton para las cámaras
    void actualizarPosicionRaton(int x, int y);
    void actualizarEstadoRaton(estadoRaton estado);
+
+   GLfloat * getMVista();
 };
 
 #endif

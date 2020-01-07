@@ -15,8 +15,8 @@ Camara::Camara(Tupla3f e, Tupla3f a, Tupla3f u, float l, float r, float b, float
 
 void Camara::rotarXExaminar(float angle){
    float x = eye(X) - at(X);
-   float y = cos(angle)*(eye(Y) - at(Y)) - sin(angle)*(eye(Z) - at(Z));
-   float z = sin(angle)*(eye(Y) - at(Y)) + cos(angle)*(eye(Z) - at(Z));
+   float y = cos(angle) * (eye(Y) - at(Y)) - sin(angle) * (eye(Z) - at(Z));
+   float z = sin(angle) * (eye(Y) - at(Y)) + cos(angle) * (eye(Z) - at(Z));
 
    eye(X) = x + at(X);
    eye(Y) = y + at(Y);
@@ -24,9 +24,9 @@ void Camara::rotarXExaminar(float angle){
 }
 
 void Camara::rotarYExaminar(float angle){
-   float x = cos(angle)*(eye(X) - at(X)) + sin(angle)*(eye(Z) - at(Z));
+   float x = cos(angle) * (eye(X) - at(X)) + sin(angle) * (eye(Z) - at(Z));
    float y = eye(Y) - at(Y);
-   float z = -sin(angle)*(eye(X) - at(X)) + cos(angle)*(eye(Z) - at(Z));
+   float z = -sin(angle) * (eye(X) - at(X)) + cos(angle) * (eye(Z) - at(Z));
 
    eye(X) = x + at(X);
    eye(Y) = y + at(Y);
@@ -35,8 +35,8 @@ void Camara::rotarYExaminar(float angle){
 
 void Camara::rotarXFirstPerson(float angle){
    float x = at(X) - eye(X);
-   float y = cos(angle)*(at(Y) - eye(Y)) - sin(angle)*(at(Z) - eye(Z));
-   float z = sin(angle)*(at(Y) - eye(Y)) + cos(angle)*(at(Z) - eye(Z));
+   float y = cos(angle) * (at(Y) - eye(Y)) - sin(angle) * (at(Z) - eye(Z));
+   float z = sin(angle) * (at(Y) - eye(Y)) + cos(angle) * (at(Z) - eye(Z));
 
    at(X) = x + eye(X);
    at(Y) = y + eye(Y);
@@ -44,9 +44,9 @@ void Camara::rotarXFirstPerson(float angle){
 }
 
 void Camara::rotarYFirstPerson(float angle){
-   float x = cos(angle)*(at(X) - eye(X)) + sin(angle)*(at(Z) - eye(Z));
+   float x = cos(angle) * (at(X) - eye(X)) + sin(angle) * (at(Z) - eye(Z));
    float y = at(Y) - eye(Y);
-   float z = -sin(angle)*(at(X) - eye(X)) + cos(angle)*(at(Z) - eye(Z));
+   float z = -sin(angle) * (at(X) - eye(X)) + cos(angle) * (at(Z) - eye(Z));
 
    at(X) = x + eye(X);
    at(Y) = y + eye(Y);
@@ -89,6 +89,10 @@ void Camara::setLeft(float valor){
 
 void Camara::setRight(float valor){
    right = valor;
+}
+
+void Camara::setAt(Tupla3f valor){
+   at = valor;
 }
 
 float Camara::getBottom(){

@@ -94,40 +94,76 @@ void Escena::inicializar(int UI_window_width, int UI_window_height){
 
 void Escena::eligeObjetos(dibujado modoVisual, dibujado modoDibuj, objetoEscena obj){
    if (obj == CUBO){
-      if (cubo != nullptr && cuboVisible)
+      if (cubo != nullptr && cuboVisible){
          cubo->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            cubo->calcularCentro(m_vista);
+      }
    }
    else if (obj == TETRAEDRO){
-      if (tetraedro != nullptr && tetraedroVisible)
+      if (tetraedro != nullptr && tetraedroVisible){
          tetraedro->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            tetraedro->calcularCentro(m_vista);
+      }
    }
    else if (obj == PEON){
-      if (peon != nullptr && peonVisible)
+      if (peon != nullptr && peonVisible){
          peon->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            peon->calcularCentro(m_vista);
+      }
    }
    else if (obj == PUERTAMAGICA){
-      if (puertaMagica != nullptr && puertaMagicaVisible)
+      if (puertaMagica != nullptr && puertaMagicaVisible){
          puertaMagica->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            puertaMagica->calcularCentro(m_vista);
+      }
    }
    else if (obj == CILINDRO){
-      if (cilindro != nullptr && cilindroVisible)
+      if (cilindro != nullptr && cilindroVisible){
          cilindro->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            cilindro->calcularCentro(m_vista);
+      }
    }
    else if (obj == CONO){
-      if (cono != nullptr && conoVisible)
+      if (cono != nullptr && conoVisible){
          cono->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            cono->calcularCentro(m_vista);
+      }
    }
    else if (obj == ESFERA){
-      if (esfera != nullptr && esferaVisible)
+      if (esfera != nullptr && esferaVisible){
          esfera->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            esfera->calcularCentro(m_vista);
+      }
    }
    else if (obj == DORAEMON){
-      if (doraemon != nullptr && doraemonVisible)
+      if (doraemon != nullptr && doraemonVisible){
          doraemon->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         /*if (modoVisual == SELECCIONADO)
+            doraemon->calcularCentro(camaras[camaraActiva].getMVista());*/
+      }
    }
    else if (obj == LIENZO){
-      if (lienzo != nullptr && lienzoVisible)
+      if (lienzo != nullptr && lienzoVisible){
          lienzo->draw(modoVisual, modoDibuj, modoIluminacion);
+
+         if (modoVisual == SELECCION)
+            lienzo->calcularCentro(m_vista);
+      }
    }
 }
 
@@ -144,31 +180,34 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
          glPolygonMode(GL_FRONT, GL_FILL);
          eligeObjetos(SELECCION, modoDibuj, obj);
       }
-
-      if (objetoSelec == obj){
-         glPolygonMode(GL_FRONT, GL_FILL);
-         eligeObjetos(SELECCIONADO, modoDibuj, obj);
-      }
-      else{
-         // Dibujar puntos
-         if (puntosVisible){
-            glPolygonMode(GL_FRONT, GL_POINT);
-            glPointSize(5);   // Puntos más gordos para que se vean bien
-            eligeObjetos(PUNTOS, modoDibuj, obj);
-         }
-
-         // Dibujar líneas
-         if (lineasVisible){
-            glPolygonMode(GL_FRONT, GL_LINE);
-            eligeObjetos(LINEAS, modoDibuj, obj);
-         }
-
-         // Dibujar sólidos
-         if (solidoVisible){
+      else {
+         if (objetoSelec == obj){
             glPolygonMode(GL_FRONT, GL_FILL);
-            eligeObjetos(SOLIDO, modoDibuj, obj);
+            eligeObjetos(SELECCIONADO, modoDibuj, obj);
+         }
+         else{
+            // Dibujar puntos
+            if (puntosVisible){
+               glPolygonMode(GL_FRONT, GL_POINT);
+               glPointSize(5);   // Puntos más gordos para que se vean bien
+               eligeObjetos(PUNTOS, modoDibuj, obj);
+            }
+
+            // Dibujar líneas
+            if (lineasVisible){
+               glPolygonMode(GL_FRONT, GL_LINE);
+               eligeObjetos(LINEAS, modoDibuj, obj);
+            }
+
+            // Dibujar sólidos
+            if (solidoVisible){
+               glPolygonMode(GL_FRONT, GL_FILL);
+               eligeObjetos(SOLIDO, modoDibuj, obj);
+            }
          }
       }
+
+
    }
 }
 
@@ -218,7 +257,7 @@ void Escena::posicionaObjetos(){
    // Esfera
    glPushMatrix();
       glScalef(2.0, 2.0, 2.0);
-      glTranslatef(0.0, 50.0, 0.0);
+      glTranslatef(-100.0, 150.0, 0.0);
       dibujaObjetos(modoDibujado, ESFERA);
    glPopMatrix();
 
@@ -323,69 +362,77 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
 
    // Primero, deseleccionar antes de seleccionar otro objeto
 
+   std::cout << objetoSelec << std::endl;
+
    //estadoR = MOVIENDO_CAMARA_EXAMINAR;
    if (comparaColores(p, colorSel1)){
       cout << "Objeto seleccionado: Cubo" << endl;
-      if (objetoSelec == CUBO)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != CUBO){
+         enfocarObjeto(CUBO);
          objetoSelec = CUBO;
+      }
    }
    else if (comparaColores(p, colorSel2)){
       cout << "Objeto seleccionado: Tetraedro" << endl;
-      if (objetoSelec == TETRAEDRO)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != TETRAEDRO){
+         enfocarObjeto(TETRAEDRO);
          objetoSelec = TETRAEDRO;
+      }
    }
    else if (comparaColores(p, colorSel3)){
       cout << "Objeto seleccionado: Peon" << endl;
-      if (objetoSelec == PEON)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != PEON){
+         enfocarObjeto(PEON);
          objetoSelec = PEON;
+      }
    }
    else if (comparaColores(p, colorSel4)){
       cout << "Objeto seleccionado: Puerta Mágica" << endl;
-      if (objetoSelec == PUERTAMAGICA)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != PUERTAMAGICA){
+         enfocarObjeto(PUERTAMAGICA);
          objetoSelec = PUERTAMAGICA;
+      }
    }
    else if (comparaColores(p, colorSel5)){
       cout << "Objeto seleccionado: Cilindro" << endl;
-      if (objetoSelec == CILINDRO)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != CILINDRO){
+         enfocarObjeto(CILINDRO);
          objetoSelec = CILINDRO;
+      }
    }
    else if (comparaColores(p, colorSel6)){
       cout << "Objeto seleccionado: Cono" << endl;
-      if (objetoSelec == CONO)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != CONO){
+         enfocarObjeto(CONO);
          objetoSelec = CONO;
+      }
    }
    else if (comparaColores(p, colorSel7)){
       cout << "Objeto seleccionado: Esfera" << endl;
-      if (objetoSelec == ESFERA)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != ESFERA){
+         enfocarObjeto(ESFERA);
          objetoSelec = ESFERA;
+      }
    }
    else if (comparaColores(p, colorSel8)){
       cout << "Objeto seleccionado: Doraemon" << endl;
-      if (objetoSelec == DORAEMON)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != DORAEMON){
+         enfocarObjeto(DORAEMON);
          objetoSelec = DORAEMON;
+      }
    }
    else if (comparaColores(p, colorSel9)){
       cout << "Objeto seleccionado: Lienzo" << endl;
-      if (objetoSelec == LIENZO)
-         objetoSelec = NINGUNO;
-      else
+      if (objetoSelec != LIENZO){
+         enfocarObjeto(LIENZO);
          objetoSelec = LIENZO;
+      }
+   }
+   else{
+      // No enfocar ningún objeto: enfocar el origen de coordenadas
+      cout << "Objeto seleccionado: Fondo (deselecciona cualquier objeto)." << endl;
+      objetoSelec = NINGUNO;
+      enfocarObjeto(NINGUNO);
    }
 }
 
@@ -939,6 +986,42 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
 	}
 }
 
+void Escena::enfocarObjeto(objetoEscena obj){
+   // Si no se ha seleccionado ningun objeto, se selecciona el origen
+   Tupla3f enfoque = {0, 0, 0};
+
+   if (obj == CUBO){
+      enfoque = cubo->getCentro();
+   }
+   else if (obj == TETRAEDRO){
+      enfoque = tetraedro->getCentro();
+   }
+   else if (obj == PEON){
+      enfoque = peon->getCentro();
+   }
+   else if (obj == PUERTAMAGICA){
+      enfoque = puertaMagica->getCentro();
+   }
+   else if (obj == CILINDRO){
+      enfoque = cilindro->getCentro();
+   }
+   else if (obj == CONO){
+      enfoque = cono->getCentro();
+   }
+   else if (obj == ESFERA){
+      enfoque = esfera->getCentro();
+   }
+   else if (obj == DORAEMON){
+      //enfoque = doraemon->getCentro();
+   }
+   else if (obj == LIENZO){
+      enfoque = lienzo->getCentro();
+   }
+
+   // Cambiar el at y poner nuevo observador
+   camaras[camaraActiva].setAt(enfoque);
+}
+
 //**************************************************************************
 
 void Escena::actualizarPosicionRaton(int x, int y){
@@ -969,10 +1052,10 @@ void Escena::change_projection(const float ratio_xy){
 
 void Escena::redimensionar(int newWidth, int newHeight){
    // Cambiar left y right para adaptarse a la redimensión de la ventana (en todas las cámaras)
-   float ratio = float(newWidth/10.0)/float(newHeight/10.0);
+   float ratio = float(newWidth/10.0) / float(newHeight/10.0);
    for (int i = 0 ; i < camaras.size() ; i++){
-      camaras[i].setLeft(camaras[i].getBottom() * ratio);
       camaras[i].setRight(camaras[i].getTop() * ratio);
+      camaras[i].setLeft(camaras[i].getBottom() * ratio);
    }
 
    change_projection(float(newHeight)/float(newWidth));
@@ -988,4 +1071,5 @@ void Escena::change_observer(){
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    camaras[camaraActiva].setObserver();
+   glGetFloatv(GL_MODELVIEW_MATRIX, m_vista);
 }

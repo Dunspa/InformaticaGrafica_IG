@@ -71,6 +71,8 @@ public:
 
    void setMaterial(Material mat);
    void setMaterialSeleccionado(Material mat);
+   void calcularCentro(const GLfloat * v_matrix);
+   Tupla3f getCentro();
 
 protected:
    virtual void dibujarElementos(); // Realiza un glDrawElements
@@ -86,6 +88,7 @@ protected:
    std::vector<Tupla3i> f;    // una terna de 3 enteros por cada cara o triángulo
    std::vector<Tupla3i> f_par;      // Tabla de triángulos pares (modo ajedrez)
    std::vector<Tupla3i> f_impar;    // Tabla de triángulos impares (modo ajedrez)
+   Tupla3f centro;   // Punto que indica el centro geometrico del objeto
 
    // Tabla de colores de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3f> c;       // Color sólido modo inmediato (par en ajedrez)

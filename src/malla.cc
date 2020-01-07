@@ -115,6 +115,10 @@ void Malla3D::draw_ModoDiferido(dibujado modoVisual){
       // Colores de la seleccion
       glColorPointer(3, GL_FLOAT, 0, c_selec.data());
    }
+   else if (modoVisual == SELECCIONADO){
+      // Colores del objeto seleccionado
+      glColorPointer(3, GL_FLOAT, 0, c_seleccionado.data());
+   }
 
    // Especificar localización y formato de la tabla de vértices y habilitarla
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);   // Activar VBO de vértices
@@ -442,6 +446,165 @@ void Malla3D::calcular_normales(){
    numNormalesVertices = nv.size();
 }
 
+void Malla3D::calcularCentro(const GLfloat * v_mat){
+   // Obtener matriz modelview para tener las coordenadas reales del objeto
+   GLfloat v_matrix[16];
+
+   for (int i = 0; i < 16; i++){
+      v_matrix[i] = v_mat[i]; 
+   }
+
+   GLfloat m_matrix[16];
+   glGetFloatv(GL_MODELVIEW_MATRIX, m_matrix);
+
+   float cx, cy, cz;
+   float x, y, z;
+   // Despejar N matriz de modelado de la matriz modelview M = NV -> N = M(V^-1)
+   // Inversa de V (CÓDIGO OBTENIDO DE LA IMPLEMENTACIÓN DE MESA DE LA BIBLIOTECA GLU)
+   GLfloat inv[16], det;
+    inv[0] = v_matrix[5]  * v_matrix[10] * v_matrix[15] -
+             v_matrix[5]  * v_matrix[11] * v_matrix[14] -
+             v_matrix[9]  * v_matrix[6]  * v_matrix[15] +
+             v_matrix[9]  * v_matrix[7]  * v_matrix[14] +
+             v_matrix[13] * v_matrix[6]  * v_matrix[11] -
+             v_matrix[13] * v_matrix[7]  * v_matrix[10];
+
+    inv[4] = -v_matrix[4]  * v_matrix[10] * v_matrix[15] +
+              v_matrix[4]  * v_matrix[11] * v_matrix[14] +
+              v_matrix[8]  * v_matrix[6]  * v_matrix[15] -
+              v_matrix[8]  * v_matrix[7]  * v_matrix[14] -
+              v_matrix[12] * v_matrix[6]  * v_matrix[11] +
+              v_matrix[12] * v_matrix[7]  * v_matrix[10];
+
+    inv[8] = v_matrix[4]  * v_matrix[9] * v_matrix[15] -
+             v_matrix[4]  * v_matrix[11] * v_matrix[13] -
+             v_matrix[8]  * v_matrix[5] * v_matrix[15] +
+             v_matrix[8]  * v_matrix[7] * v_matrix[13] +
+             v_matrix[12] * v_matrix[5] * v_matrix[11] -
+             v_matrix[12] * v_matrix[7] * v_matrix[9];
+
+    inv[12] = -v_matrix[4]  * v_matrix[9] * v_matrix[14] +
+               v_matrix[4]  * v_matrix[10] * v_matrix[13] +
+               v_matrix[8]  * v_matrix[5] * v_matrix[14] -
+               v_matrix[8]  * v_matrix[6] * v_matrix[13] -
+               v_matrix[12] * v_matrix[5] * v_matrix[10] +
+               v_matrix[12] * v_matrix[6] * v_matrix[9];
+
+    inv[1] = -v_matrix[1]  * v_matrix[10] * v_matrix[15] +
+              v_matrix[1]  * v_matrix[11] * v_matrix[14] +
+              v_matrix[9]  * v_matrix[2] * v_matrix[15] -
+              v_matrix[9]  * v_matrix[3] * v_matrix[14] -
+              v_matrix[13] * v_matrix[2] * v_matrix[11] +
+              v_matrix[13] * v_matrix[3] * v_matrix[10];
+
+    inv[5] = v_matrix[0]  * v_matrix[10] * v_matrix[15] -
+             v_matrix[0]  * v_matrix[11] * v_matrix[14] -
+             v_matrix[8]  * v_matrix[2] * v_matrix[15] +
+             v_matrix[8]  * v_matrix[3] * v_matrix[14] +
+             v_matrix[12] * v_matrix[2] * v_matrix[11] -
+             v_matrix[12] * v_matrix[3] * v_matrix[10];
+
+    inv[9] = -v_matrix[0]  * v_matrix[9] * v_matrix[15] +
+              v_matrix[0]  * v_matrix[11] * v_matrix[13] +
+              v_matrix[8]  * v_matrix[1] * v_matrix[15] -
+              v_matrix[8]  * v_matrix[3] * v_matrix[13] -
+              v_matrix[12] * v_matrix[1] * v_matrix[11] +
+              v_matrix[12] * v_matrix[3] * v_matrix[9];
+
+    inv[13] = v_matrix[0]  * v_matrix[9] * v_matrix[14] -
+              v_matrix[0]  * v_matrix[10] * v_matrix[13] -
+              v_matrix[8]  * v_matrix[1] * v_matrix[14] +
+              v_matrix[8]  * v_matrix[2] * v_matrix[13] +
+              v_matrix[12] * v_matrix[1] * v_matrix[10] -
+              v_matrix[12] * v_matrix[2] * v_matrix[9];
+
+    inv[2] = v_matrix[1]  * v_matrix[6] * v_matrix[15] -
+             v_matrix[1]  * v_matrix[7] * v_matrix[14] -
+             v_matrix[5]  * v_matrix[2] * v_matrix[15] +
+             v_matrix[5]  * v_matrix[3] * v_matrix[14] +
+             v_matrix[13] * v_matrix[2] * v_matrix[7] -
+             v_matrix[13] * v_matrix[3] * v_matrix[6];
+
+    inv[6] = -v_matrix[0]  * v_matrix[6] * v_matrix[15] +
+              v_matrix[0]  * v_matrix[7] * v_matrix[14] +
+              v_matrix[4]  * v_matrix[2] * v_matrix[15] -
+              v_matrix[4]  * v_matrix[3] * v_matrix[14] -
+              v_matrix[12] * v_matrix[2] * v_matrix[7] +
+              v_matrix[12] * v_matrix[3] * v_matrix[6];
+
+    inv[10] = v_matrix[0]  * v_matrix[5] * v_matrix[15] -
+              v_matrix[0]  * v_matrix[7] * v_matrix[13] -
+              v_matrix[4]  * v_matrix[1] * v_matrix[15] +
+              v_matrix[4]  * v_matrix[3] * v_matrix[13] +
+              v_matrix[12] * v_matrix[1] * v_matrix[7] -
+              v_matrix[12] * v_matrix[3] * v_matrix[5];
+
+    inv[14] = -v_matrix[0]  * v_matrix[5] * v_matrix[14] +
+               v_matrix[0]  * v_matrix[6] * v_matrix[13] +
+               v_matrix[4]  * v_matrix[1] * v_matrix[14] -
+               v_matrix[4]  * v_matrix[2] * v_matrix[13] -
+               v_matrix[12] * v_matrix[1] * v_matrix[6] +
+               v_matrix[12] * v_matrix[2] * v_matrix[5];
+
+    inv[3] = -v_matrix[1] * v_matrix[6] * v_matrix[11] +
+              v_matrix[1] * v_matrix[7] * v_matrix[10] +
+              v_matrix[5] * v_matrix[2] * v_matrix[11] -
+              v_matrix[5] * v_matrix[3] * v_matrix[10] -
+              v_matrix[9] * v_matrix[2] * v_matrix[7] +
+              v_matrix[9] * v_matrix[3] * v_matrix[6];
+
+    inv[7] = v_matrix[0] * v_matrix[6] * v_matrix[11] -
+             v_matrix[0] * v_matrix[7] * v_matrix[10] -
+             v_matrix[4] * v_matrix[2] * v_matrix[11] +
+             v_matrix[4] * v_matrix[3] * v_matrix[10] +
+             v_matrix[8] * v_matrix[2] * v_matrix[7] -
+             v_matrix[8] * v_matrix[3] * v_matrix[6];
+
+    inv[11] = -v_matrix[0] * v_matrix[5] * v_matrix[11] +
+               v_matrix[0] * v_matrix[7] * v_matrix[9] +
+               v_matrix[4] * v_matrix[1] * v_matrix[11] -
+               v_matrix[4] * v_matrix[3] * v_matrix[9] -
+               v_matrix[8] * v_matrix[1] * v_matrix[7] +
+               v_matrix[8] * v_matrix[3] * v_matrix[5];
+
+    inv[15] = v_matrix[0] * v_matrix[5] * v_matrix[10] -
+              v_matrix[0] * v_matrix[6] * v_matrix[9] -
+              v_matrix[4] * v_matrix[1] * v_matrix[10] +
+              v_matrix[4] * v_matrix[2] * v_matrix[9] +
+              v_matrix[8] * v_matrix[1] * v_matrix[6] -
+              v_matrix[8] * v_matrix[2] * v_matrix[5];
+
+    det = v_matrix[0] * inv[0] + v_matrix[1] * inv[4] + v_matrix[2] * inv[8] + v_matrix[3] * inv[12];
+
+    det = 1.0 / det;
+
+    for (int i = 0; i < 16; i++)
+      v_matrix[i] = inv[i] * det;
+
+   centro = {0.0f, 0.0f, 0.0f};
+
+   // Calcular centro geometrico como la suma de todas las coordenadas dividido por el numero de puntos
+   for (int i = 0 ; i < v.size() ; i++){
+      centro = centro + v[i];
+   }
+
+   centro = centro/v.size();
+
+   // Aplicar modelview
+   x = m_matrix[0] * centro(X) + m_matrix[4] * centro(Y) + m_matrix[8] * centro(Z) + m_matrix[12];
+   y = m_matrix[1] * centro(X) + m_matrix[5] * centro(Y) + m_matrix[9] * centro(Z) + m_matrix[13];
+   z = m_matrix[2] * centro(X) + m_matrix[6] * centro(Y) + m_matrix[10] * centro(Z) + m_matrix[14];
+
+   centro = {x, y, z};
+
+   // Aplicar inversa de V
+   x = v_matrix[0] * centro(X) + v_matrix[4] * centro(Y) + v_matrix[8] * centro(Z) + v_matrix[12];
+   y = v_matrix[1] * centro(X) + v_matrix[5] * centro(Y) + v_matrix[9] * centro(Z) + v_matrix[13];
+   z = v_matrix[2] * centro(X) + v_matrix[6] * centro(Y) + v_matrix[10] * centro(Z) + v_matrix[14];
+
+   centro = {x, y, z};
+}
+
 // -----------------------------------------------------------------------------
 // Aplica un material a la malla 3D
 void Malla3D::setMaterial(Material mat){
@@ -450,6 +613,10 @@ void Malla3D::setMaterial(Material mat){
 
 void Malla3D::setMaterialSeleccionado(Material mat){
    m_seleccionado = mat;
+}
+
+Tupla3f Malla3D::getCentro(){
+   return centro;
 }
 
 // -----------------------------------------------------------------------------

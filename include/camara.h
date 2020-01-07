@@ -52,6 +52,7 @@ public:
 
    void setLeft(float valor);
    void setRight(float valor);
+   void setAt(Tupla3f valor); // Cambiar el at al seleccionar un objeto
    float getBottom();
    float getTop();
 };
