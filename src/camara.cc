@@ -102,3 +102,11 @@ float Camara::getBottom(){
 float Camara::getTop(){
    return top;
 }
+
+void Camara::setObjetoSelec(int obj){
+   objetoSelec = obj;
+}
+
+int Camara::getObjetoSelec(){
+   return objetoSelec;
+}

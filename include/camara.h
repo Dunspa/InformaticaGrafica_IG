@@ -30,6 +30,8 @@ private:
    TipoCamara tipo;  // Ortogonal o Perspectiva
    float left, right, bottom, top, near, far;
 
+   int objetoSelec = 0; // Objeto que tiene seleccionado la camara
+
    const float PI = atan(1)*4.0;	// Número pi
 
 public:
@@ -55,6 +57,9 @@ public:
    void setAt(Tupla3f valor); // Cambiar el at al seleccionar un objeto
    float getBottom();
    float getTop();
+
+   void setObjetoSelec(int obj);
+   int getObjetoSelec();
 };
 
 #endif

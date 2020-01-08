@@ -181,7 +181,7 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
          eligeObjetos(SELECCION, modoDibuj, obj);
       }
       else {
-         if (objetoSelec == obj){
+         if (camaras[camaraActiva].getObjetoSelec() == obj){
             glPolygonMode(GL_FRONT, GL_FILL);
             eligeObjetos(SELECCIONADO, modoDibuj, obj);
          }
@@ -206,8 +206,6 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
             }
          }
       }
-
-
    }
 }
 
@@ -360,79 +358,75 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
    for (int i = 0 ; i <= 2 ; i++)
       p(i) = pixeles[i];
 
-   // Primero, deseleccionar antes de seleccionar otro objeto
-
-   std::cout << objetoSelec << std::endl;
-
-   //estadoR = MOVIENDO_CAMARA_EXAMINAR;
    if (comparaColores(p, colorSel1)){
       cout << "Objeto seleccionado: Cubo" << endl;
-      if (objetoSelec != CUBO){
+      if (camaras[camaraActiva].getObjetoSelec() != CUBO){
          enfocarObjeto(CUBO);
-         objetoSelec = CUBO;
+         camaras[camaraActiva].setObjetoSelec(CUBO);
       }
    }
    else if (comparaColores(p, colorSel2)){
       cout << "Objeto seleccionado: Tetraedro" << endl;
-      if (objetoSelec != TETRAEDRO){
+      if (camaras[camaraActiva].getObjetoSelec() != TETRAEDRO){
          enfocarObjeto(TETRAEDRO);
-         objetoSelec = TETRAEDRO;
+         camaras[camaraActiva].setObjetoSelec(TETRAEDRO);
       }
    }
    else if (comparaColores(p, colorSel3)){
       cout << "Objeto seleccionado: Peon" << endl;
-      if (objetoSelec != PEON){
+      if (camaras[camaraActiva].getObjetoSelec() != PEON){
          enfocarObjeto(PEON);
-         objetoSelec = PEON;
+         camaras[camaraActiva].setObjetoSelec(PEON);
       }
    }
    else if (comparaColores(p, colorSel4)){
       cout << "Objeto seleccionado: Puerta Mágica" << endl;
-      if (objetoSelec != PUERTAMAGICA){
+      if (camaras[camaraActiva].getObjetoSelec() != PUERTAMAGICA){
          enfocarObjeto(PUERTAMAGICA);
-         objetoSelec = PUERTAMAGICA;
+         camaras[camaraActiva].setObjetoSelec(PUERTAMAGICA);
       }
    }
    else if (comparaColores(p, colorSel5)){
       cout << "Objeto seleccionado: Cilindro" << endl;
-      if (objetoSelec != CILINDRO){
+      if (camaras[camaraActiva].getObjetoSelec() != CILINDRO){
          enfocarObjeto(CILINDRO);
-         objetoSelec = CILINDRO;
+         camaras[camaraActiva].setObjetoSelec(CILINDRO);
       }
    }
    else if (comparaColores(p, colorSel6)){
       cout << "Objeto seleccionado: Cono" << endl;
-      if (objetoSelec != CONO){
+      if (camaras[camaraActiva].getObjetoSelec() != CONO){
          enfocarObjeto(CONO);
-         objetoSelec = CONO;
+         camaras[camaraActiva].setObjetoSelec(CONO);
       }
    }
    else if (comparaColores(p, colorSel7)){
       cout << "Objeto seleccionado: Esfera" << endl;
-      if (objetoSelec != ESFERA){
+      if (camaras[camaraActiva].getObjetoSelec() != ESFERA){
          enfocarObjeto(ESFERA);
-         objetoSelec = ESFERA;
+         camaras[camaraActiva].setObjetoSelec(ESFERA);
       }
    }
    else if (comparaColores(p, colorSel8)){
       cout << "Objeto seleccionado: Doraemon" << endl;
-      if (objetoSelec != DORAEMON){
+      if (camaras[camaraActiva].getObjetoSelec() != DORAEMON){
          enfocarObjeto(DORAEMON);
-         objetoSelec = DORAEMON;
+         camaras[camaraActiva].setObjetoSelec(DORAEMON);
       }
    }
    else if (comparaColores(p, colorSel9)){
       cout << "Objeto seleccionado: Lienzo" << endl;
-      if (objetoSelec != LIENZO){
+      if (camaras[camaraActiva].getObjetoSelec() != LIENZO){
          enfocarObjeto(LIENZO);
-         objetoSelec = LIENZO;
+         camaras[camaraActiva].setObjetoSelec(LIENZO);
       }
    }
    else{
       // No enfocar ningún objeto: enfocar el origen de coordenadas
       cout << "Objeto seleccionado: Fondo (deselecciona cualquier objeto)." << endl;
-      objetoSelec = NINGUNO;
       enfocarObjeto(NINGUNO);
+      camaras[camaraActiva].setObjetoSelec(NINGUNO);
+      estadoR = MOVIENDO_CAMARA_FIRSTPERSON;
    }
 }
 
@@ -944,11 +938,27 @@ void Escena::teclaEspecial(int Tecla1, int x, int y){
 //**************************************************************************
 
 void Escena::ratonMovido(int x, int y){
-   if (estadoR == MOVIENDO_CAMARA_FIRSTPERSON && objetoSelec == NINGUNO){
+   if (estadoR == MOVIENDO_CAMARA_FIRSTPERSON && camaras[camaraActiva].getObjetoSelec() == NINGUNO){
       camaras[camaraActiva].girar(x - Xraton, y - Yraton);
-      Xraton = x;
-      Yraton = y;
    }
+   else if (estadoR == MOVIENDO_CAMARA_EXAMINAR && camaras[camaraActiva].getObjetoSelec() != NINGUNO){
+      /*float exam_x = 0.0, exam_y = 0.0;
+      if (x - Xraton <= 0)
+         exam_x = 1.1;
+      else
+         exam_x = 0.9;
+
+      if (y - Yraton <= 0)
+         exam_y = 1.1;
+      else
+         exam_y = 0.9;
+
+      camaras[camaraActiva].rotarXExaminar((x - Xraton)*(PI/180.0));
+      camaras[camaraActiva].rotarYExaminar((y - Yraton)*(PI/180.0));*/
+   }
+
+   Xraton = x;
+   Yraton = y;
 }
 
 void Escena::clickRaton(int boton, int estado, int x, int y){
@@ -959,6 +969,9 @@ void Escena::clickRaton(int boton, int estado, int x, int y){
 		// Se pulsa el botón, por lo que se entra en el estado "moviendo cámara"
 		if (estado == GLUT_DOWN){
  			actualizarEstadoRaton(MOVIENDO_CAMARA_FIRSTPERSON);
+
+         if (camaras[camaraActiva].getObjetoSelec() != NINGUNO)
+            actualizarEstadoRaton(MOVIENDO_CAMARA_EXAMINAR);
 		}
 		// Se levanta el botón, por lo que se sale del estado "moviendo cámara"
 		else if (estado == GLUT_UP){

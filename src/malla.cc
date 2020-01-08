@@ -451,7 +451,7 @@ void Malla3D::calcularCentro(const GLfloat * v_mat){
    GLfloat v_matrix[16];
 
    for (int i = 0; i < 16; i++){
-      v_matrix[i] = v_mat[i]; 
+      v_matrix[i] = v_mat[i];
    }
 
    GLfloat m_matrix[16];
@@ -588,7 +588,7 @@ void Malla3D::calcularCentro(const GLfloat * v_mat){
       centro = centro + v[i];
    }
 
-   centro = centro/v.size();
+   centro = centro / v.size();
 
    // Aplicar modelview
    x = m_matrix[0] * centro(X) + m_matrix[4] * centro(Y) + m_matrix[8] * centro(Z) + m_matrix[12];
