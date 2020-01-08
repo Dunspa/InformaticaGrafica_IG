@@ -250,8 +250,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
       }
    }
 
-   v.push_back(polo_sur);
-   v.push_back(polo_norte);
+
 
    // Creación de la tabla de triángulos
    for (int i = 0 ; i < numInstancias ; i++){
@@ -267,6 +266,9 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
          f.push_back(t2);
       }
    }
+
+   v.push_back(polo_sur);
+   v.push_back(polo_norte);
 
    numVertices = v.size();
    numTriangulos = f.size();
@@ -329,6 +331,13 @@ void ObjRevolucion::calcularTexturas(){
          t = distanciasPerfil[j]/distanciasPerfil[numVerticesPerfil-1];
          ct.push_back({s, t});
       }
+   }
+
+   // Cerrar textura
+   s = 1;
+   for (int i = 0 ; i < numVerticesPerfil ; i++){
+      t = distanciasPerfil[i]/distanciasPerfil[numVerticesPerfil-1];
+      ct.push_back({s, t});
    }
 
    /*for (int i = 0 ; i < (numInstancias + 1) * numVerticesPerfil ; i++){
