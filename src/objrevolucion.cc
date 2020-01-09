@@ -103,7 +103,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    bool sentido_perfil_ascendente;
    float x, y, z;
    Tupla3f polo_sur, polo_norte;
-   numInstancias = num_instancias + 1;
+   numInstancias = num_instancias;
    numVerticesPerfil = perfil.size();
    eje = eje_rotacion;
 
@@ -251,7 +251,6 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
    }
 
 
-
    // Creación de la tabla de triángulos
    for (int i = 0 ; i < numInstancias ; i++){
       for (int j = 0 ; j < numVerticesPerfil - 1 ; j++){
@@ -278,6 +277,14 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil, int num_instancias, 
 
    if (tapa_sup)
       crearTapaSup(eje_rotacion);
+
+   // Normales
+   calcular_normales();
+
+   // Ultima instancia
+   for (int i = numVerticesPerfil*numInstancias ; i < (numVerticesPerfil*numInstancias)+numVerticesPerfil ; i++){
+      nv[i] = nv[i - numVerticesPerfil*numInstancias];
+   }
 }
 
 void ObjRevolucion::crearTapaInf(char eje_rotacion){
@@ -326,7 +333,7 @@ void ObjRevolucion::eliminarTapas(){
 void ObjRevolucion::calcularTexturas(){
    float s, t;
    for (int i = 0 ; i < numInstancias ; i++){
-      s = i/(numInstancias-1.0);
+      s = (float)i/(numInstancias);
       for (int j = 0 ; j < numVerticesPerfil ; j++){
          t = distanciasPerfil[j]/distanciasPerfil[numVerticesPerfil-1];
          ct.push_back({s, t});
@@ -339,6 +346,7 @@ void ObjRevolucion::calcularTexturas(){
       t = distanciasPerfil[i]/distanciasPerfil[numVerticesPerfil-1];
       ct.push_back({s, t});
    }
+
 
    /*for (int i = 0 ; i < (numInstancias + 1) * numVerticesPerfil ; i++){
       s = 0.5 + (atan2(v[i](Z), v[i](X)) / (2.0*PI));

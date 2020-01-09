@@ -28,9 +28,6 @@ Esfera::Esfera(float r, int num_instancias, int num_vert_perfil){
    calcularColores(AZUL, DIFERIDO);
    calcularColores(AMARILLO, SELECCIONADO);
 
-   // Normales
-   calcular_normales();
-
    // Material
    Material mat(jade[0], jade[1], jade[2], jade_brillo);
    setMaterial(mat);

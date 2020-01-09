@@ -121,7 +121,7 @@ void Doraemon::calcularCentro(const GLfloat * v_matrix){
    cuerpo->calcularCentro(v_matrix);
 }
 
-GLfloat * Doraemon::getCentro(){
+Tupla3f Doraemon::getCentro(){
    return cuerpo->getCentro();
 }
 

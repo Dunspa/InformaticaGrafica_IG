@@ -31,8 +31,8 @@ Escena::Escena(){
     luzdireccional = new LuzDireccional({0.0, 100.0, 100.0}, GL_LIGHT1, {0.0, 0.0, 0.0, 1.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0, 1.0, 1.0});
 
     // Crear las cámaras de la escena
-    camaras.push_back(Camara({0.0, 100.0, 300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, PERSPECTIVA));
-    camaras.push_back(Camara({-100.0, 150.0, 150.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, ORTOGONAL));
+    camaras.push_back(Camara({-75.0, 100.0, 300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -100.0, 100.0, -100.0, 100.0, 100.0, 2000.0, PERSPECTIVA));
+    camaras.push_back(Camara({-100.0, 150.0, 150.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -150.0, 150.0, -150.0, 150.0, 80.0, 2000.0, ORTOGONAL));
     camaras.push_back(Camara({0.0, 100.0, -300.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, -1000.0, 1000.0, -1000.0, 1000.0, 100.0, 2000.0, PERSPECTIVA));
 
     // Asignar colores de selección a los objetos de la escena
@@ -212,21 +212,23 @@ void Escena::dibujaObjetos(dibujado modoDibuj, objetoEscena obj){
 void Escena::posicionaObjetos(){
    // Cubo
 	glPushMatrix();
-      glScalef(1.0, 1.0, 1.0);
-		glTranslatef(25.0, 0.0, 0.0);
+      glScalef(3.0, 3.0, 2.5);
+		glTranslatef(-25.0, 0.0, -50.0);
 		dibujaObjetos(modoDibujado, CUBO);
 	glPopMatrix();
 
    // Tetraedro
    glPushMatrix();
-      glTranslatef(50.0, 80.0, 0.0);
+      //glScalef(3.0, 3.0, 3.0);
+      glRotatef(60.0, 0.0, 1.0, 0.0);
+      glTranslatef(10.0, 150.0, -10.0);
       dibujaObjetos(modoDibujado, TETRAEDRO);
    glPopMatrix();
 
    // Peon
    glPushMatrix();
       glScalef(15.0, 15.0, 15.0);
-      glTranslatef(-7.5, 5.0, 0.0);
+      glTranslatef(5.0, 1.0, 3.0);
       dibujaObjetos(modoDibujado, PEON);
    glPopMatrix();
 
@@ -234,33 +236,35 @@ void Escena::posicionaObjetos(){
    glPushMatrix();
       glScalef(15.0, 15.0, 15.0);
       glRotatef(90, 0, 1, 0);
-      glTranslatef(0.0, 1.2, -2.4);
+      glTranslatef(-0.2, 1.2, 0.0);
       dibujaObjetos(modoDibujado, PUERTAMAGICA);
    glPopMatrix();
 
    // Cilindro
    glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-50.0, 0.0, 0.0);
+      glScalef(0.8, 2.0, 0.8);
+      glTranslatef(-90.0, 0.0, 55.0);
       dibujaObjetos(modoDibujado, CILINDRO);
    glPopMatrix();
 
    // Cono
    glPushMatrix();
       glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-50.0, 60.0, 0.0);
+      glTranslatef(0.0, 60.0, 50.0);
       dibujaObjetos(modoDibujado, CONO);
    glPopMatrix();
 
    // Esfera
    glPushMatrix();
-      glScalef(2.0, 2.0, 2.0);
-      glTranslatef(-100.0, 150.0, 0.0);
+      glScalef(1.5, 1.5, 1.5);
+      glTranslatef(-48.0, 85.0, 30.0);
       dibujaObjetos(modoDibujado, ESFERA);
    glPopMatrix();
 
    // Modelo jerárquico
    glPushMatrix();
+      glRotatef(-45.0, 0.0, 1.0, 0.0);
+      glTranslatef(100.0, 0.0, 50.0);
       dibujaObjetos(modoDibujado, DORAEMON);
    glPopMatrix();
 
@@ -426,7 +430,6 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
       cout << "Objeto seleccionado: Fondo (deselecciona cualquier objeto)." << endl;
       enfocarObjeto(NINGUNO);
       camaras[camaraActiva].setObjetoSelec(NINGUNO);
-      estadoR = MOVIENDO_CAMARA_FIRSTPERSON;
    }
 }
 
@@ -1014,7 +1017,7 @@ void Escena::enfocarObjeto(objetoEscena obj){
       enfoque = esfera->getCentro();
    }
    else if (obj == DORAEMON){
-      //enfoque = doraemon->getCentro();
+      enfoque = doraemon->getCentro();
    }
    else if (obj == LIENZO){
       enfoque = lienzo->getCentro();

@@ -37,9 +37,6 @@ Cono::Cono(float h, float r, int num_instancias, char eje_rotacion){
    calcularColores(AZUL, DIFERIDO);
    calcularColores(AMARILLO, SELECCIONADO);
 
-   // Normales
-   calcular_normales();
-
    // Material
    Material mat(obsidiana[0], obsidiana[1], obsidiana[2], obsidiana_brillo);
    setMaterial(mat);

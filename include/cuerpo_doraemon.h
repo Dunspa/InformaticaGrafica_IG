@@ -27,7 +27,7 @@ public:
    void setColorSeleccion(color col) override;
 
    void calcularCentro(const GLfloat * v_matrix);
-   GLfloat * getCentro();
+   Tupla3f getCentro();
 };
 
 #endif

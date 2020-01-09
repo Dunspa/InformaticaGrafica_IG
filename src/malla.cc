@@ -401,6 +401,7 @@ void Malla3D::calcularModoAjedrez(){
 // Calcula las normales de cualquier malla 3D
 void Malla3D::calcular_normales(){
    // Calcular tabla de normales de las caras
+   nf.resize(f.size());
    for (int i = 0 ; i < f.size() ; i++){
       Tupla3f p = v[f[i](X)];
       Tupla3f q = v[f[i](Y)];
@@ -411,11 +412,12 @@ void Malla3D::calcular_normales(){
       Tupla3f b = r - p;
       // Vector perpendicular a la cara
       Tupla3f m = a.cross(b);
+
       if (m.lengthSq() > 0){
          // Vector perpendicular a la cara, normalizado
          Tupla3f n = m.normalized();
          // Añadir normal de la cara i
-         nf.push_back(n);
+         nf[i] = n;
       }
    }
 
@@ -423,6 +425,7 @@ void Malla3D::calcular_normales(){
 
    // Calcular tabla de normales de los vértices
    std::vector<Tupla3f> m(v.size());
+
    for (int i = 0 ; i < f.size() ; i++){
       int v1 = f[i](X);
       int v2 = f[i](Y);
@@ -433,13 +436,15 @@ void Malla3D::calcular_normales(){
       m[v2] = m[v2] + nf[i];
       m[v3] = m[v3] + nf[i];
    }
+   
+   nv.resize(v.size());
 
    for (int i = 0 ; i < v.size() ; i++){
       if (m[i].lengthSq() > 0){
          // Vector perpendicular al vértice, normalizado
          Tupla3f n = m[i].normalized();
          // Añadir normal del vértice i
-         nv.push_back(n);
+         nv[i] = n;
       }
    }
 

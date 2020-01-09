@@ -29,7 +29,7 @@ Lienzo::Lienzo(float l){
    calcular_normales();
 
    // Textura
-   setTextura("text-madera.jpg");
+   setTextura("suelo.jpg");
    ct.push_back({0, 0});
    ct.push_back({1, 0});
    ct.push_back({0, 1});
