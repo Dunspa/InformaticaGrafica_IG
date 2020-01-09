@@ -250,7 +250,7 @@ void Escena::posicionaObjetos(){
    // Cono
    glPushMatrix();
       glScalef(2.0, 2.0, 2.0);
-      glTranslatef(0.0, 60.0, 50.0);
+      glTranslatef(-20.0, 75.0, -50.0);
       dibujaObjetos(modoDibujado, CONO);
    glPopMatrix();
 
