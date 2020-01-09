@@ -432,7 +432,7 @@ void Escena::objetoSeleccionado(GLfloat * pixeles){
 
 
 bool Escena::comparaColores(Tupla3f c1, Tupla3f c2){
-   // Comparar tuplas3f de colores, si su diferencia es menor que un umbral, son el mismo color
+   // Comparar tuplas3f de colores, si su diferencia es menor que un pequeño error, son el mismo color
    return (fabs(c1(X) - c2(X)) < 0.003) && (fabs(c1(Y) - c2(Y)) < 0.003) && (fabs(c1(Z) - c2(Z)) < 0.003);
 }
 
@@ -942,19 +942,8 @@ void Escena::ratonMovido(int x, int y){
       camaras[camaraActiva].girar(x - Xraton, y - Yraton);
    }
    else if (estadoR == MOVIENDO_CAMARA_EXAMINAR && camaras[camaraActiva].getObjetoSelec() != NINGUNO){
-      /*float exam_x = 0.0, exam_y = 0.0;
-      if (x - Xraton <= 0)
-         exam_x = 1.1;
-      else
-         exam_x = 0.9;
-
-      if (y - Yraton <= 0)
-         exam_y = 1.1;
-      else
-         exam_y = 0.9;
-
-      camaras[camaraActiva].rotarXExaminar((x - Xraton)*(PI/180.0));
-      camaras[camaraActiva].rotarYExaminar((y - Yraton)*(PI/180.0));*/
+      camaras[camaraActiva].rotarXExaminar((y - Yraton)*(PI/180.0));
+      camaras[camaraActiva].rotarYExaminar((x - Xraton)*(PI/180.0));
    }
 
    Xraton = x;
